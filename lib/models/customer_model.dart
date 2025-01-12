@@ -10,8 +10,9 @@ class CustomerModel with _$CustomerModel {
     String? name,
     String? phone,
     String? address,
-    String? group,
-    double? balanceAmount,
+    @JsonKey(name: "group_name") String? group,
+    @JsonKey(name: "balance_amount")@Default("0.0") String balanceAmount,
+    @JsonKey(name: "modified") DateTime? modified,
     List<AmountModel>? transactionList,
   }) = _CustomerModel;
 
@@ -25,7 +26,7 @@ class AmountModel with _$AmountModel {
     @JsonKey(name: "customer_id") int? customerId,
     @Default(0.0) double amount,
     String? description,
-    @JsonKey(name: "is_debit") @Default(false) bool isDebit,
+    @JsonKey(name: "to_get") @Default(false) bool toGet,
     @JsonKey(name: "date_time") DateTime? dateTime,
   }) = _AmountModel;
 

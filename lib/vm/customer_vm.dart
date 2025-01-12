@@ -6,18 +6,33 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class CustomerVM extends AsyncNotifier<List<CustomerModel>> {
   @override
   Future<List<CustomerModel>> build() async {
-    return await getCustomers();
+    return await get();
   }
 
-  Future<List<CustomerModel>> getCustomers({bool isBuild = true}) async {
+  Future<List<CustomerModel>> get({int? id, Map<String, dynamic>? where, String? orderBy, bool ascending = true, Map<String, dynamic>? search}) async {
     try {
-      final customers = await CustomerRepo.fetchCustomers();
-      qp(customers);
+      List<CustomerModel> customers = state.value ?? [];
+
+      if (id != null) {
+        final customer = (await CustomerRepo.fetchCustomers(where: {"id": id})).first;
+        final index = customers.indexWhere((c) => c.id == customer.id);
+        index != -1 ? customers[index] = customer : customers.add(customer);
+      } else {
+        customers = await CustomerRepo.fetchCustomers(where: where, orderBy: orderBy, ascending: ascending, search: search);
+      }
+
+      state = AsyncValue.data(customers);
       return customers;
-    } catch (e) {
-      qp(e);
+    } catch (e, stackTrace) {
+      qp('Error: $e\nStackTrace: $stackTrace');
       return [];
     }
+  }
+
+  Future<bool> save(CustomerModel model) async {
+    final res = await CustomerRepo.addCustomer(model);
+    if (res != 0) await get(id: res);
+    return res != 0;
   }
 }
 

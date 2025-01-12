@@ -1,18 +1,25 @@
+import 'package:db_billmate/common_widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final double? width;
   final double? height;
   final String text;
-  final Buttontype type;
+  final TextStyle? style;
+  final Color? buttonColor;
+  final Color? textColor;
   final Function onTap;
+  final bool isLoading;
   const CustomButton({
     super.key,
     this.width,
     this.height,
     required this.text,
-    required this.type,
+    this.style,
+    this.buttonColor,
+    this.textColor,
     required this.onTap,
+    this.isLoading = false,
   });
 
   @override
@@ -21,65 +28,71 @@ class CustomButton extends StatelessWidget {
       onTap: () {
         onTap();
       },
-      child: width == null ? Expanded(child: CustomButtonCard(width: width, height: height, type: type, text: text)) : CustomButtonCard(width: width, height: height, type: type, text: text),
+      child: width == null
+          ? Expanded(
+              child: CustomButtonCard(
+                  width: width,
+                  height: height,
+                  buttonColor: buttonColor,
+                  textColor: textColor,
+                  text: text,
+                  isLoading: isLoading,
+                  style: style))
+          : CustomButtonCard(
+              width: width,
+              height: height,
+              buttonColor: buttonColor,
+              textColor: textColor,
+              text: text,
+              isLoading: isLoading,
+              style: style),
     );
   }
 }
 
 class CustomButtonCard extends StatelessWidget {
+  final double? width;
+  final double? height;
+  final Color? buttonColor;
+  final Color? textColor;
+
+  final String text;
+  final TextStyle? style;
+  final bool isLoading;
+
   const CustomButtonCard({
     super.key,
     required this.width,
     required this.height,
-    required this.type,
+    this.buttonColor,
+    this.textColor,
     required this.text,
+    this.style,
+    this.isLoading = false,
   });
-
-  final double? width;
-  final double? height;
-  final Buttontype type;
-  final String text;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height ?? 40,
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: _fromType(type),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: _fromTypeForText(type),
-                fontWeight: FontWeight.w500,
+    return isLoading
+        ? SizedBox(
+            height: height ?? 40, width: width, child: const LoadingWidget())
+        : Container(
+            height: height ?? 40,
+            width: width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: buttonColor ?? Colors.white,
+            ),
+            child: Center(
+              child: Text(
+                text,
+                style: style ??
+                    Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: textColor ?? Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
               ),
-        ),
-      ),
-    );
+            ),
+          );
   }
-}
-
-enum Buttontype { primary, secondary }
-
-Color _fromType(Buttontype type) {
-  Color color = Colors.white;
-  if (type == Buttontype.primary) {
-    return Colors.black;
-  } else if (type == Buttontype.secondary) {
-    return Colors.grey[300]!;
-  }
-  return color;
-}
-
-Color _fromTypeForText(Buttontype type) {
-  Color color = Colors.white;
-  if (type == Buttontype.primary) {
-    return Colors.white;
-  } else if (type == Buttontype.secondary) {
-    return Colors.black;
-  }
-  return color;
 }

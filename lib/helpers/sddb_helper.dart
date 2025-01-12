@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 qp(dynamic data, [String? tag]) {
   final String ttag = tag != null ? tag.toString() : '';
@@ -23,28 +24,93 @@ extension StringExtension on String {
   }
 }
 
-
-
 extension NameInitials on String {
-  /// Returns the initials based on the name.
-  /// - If both first and last names exist, it returns the first letters of both.
-  /// - If only one name exists, it returns the first and last letters of the name.
   String get initials {
-    // Trim any leading/trailing whitespace
     final trimmed = trim();
-
-    // Split the string by spaces
     final parts = trimmed.split(' ');
-
     if (parts.length > 1) {
-      // Return the first letter of the first and last words
       return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
     } else if (parts.length == 1 && parts[0].isNotEmpty) {
-      // Return the first and last letters of the single word
       return '${parts[0][0]}${parts[0].characters.last}'.toUpperCase();
     }
-
-    // Return an empty string if input is invalid
     return '';
+  }
+}
+
+class IntegerOnlyFormatter extends TextInputFormatter {
+  final int? maxDigits;
+
+  IntegerOnlyFormatter({this.maxDigits});
+
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final RegExp integerRegExp = RegExp(r'^[0-9]*$');
+
+    if (!integerRegExp.hasMatch(newValue.text)) {
+      return oldValue;
+    }
+
+    if (maxDigits != null && newValue.text.length > maxDigits!) {
+      return oldValue;
+    }
+
+    return newValue;
+  }
+}
+
+
+class DoubleOnlyFormatter extends TextInputFormatter {
+  final int? maxDigitsBeforeDecimal;
+  final int? maxDigitsAfterDecimal;
+
+  DoubleOnlyFormatter({this.maxDigitsBeforeDecimal, this.maxDigitsAfterDecimal});
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Regular expression for matching valid double values (e.g., "123", "123.45", ".45")
+    final RegExp doubleRegExp = RegExp(
+      r'^[0-9]*\.?[0-9]*$', 
+    );
+
+    // Check if the new value matches the double pattern
+    if (!doubleRegExp.hasMatch(newValue.text)) {
+      return oldValue;
+    }
+
+    // Limit the number of digits before the decimal point
+    if (maxDigitsBeforeDecimal != null &&
+        newValue.text.contains('.') &&
+        newValue.text.split('.')[0].length > maxDigitsBeforeDecimal!) {
+      return oldValue;
+    }
+
+    // Limit the number of digits after the decimal point
+    if (maxDigitsAfterDecimal != null &&
+        newValue.text.contains('.') &&
+        newValue.text.split('.')[1].length > maxDigitsAfterDecimal!) {
+      return oldValue;
+    }
+
+    return newValue;
+  }
+}
+
+
+class CapitalizeEachWordFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Split the text by spaces, capitalize the first letter of each word, and rejoin.
+    final newText = newValue.text
+        .split(' ')
+        .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
+        .join(' ');
+
+    // Return the updated TextEditingValue, preserving the cursor position.
+    return newValue.copyWith(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
   }
 }

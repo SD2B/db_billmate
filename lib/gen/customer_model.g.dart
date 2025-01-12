@@ -12,8 +12,11 @@ _$CustomerModelImpl _$$CustomerModelImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       phone: json['phone'] as String?,
       address: json['address'] as String?,
-      group: json['group'] as String?,
-      balanceAmount: (json['balanceAmount'] as num?)?.toDouble(),
+      group: json['group_name'] as String?,
+      balanceAmount: json['balance_amount'] as String? ?? "0.0",
+      modified: json['modified'] == null
+          ? null
+          : DateTime.parse(json['modified'] as String),
       transactionList: (json['transactionList'] as List<dynamic>?)
           ?.map((e) => AmountModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -25,8 +28,9 @@ Map<String, dynamic> _$$CustomerModelImplToJson(_$CustomerModelImpl instance) =>
       'name': instance.name,
       'phone': instance.phone,
       'address': instance.address,
-      'group': instance.group,
-      'balanceAmount': instance.balanceAmount,
+      'group_name': instance.group,
+      'balance_amount': instance.balanceAmount,
+      'modified': instance.modified?.toIso8601String(),
       'transactionList': instance.transactionList,
     };
 
@@ -36,7 +40,7 @@ _$AmountModelImpl _$$AmountModelImplFromJson(Map<String, dynamic> json) =>
       customerId: (json['customer_id'] as num?)?.toInt(),
       amount: (json['amount'] as num?)?.toDouble() ?? 0.0,
       description: json['description'] as String?,
-      isDebit: json['is_debit'] as bool? ?? false,
+      toGet: json['to_get'] as bool? ?? false,
       dateTime: json['date_time'] == null
           ? null
           : DateTime.parse(json['date_time'] as String),
@@ -48,6 +52,6 @@ Map<String, dynamic> _$$AmountModelImplToJson(_$AmountModelImpl instance) =>
       'customer_id': instance.customerId,
       'amount': instance.amount,
       'description': instance.description,
-      'is_debit': instance.isDebit,
+      'to_get': instance.toGet,
       'date_time': instance.dateTime?.toIso8601String(),
     };

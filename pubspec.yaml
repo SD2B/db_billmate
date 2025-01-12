@@ -50,6 +50,9 @@ dependencies:
   smart_wrap: ^0.0.7
   toastification: ^2.3.0
   intl: ^0.20.1
+  sqflite_common_ffi: ^2.3.4+4
+  path: ^1.9.0
+  flutter_spinkit: ^5.2.1
 
 dev_dependencies:
   json_serializable: ^6.8.0

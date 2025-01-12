@@ -24,8 +24,12 @@ mixin _$CustomerModel {
   String? get name => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
   String? get address => throw _privateConstructorUsedError;
+  @JsonKey(name: "group_name")
   String? get group => throw _privateConstructorUsedError;
-  double? get balanceAmount => throw _privateConstructorUsedError;
+  @JsonKey(name: "balance_amount")
+  String get balanceAmount => throw _privateConstructorUsedError;
+  @JsonKey(name: "modified")
+  DateTime? get modified => throw _privateConstructorUsedError;
   List<AmountModel>? get transactionList => throw _privateConstructorUsedError;
 
   /// Serializes this CustomerModel to a JSON map.
@@ -49,8 +53,9 @@ abstract class $CustomerModelCopyWith<$Res> {
       String? name,
       String? phone,
       String? address,
-      String? group,
-      double? balanceAmount,
+      @JsonKey(name: "group_name") String? group,
+      @JsonKey(name: "balance_amount") String balanceAmount,
+      @JsonKey(name: "modified") DateTime? modified,
       List<AmountModel>? transactionList});
 }
 
@@ -74,7 +79,8 @@ class _$CustomerModelCopyWithImpl<$Res, $Val extends CustomerModel>
     Object? phone = freezed,
     Object? address = freezed,
     Object? group = freezed,
-    Object? balanceAmount = freezed,
+    Object? balanceAmount = null,
+    Object? modified = freezed,
     Object? transactionList = freezed,
   }) {
     return _then(_value.copyWith(
@@ -98,10 +104,14 @@ class _$CustomerModelCopyWithImpl<$Res, $Val extends CustomerModel>
           ? _value.group
           : group // ignore: cast_nullable_to_non_nullable
               as String?,
-      balanceAmount: freezed == balanceAmount
+      balanceAmount: null == balanceAmount
           ? _value.balanceAmount
           : balanceAmount // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as String,
+      modified: freezed == modified
+          ? _value.modified
+          : modified // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       transactionList: freezed == transactionList
           ? _value.transactionList
           : transactionList // ignore: cast_nullable_to_non_nullable
@@ -123,8 +133,9 @@ abstract class _$$CustomerModelImplCopyWith<$Res>
       String? name,
       String? phone,
       String? address,
-      String? group,
-      double? balanceAmount,
+      @JsonKey(name: "group_name") String? group,
+      @JsonKey(name: "balance_amount") String balanceAmount,
+      @JsonKey(name: "modified") DateTime? modified,
       List<AmountModel>? transactionList});
 }
 
@@ -146,7 +157,8 @@ class __$$CustomerModelImplCopyWithImpl<$Res>
     Object? phone = freezed,
     Object? address = freezed,
     Object? group = freezed,
-    Object? balanceAmount = freezed,
+    Object? balanceAmount = null,
+    Object? modified = freezed,
     Object? transactionList = freezed,
   }) {
     return _then(_$CustomerModelImpl(
@@ -170,10 +182,14 @@ class __$$CustomerModelImplCopyWithImpl<$Res>
           ? _value.group
           : group // ignore: cast_nullable_to_non_nullable
               as String?,
-      balanceAmount: freezed == balanceAmount
+      balanceAmount: null == balanceAmount
           ? _value.balanceAmount
           : balanceAmount // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as String,
+      modified: freezed == modified
+          ? _value.modified
+          : modified // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       transactionList: freezed == transactionList
           ? _value._transactionList
           : transactionList // ignore: cast_nullable_to_non_nullable
@@ -190,8 +206,9 @@ class _$CustomerModelImpl implements _CustomerModel {
       this.name,
       this.phone,
       this.address,
-      this.group,
-      this.balanceAmount,
+      @JsonKey(name: "group_name") this.group,
+      @JsonKey(name: "balance_amount") this.balanceAmount = "0.0",
+      @JsonKey(name: "modified") this.modified,
       final List<AmountModel>? transactionList})
       : _transactionList = transactionList;
 
@@ -207,9 +224,14 @@ class _$CustomerModelImpl implements _CustomerModel {
   @override
   final String? address;
   @override
+  @JsonKey(name: "group_name")
   final String? group;
   @override
-  final double? balanceAmount;
+  @JsonKey(name: "balance_amount")
+  final String balanceAmount;
+  @override
+  @JsonKey(name: "modified")
+  final DateTime? modified;
   final List<AmountModel>? _transactionList;
   @override
   List<AmountModel>? get transactionList {
@@ -222,7 +244,7 @@ class _$CustomerModelImpl implements _CustomerModel {
 
   @override
   String toString() {
-    return 'CustomerModel(id: $id, name: $name, phone: $phone, address: $address, group: $group, balanceAmount: $balanceAmount, transactionList: $transactionList)';
+    return 'CustomerModel(id: $id, name: $name, phone: $phone, address: $address, group: $group, balanceAmount: $balanceAmount, modified: $modified, transactionList: $transactionList)';
   }
 
   @override
@@ -237,14 +259,24 @@ class _$CustomerModelImpl implements _CustomerModel {
             (identical(other.group, group) || other.group == group) &&
             (identical(other.balanceAmount, balanceAmount) ||
                 other.balanceAmount == balanceAmount) &&
+            (identical(other.modified, modified) ||
+                other.modified == modified) &&
             const DeepCollectionEquality()
                 .equals(other._transactionList, _transactionList));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, phone, address, group,
-      balanceAmount, const DeepCollectionEquality().hash(_transactionList));
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      name,
+      phone,
+      address,
+      group,
+      balanceAmount,
+      modified,
+      const DeepCollectionEquality().hash(_transactionList));
 
   /// Create a copy of CustomerModel
   /// with the given fields replaced by the non-null parameter values.
@@ -268,8 +300,9 @@ abstract class _CustomerModel implements CustomerModel {
       final String? name,
       final String? phone,
       final String? address,
-      final String? group,
-      final double? balanceAmount,
+      @JsonKey(name: "group_name") final String? group,
+      @JsonKey(name: "balance_amount") final String balanceAmount,
+      @JsonKey(name: "modified") final DateTime? modified,
       final List<AmountModel>? transactionList}) = _$CustomerModelImpl;
 
   factory _CustomerModel.fromJson(Map<String, dynamic> json) =
@@ -284,9 +317,14 @@ abstract class _CustomerModel implements CustomerModel {
   @override
   String? get address;
   @override
+  @JsonKey(name: "group_name")
   String? get group;
   @override
-  double? get balanceAmount;
+  @JsonKey(name: "balance_amount")
+  String get balanceAmount;
+  @override
+  @JsonKey(name: "modified")
+  DateTime? get modified;
   @override
   List<AmountModel>? get transactionList;
 
@@ -309,8 +347,8 @@ mixin _$AmountModel {
   int? get customerId => throw _privateConstructorUsedError;
   double get amount => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
-  @JsonKey(name: "is_debit")
-  bool get isDebit => throw _privateConstructorUsedError;
+  @JsonKey(name: "to_get")
+  bool get toGet => throw _privateConstructorUsedError;
   @JsonKey(name: "date_time")
   DateTime? get dateTime => throw _privateConstructorUsedError;
 
@@ -335,7 +373,7 @@ abstract class $AmountModelCopyWith<$Res> {
       @JsonKey(name: "customer_id") int? customerId,
       double amount,
       String? description,
-      @JsonKey(name: "is_debit") bool isDebit,
+      @JsonKey(name: "to_get") bool toGet,
       @JsonKey(name: "date_time") DateTime? dateTime});
 }
 
@@ -358,7 +396,7 @@ class _$AmountModelCopyWithImpl<$Res, $Val extends AmountModel>
     Object? customerId = freezed,
     Object? amount = null,
     Object? description = freezed,
-    Object? isDebit = null,
+    Object? toGet = null,
     Object? dateTime = freezed,
   }) {
     return _then(_value.copyWith(
@@ -378,9 +416,9 @@ class _$AmountModelCopyWithImpl<$Res, $Val extends AmountModel>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      isDebit: null == isDebit
-          ? _value.isDebit
-          : isDebit // ignore: cast_nullable_to_non_nullable
+      toGet: null == toGet
+          ? _value.toGet
+          : toGet // ignore: cast_nullable_to_non_nullable
               as bool,
       dateTime: freezed == dateTime
           ? _value.dateTime
@@ -403,7 +441,7 @@ abstract class _$$AmountModelImplCopyWith<$Res>
       @JsonKey(name: "customer_id") int? customerId,
       double amount,
       String? description,
-      @JsonKey(name: "is_debit") bool isDebit,
+      @JsonKey(name: "to_get") bool toGet,
       @JsonKey(name: "date_time") DateTime? dateTime});
 }
 
@@ -424,7 +462,7 @@ class __$$AmountModelImplCopyWithImpl<$Res>
     Object? customerId = freezed,
     Object? amount = null,
     Object? description = freezed,
-    Object? isDebit = null,
+    Object? toGet = null,
     Object? dateTime = freezed,
   }) {
     return _then(_$AmountModelImpl(
@@ -444,9 +482,9 @@ class __$$AmountModelImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      isDebit: null == isDebit
-          ? _value.isDebit
-          : isDebit // ignore: cast_nullable_to_non_nullable
+      toGet: null == toGet
+          ? _value.toGet
+          : toGet // ignore: cast_nullable_to_non_nullable
               as bool,
       dateTime: freezed == dateTime
           ? _value.dateTime
@@ -464,7 +502,7 @@ class _$AmountModelImpl implements _AmountModel {
       @JsonKey(name: "customer_id") this.customerId,
       this.amount = 0.0,
       this.description,
-      @JsonKey(name: "is_debit") this.isDebit = false,
+      @JsonKey(name: "to_get") this.toGet = false,
       @JsonKey(name: "date_time") this.dateTime});
 
   factory _$AmountModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -481,15 +519,15 @@ class _$AmountModelImpl implements _AmountModel {
   @override
   final String? description;
   @override
-  @JsonKey(name: "is_debit")
-  final bool isDebit;
+  @JsonKey(name: "to_get")
+  final bool toGet;
   @override
   @JsonKey(name: "date_time")
   final DateTime? dateTime;
 
   @override
   String toString() {
-    return 'AmountModel(id: $id, customerId: $customerId, amount: $amount, description: $description, isDebit: $isDebit, dateTime: $dateTime)';
+    return 'AmountModel(id: $id, customerId: $customerId, amount: $amount, description: $description, toGet: $toGet, dateTime: $dateTime)';
   }
 
   @override
@@ -503,7 +541,7 @@ class _$AmountModelImpl implements _AmountModel {
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.isDebit, isDebit) || other.isDebit == isDebit) &&
+            (identical(other.toGet, toGet) || other.toGet == toGet) &&
             (identical(other.dateTime, dateTime) ||
                 other.dateTime == dateTime));
   }
@@ -511,7 +549,7 @@ class _$AmountModelImpl implements _AmountModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, customerId, amount, description, isDebit, dateTime);
+      runtimeType, id, customerId, amount, description, toGet, dateTime);
 
   /// Create a copy of AmountModel
   /// with the given fields replaced by the non-null parameter values.
@@ -535,7 +573,7 @@ abstract class _AmountModel implements AmountModel {
           @JsonKey(name: "customer_id") final int? customerId,
           final double amount,
           final String? description,
-          @JsonKey(name: "is_debit") final bool isDebit,
+          @JsonKey(name: "to_get") final bool toGet,
           @JsonKey(name: "date_time") final DateTime? dateTime}) =
       _$AmountModelImpl;
 
@@ -552,8 +590,8 @@ abstract class _AmountModel implements AmountModel {
   @override
   String? get description;
   @override
-  @JsonKey(name: "is_debit")
-  bool get isDebit;
+  @JsonKey(name: "to_get")
+  bool get toGet;
   @override
   @JsonKey(name: "date_time")
   DateTime? get dateTime;
