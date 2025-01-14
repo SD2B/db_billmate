@@ -14,9 +14,12 @@ class LoadingWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SpinKitChasingDots(
-            color: ColorCode.colorList(context).bgColor,
+          SpinKitSpinningLines(
+            color: ColorCode.colorList(context).primary!,
           ),
+          // SpinKitChasingDots(
+          //   color: ColorCode.colorList(context).borderColor,
+          // ),
         ],
       ),
     );

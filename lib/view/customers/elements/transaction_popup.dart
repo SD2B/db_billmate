@@ -1,7 +1,7 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/constants/colors.dart';
-import 'package:db_billmate/helpers/sddb_helper.dart';
+import 'package:db_billmate/helpers/form_helpers.dart';
 import 'package:db_billmate/models/customer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -24,9 +24,9 @@ class TransactionPopup extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final amountController = useTextEditingController(text: "");
-    final noteController = useTextEditingController(text: "");
     final model = useState<AmountModel>(amountModel ?? AmountModel());
+    final amountController = useTextEditingController(text: "${model.value.amount}" "");
+    final noteController = useTextEditingController(text: model.value.description ?? "");
     final formKey = GlobalKey<FormState>();
 
     return AlertDialog(
@@ -64,6 +64,7 @@ class TransactionPopup extends HookConsumerWidget {
                 ),
               ),
               CustomTextField(
+                selectAllOnFocus: true,
                 controller: amountController,
                 inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
                 hintText: "Enter amount",
@@ -81,6 +82,7 @@ class TransactionPopup extends HookConsumerWidget {
               CustomTextField(
                 controller: noteController,
                 hintText: "Enter note",
+                inputFormatters: [CapitalizeEachWordFormatter()],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,13 +95,21 @@ class TransactionPopup extends HookConsumerWidget {
                     text: "Save",
                     onTap: () {
                       if (formKey.currentState?.validate() ?? false) {
-                        model.value = model.value.copyWith(
-                          id: model.value.id ?? (lastId + 1),
-                          amount: double.parse(amountController.text),
-                          description: noteController.text,
-                          dateTime: model.value.dateTime ?? DateTime.now(),
-                          toGet: !youGot,
-                        );
+                        if (model.value.id != null) {
+                          model.value = model.value.copyWith(
+                            amount: double.parse(amountController.text),
+                            description: noteController.text,
+                          );
+                        } else {
+                          model.value = model.value.copyWith(
+                            id: model.value.id ?? (lastId + 1),
+                            amount: double.parse(amountController.text),
+                            description: noteController.text,
+                            dateTime: model.value.dateTime ?? DateTime.now(),
+                            toGet: !youGot,
+                          );
+                        }
+
                         onSave(model.value);
                         context.pop();
                       }

@@ -1,9 +1,15 @@
 import 'package:db_billmate/constants/theme.dart';
+import 'package:db_billmate/helpers/local_storage.dart';
 import 'package:db_billmate/route/route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await LocalStorage.init(); // Initialize the database
+  await LocalStorage.ensureAttributesTableExists(); // Ensure the attributes table exists and is populated
+
   runApp(ProviderScope(child: const MyApp()));
 }
 
@@ -13,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'DB-Billmate',
       debugShowCheckedModeBanner: false,
       theme: MyTheme.getThemeData(ThemeMode.light),
       themeMode: ThemeMode.light,

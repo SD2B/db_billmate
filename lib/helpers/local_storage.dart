@@ -74,8 +74,10 @@ static Future<List<Map<String, dynamic>>> get(
   Map<String, dynamic>? search,
   Map<String, dynamic>? notWhere,
   int? limit,
+  int pageIndex = 1, // Page index starts from 1
   String? orderBy, // Column to sort by
   bool ascending = true, // Sort order: true for ASC, false for DESC
+  bool isDouble = false, // Indicates if the orderBy column is stored as a string but represents numeric values
 }) async {
   final db = await _getDatabase();
 
@@ -110,8 +112,13 @@ static Future<List<Map<String, dynamic>>> get(
   // Combine all conditions
   final whereString = whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null;
 
-  // Build the ORDER BY clause
-  final orderByClause = orderBy != null ? '$orderBy ${ascending ? 'ASC' : 'DESC'}' : null;
+  // Build the ORDER BY clause with CAST if isDouble is true
+  final orderByClause = orderBy != null
+      ? '${isDouble ? 'CAST($orderBy AS DECIMAL)' : orderBy} ${ascending ? 'ASC' : 'DESC'}'
+      : null;
+
+  // Calculate the OFFSET for pagination
+  final offset = (pageIndex - 1) * (limit ?? 0);
 
   // Execute the query
   final result = await db.query(
@@ -119,6 +126,7 @@ static Future<List<Map<String, dynamic>>> get(
     where: whereString,
     whereArgs: whereArgs,
     limit: limit,
+    offset: offset, // Apply the offset for pagination
     orderBy: orderByClause, // Apply sorting
   );
 
@@ -137,6 +145,7 @@ static Future<List<Map<String, dynamic>>> get(
     });
   }).toList();
 }
+
 
   /// Save (Insert) data into a table
   static Future<int> save(String tableName, Map<String, dynamic> data) async {
@@ -236,7 +245,106 @@ static Future<int?> update(
       whereArgs: whereArgs,
     );
   }
+
+/// Update specific column data based on a condition
+static Future<int> updateWhere({
+  required String tableName,
+  required String columnName,
+  required Map<String, dynamic> where,
+  required dynamic data,
+}) async {
+  final db = await _getDatabase();
+
+  // Serialize the data if it is a complex object
+  final newValue = data is List || data is Map ? jsonEncode(data) : data;
+
+  // Build the WHERE clause
+  final whereClauses = <String>[];
+  final whereArgs = <dynamic>[];
+
+  where.forEach((key, value) {
+    whereClauses.add('$key = ?');
+    whereArgs.add(value);
+  });
+
+  final whereString = whereClauses.join(' AND ');
+
+  // Prepare the data to update
+  final updatedData = {columnName: newValue};
+
+  // Execute the update query
+  return await db.update(
+    tableName,
+    updatedData,
+    where: whereString,
+    whereArgs: whereArgs,
+  );
 }
+
+
+
+
+
+
+
+static Future<void> ensureAttributesTableExists() async {
+  final db = await _getDatabase();
+  const tableName = "attributes";
+
+  // Define the table structure
+  const tableStructure = {
+    "id": 0, // Example placeholder
+    "mode": "TEXT",
+    "data": "TEXT"
+  };
+
+  // Check if the table exists
+  final exists = await _checkTableExists(db, tableName);
+
+  // Create the table if it doesn't exist
+  if (!exists) {
+    final createTableQuery = '''
+      CREATE TABLE $tableName (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        mode TEXT,
+        data TEXT
+      )
+    ''';
+    await db.execute(createTableQuery);
+
+    // Insert initial values into the table
+    final initialValues = [
+      {
+        "id": 1,
+        "mode": "category",
+        "data": jsonEncode(["Rice", "Oil", "Vegetables", "Fruits"])
+      },
+      {
+        "id": 2,
+        "mode": "units",
+        "data": jsonEncode(["kg", "g", "litre", "ml", "no", "pac"])
+      },
+      {
+        "id": 3,
+        "mode": "groupList",
+        "data": jsonEncode(["South"])
+      }
+    ];
+
+    for (var value in initialValues) {
+      await db.insert(tableName, value);
+    }
+  }
+}
+
+
+}
+
+
+
+
+
+
 
 class DBTable {
   static String transactions = "transactions";

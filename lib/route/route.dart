@@ -1,7 +1,6 @@
-import 'package:db_billmate/view/accounts/accounts.dart';
-import 'package:db_billmate/view/custom_scaffold/custom_scaffold.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/constants.dart';
+import 'package:db_billmate/view/custom_scaffold/custom_scaffold.dart';
 import 'package:db_billmate/view/customers/customers.dart';
 import 'package:db_billmate/view/sales/sales.dart';
 import 'package:db_billmate/view/settings/settings.dart';
@@ -9,7 +8,6 @@ import 'package:db_billmate/view/stock/stock.dart';
 import 'package:db_billmate/view/suppliers/suppliers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 
 final GoRouter myRoute = GoRouter(
   initialLocation: "/",
@@ -31,7 +29,7 @@ List<RouteBase> _buildRoutes() {
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
           },
-          child: const CustomScaffold(child: Accounts())),
+          child: const CustomScaffold(child: Customers())),
       routes: [
         ..._staticRoutes(),
       ],
@@ -42,14 +40,25 @@ List<RouteBase> _buildRoutes() {
 List<GoRoute> _staticRoutes() {
   return [
     GoRoute(
-      path: RouteEnum.accounts.name,
-      name: RouteEnum.accounts.name,
+      path: RouteEnum.customers.name,
+      name: RouteEnum.customers.name,
       pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
         key: state.pageKey,
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
         },
-        child: const CustomScaffold(child: Accounts()),
+        child: const CustomScaffold(child: Customers()),
+      ),
+    ),
+    GoRoute(
+      path: RouteEnum.supplier.name,
+      name: RouteEnum.supplier.name,
+      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+        key: state.pageKey,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+        },
+        child: const CustomScaffold(child: Suppliers()),
       ),
     ),
     GoRoute(
@@ -72,28 +81,6 @@ List<GoRoute> _staticRoutes() {
           return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
         },
         child: const CustomScaffold(child: Stock()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.customer.name,
-      name: RouteEnum.customer.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Customers()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.supplier.name,
-      name: RouteEnum.supplier.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Suppliers()),
       ),
     ),
     GoRoute(

@@ -18,7 +18,7 @@ class ColorList {
   factory ColorList.light() {
     return ColorList(
       primary: Colors.black87,
-      secondary: const Color(0xFFfbfff1),
+      secondary: Colors.white,
       middlePrimary: const Color(0xFF3066be),
       middleSecondary: const Color(0xFFb4c5e4),
       labelColor: const Color(0xFF6C7584),
@@ -34,7 +34,7 @@ class ColorList {
   factory ColorList.dark() {
     return ColorList(
       primary: const Color(0xFFbae5f5),
-      secondary: const Color(0xFFE83D3D),
+      secondary: Colors.white,
       middlePrimary: const Color(0xFF3066be),
       middleSecondary: const Color(0xFFb4c5e4),
       labelColor: const Color(0xFF6C7584),

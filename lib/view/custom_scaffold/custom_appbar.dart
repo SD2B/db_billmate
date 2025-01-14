@@ -11,7 +11,7 @@ class CustomAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentRoute = GoRouter.of(context).routeInformationProvider.value.uri;
-    String routeName = currentRoute.toString() == "/" ? RouteEnum.accounts.name : currentRoute.toString().split("/").join();
+    String routeName = currentRoute.toString() == "/" ? RouteEnum.customers.asString : currentRoute.toString().split("/").join();
     return Row(
       children: [
         Expanded(

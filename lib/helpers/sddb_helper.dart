@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 
 qp(dynamic data, [String? tag]) {
   final String ttag = tag != null ? tag.toString() : '';
@@ -37,80 +37,43 @@ extension NameInitials on String {
   }
 }
 
-class IntegerOnlyFormatter extends TextInputFormatter {
-  final int? maxDigits;
 
-  IntegerOnlyFormatter({this.maxDigits});
-
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    final RegExp integerRegExp = RegExp(r'^[0-9]*$');
-
-    if (!integerRegExp.hasMatch(newValue.text)) {
-      return oldValue;
-    }
-
-    if (maxDigits != null && newValue.text.length > maxDigits!) {
-      return oldValue;
-    }
-
-    return newValue;
-  }
-}
-
-
-class DoubleOnlyFormatter extends TextInputFormatter {
-  final int? maxDigitsBeforeDecimal;
-  final int? maxDigitsAfterDecimal;
-
-  DoubleOnlyFormatter({this.maxDigitsBeforeDecimal, this.maxDigitsAfterDecimal});
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    // Regular expression for matching valid double values (e.g., "123", "123.45", ".45")
-    final RegExp doubleRegExp = RegExp(
-      r'^[0-9]*\.?[0-9]*$', 
+extension GestureWidgetExtension on Widget {
+  /// Add tap gesture handling to a widget
+  Widget onTap(VoidCallback? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: this,
     );
-
-    // Check if the new value matches the double pattern
-    if (!doubleRegExp.hasMatch(newValue.text)) {
-      return oldValue;
-    }
-
-    // Limit the number of digits before the decimal point
-    if (maxDigitsBeforeDecimal != null &&
-        newValue.text.contains('.') &&
-        newValue.text.split('.')[0].length > maxDigitsBeforeDecimal!) {
-      return oldValue;
-    }
-
-    // Limit the number of digits after the decimal point
-    if (maxDigitsAfterDecimal != null &&
-        newValue.text.contains('.') &&
-        newValue.text.split('.')[1].length > maxDigitsAfterDecimal!) {
-      return oldValue;
-    }
-
-    return newValue;
   }
-}
 
+  /// Add double-tap gesture handling to a widget
+  Widget onDoubleTap(VoidCallback? onDoubleTap) {
+    return GestureDetector(
+      onDoubleTap: onDoubleTap,
+      child: this,
+    );
+  }
 
-class CapitalizeEachWordFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    // Split the text by spaces, capitalize the first letter of each word, and rejoin.
-    final newText = newValue.text
-        .split(' ')
-        .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
-        .join(' ');
+  /// Add long-press gesture handling to a widget
+  Widget onLongPress(VoidCallback? onLongPress) {
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: this,
+    );
+  }
 
-    // Return the updated TextEditingValue, preserving the cursor position.
-    return newValue.copyWith(
-      text: newText,
-      selection: TextSelection.collapsed(offset: newText.length),
+  /// Add secondary tap gesture handling to a widget
+  Widget onSecondaryTap(VoidCallback? onSecondaryTap) {
+    return GestureDetector(
+      onSecondaryTap: onSecondaryTap,
+      child: this,
     );
   }
 }
+
+
+
+
+
+

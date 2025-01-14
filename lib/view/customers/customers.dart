@@ -1,3 +1,4 @@
+import 'package:db_billmate/common_widgets/loading_widget.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/customer_model.dart';
@@ -17,10 +18,12 @@ class Customers extends HookConsumerWidget {
     final searchController = useTextEditingController();
     final customerModel = useState<CustomerModel>(CustomerModel());
     final customerList = useState<List<CustomerModel>>([]);
+    final selected = useState(1);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CustomersHeader(searchController: searchController),
+        CustomersHeader(searchController: searchController, selected: selected),
         20.height,
         ref.watch(customerVMProvider).when(
             data: (dataList) {
@@ -32,13 +35,13 @@ class Customers extends HookConsumerWidget {
                     CustomerList(customerList: customerList.value, customerModel: customerModel),
                     VerticalDivider(color: ColorCode.colorList(context).borderColor),
                     if (customerModel.value == CustomerModel()) Expanded(child: Center(child: Text("Select a customer"))),
-                    if (customerModel.value != CustomerModel()) CustomerTransactions(customerModel: customerModel),
+                    if (customerModel.value != CustomerModel()) CustomerTransactions(customerModel2: customerModel, selected: selected),
                   ],
                 ),
               );
             },
             error: (error, stackTrace) => Text(error.toString()),
-            loading: () => CircularProgressIndicator.adaptive())
+            loading: () => SizedBox(height: context.height() - 300, width: context.width() - 200, child: LoadingWidget()))
       ],
     );
   }

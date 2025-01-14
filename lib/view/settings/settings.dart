@@ -9,7 +9,7 @@ class Settings extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        HeaderLabel(header: "Settings"),
+        
       ],
     );
   }

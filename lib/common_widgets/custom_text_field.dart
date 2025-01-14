@@ -23,6 +23,7 @@ class CustomTextField extends HookWidget {
   final double? boarderRadius;
   final int? maxLines;
   final bool firstLetterCapital;
+  final bool selectAllOnFocus; // New parameter
 
   const CustomTextField({
     super.key,
@@ -45,12 +46,29 @@ class CustomTextField extends HookWidget {
     this.boarderRadius,
     this.maxLines,
     this.firstLetterCapital = false,
+    this.selectAllOnFocus = false, // Default is false
   });
 
   @override
   Widget build(BuildContext context) {
     final obscureText = useState(true);
     final errorText = useState<String?>(null);
+    final effectiveFocusNode = focusNode ?? useFocusNode();
+
+    useEffect(() {
+      // Add listener to focus node to select text on focus
+      void handleFocusChange() {
+        if (selectAllOnFocus && effectiveFocusNode.hasFocus) {
+          controller.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: controller.text.length,
+          );
+        }
+      }
+
+      effectiveFocusNode.addListener(handleFocusChange);
+      return () => effectiveFocusNode.removeListener(handleFocusChange);
+    }, [effectiveFocusNode, selectAllOnFocus]);
 
     return SizedBox(
       width: width,
@@ -65,7 +83,7 @@ class CustomTextField extends HookWidget {
         maxLines: maxLines ?? 1,
         keyboardType: textInputType,
         controller: controller,
-        focusNode: focusNode,
+        focusNode: effectiveFocusNode,
         obscureText: isPassword ? obscureText.value : false,
         decoration: InputDecoration(
           filled: true,
@@ -116,18 +134,17 @@ class CustomTextField extends HookWidget {
                 color: Colors.red,
               ),
           prefixIcon: prefix,
-          suffixIcon: suffix ??
-              (isPassword
-                  ? IconButton(
-                      icon: Icon(
-                        obscureText.value ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.grey,
-                      ),
-                      onPressed: () {
-                        obscureText.value = !obscureText.value;
-                      },
-                    )
-                  : null),
+          suffixIcon: suffix ?? (isPassword
+              ? IconButton(
+                  icon: Icon(
+                    obscureText.value ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    obscureText.value = !obscureText.value;
+                  },
+                )
+              : null),
         ),
         inputFormatters: inputFormatters,
         onChanged: onChanged,

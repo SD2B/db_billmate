@@ -28,7 +28,15 @@ class CustomSidebar extends StatelessWidget {
           Container(
             height: 50,
             width: 50,
-            decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: whiteColor), image: DecorationImage(image: AssetImage("assets/image/db.png"))),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: whiteColor),
+            ),
+            padding: EdgeInsets.all(5),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(500),
+              child: Image.asset("assets/image/db.png"),
+            ),
           ),
           Divider(),
           Column(
@@ -46,10 +54,20 @@ class CustomSidebar extends StatelessWidget {
 }
 
 List<UiModel> sidebarButtons = [
+  // UiModel(
+  //   title: "Customers",
+  //   svg: "assets/svg/home.svg",
+  //   value: RouteEnum.customers.name,
+  // ),
   UiModel(
-    title: "Accounts",
-    svg: "assets/svg/accounts.svg",
-    value: RouteEnum.accounts.name,
+    title: "Customers",
+    svg: "assets/svg/customer.svg",
+    value: RouteEnum.customers.name,
+  ),
+  UiModel(
+    title: "Suppliers",
+    svg: "assets/svg/supplier.svg",
+    value: RouteEnum.supplier.name,
   ),
   UiModel(
     title: "Sales",
@@ -60,16 +78,6 @@ List<UiModel> sidebarButtons = [
     title: "Stock",
     svg: "assets/svg/stock.svg",
     value: RouteEnum.stock.name,
-  ),
-  UiModel(
-    title: "Customers",
-    svg: "assets/svg/customer.svg",
-    value: RouteEnum.customer.name,
-  ),
-  UiModel(
-    title: "Suppliers",
-    svg: "assets/svg/supplier.svg",
-    value: RouteEnum.supplier.name,
   ),
   UiModel(
     title: "Settings",
