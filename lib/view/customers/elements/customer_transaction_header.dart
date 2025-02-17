@@ -4,6 +4,7 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/customers/add_customer_popup.dart';
 import 'package:db_billmate/view/customers/elements/account_close_popup.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
+import 'package:db_billmate/vm/transaction_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -43,12 +44,12 @@ class CustomerTransactionHeader extends HookConsumerWidget {
                 ),
           ),
           VerticalDivider(),
-          Text(
+          Text( 
             double.parse(tempCustomer.state.balanceAmount).toStringAsFixed(2).split("-").join(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: tempCustomer.state.balanceAmount.contains("-") ? greenColor : redColor,
+                  color: (tempCustomer.state.balanceAmount.contains("-") || double.parse(tempCustomer.state.balanceAmount) == 0) ? greenColor : redColor,
                 ),
           ),
           Spacer(),
@@ -64,7 +65,6 @@ class CustomerTransactionHeader extends HookConsumerWidget {
                     context: context,
                     builder: (context) => AddCustomerPopup(
                           updateModel: tempCustomer.state,
-                          onSaved: (model) async => await ref.read(customerVMProvider.notifier).save(model),
                         ));
               }),
           VerticalDivider(),
@@ -75,7 +75,7 @@ class CustomerTransactionHeader extends HookConsumerWidget {
               textColor: whiteColor,
               text: "Close Account",
               onTap: () {
-                showDialog(context: context, builder: (context) => AccountClosePopup());
+                if (ref.read(transactionVMProvider).value?.isNotEmpty == true) showDialog(context: context, builder: (context) => AccountClosePopup());
               })
         ],
       ),

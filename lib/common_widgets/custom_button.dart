@@ -1,5 +1,6 @@
-import 'package:db_billmate/common_widgets/loading_widget.dart';
+import 'package:db_billmate/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CustomButton extends StatelessWidget {
   final double? width;
@@ -28,24 +29,7 @@ class CustomButton extends StatelessWidget {
       onTap: () {
         onTap();
       },
-      child: width == null
-          ? Expanded(
-              child: CustomButtonCard(
-                  width: width,
-                  height: height,
-                  buttonColor: buttonColor,
-                  textColor: textColor,
-                  text: text,
-                  isLoading: isLoading,
-                  style: style))
-          : CustomButtonCard(
-              width: width,
-              height: height,
-              buttonColor: buttonColor,
-              textColor: textColor,
-              text: text,
-              isLoading: isLoading,
-              style: style),
+      child: width == null ? Expanded(child: CustomButtonCard(width: width, height: height, buttonColor: buttonColor, textColor: textColor, text: text, isLoading: isLoading, style: style)) : CustomButtonCard(width: width, height: height, buttonColor: buttonColor, textColor: textColor, text: text, isLoading: isLoading, style: style),
     );
   }
 }
@@ -75,7 +59,13 @@ class CustomButtonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return isLoading
         ? SizedBox(
-            height: height ?? 40, width: width, child: const LoadingWidget())
+            height: height ?? 40,
+            width: width,
+            child: SpinKitSpinningLines(
+              size: 25,
+              color: ColorCode.colorList(context).primary!,
+            ),
+          )
         : Container(
             height: height ?? 40,
             width: width,

@@ -1,3 +1,4 @@
+import 'package:db_billmate/helpers/model_helper.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part '../gen/customer_model.freezed.dart';
@@ -11,24 +12,29 @@ class CustomerModel with _$CustomerModel {
     String? phone,
     String? address,
     @JsonKey(name: "group_name") String? group,
-    @JsonKey(name: "balance_amount")@Default("0.0") String balanceAmount,
+    @JsonKey(name: "balance_amount") @Default("0.0") String balanceAmount,
     @JsonKey(name: "modified") DateTime? modified,
-    List<AmountModel>? transactionList,
   }) = _CustomerModel;
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) => _$CustomerModelFromJson(json);
 }
 
 @freezed
-class AmountModel with _$AmountModel {
-  const factory AmountModel({
+class TransactionModel with _$TransactionModel {
+  const factory TransactionModel({
     int? id,
-    @JsonKey(name: "customer_id") int? customerId,
-    @Default(0.0) double amount,
+    @IntConverter() @JsonKey(name: "customer_id") int? customerId,
+    @DoubleConverter() @Default(0.0) double amount,
     String? description,
-    @JsonKey(name: "to_get") @Default(false) bool toGet,
-    @JsonKey(name: "date_time") DateTime? dateTime,
-  }) = _AmountModel;
+    @BoolConverter() @JsonKey(name: "to_get") @Default(false) bool toGet,
+    @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
+    @Default(TransactionType.normal) @JsonKey(name: "transaction_type") String transactionType,
+  }) = _TransactionModel;
 
-  factory AmountModel.fromJson(Map<String, dynamic> json) => _$AmountModelFromJson(json);
+  factory TransactionModel.fromJson(Map<String, dynamic> json) => _$TransactionModelFromJson(json);
+}
+
+class TransactionType {
+  static const String sale = "sale";
+  static const String normal = "normal";
 }

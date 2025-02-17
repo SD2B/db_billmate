@@ -30,7 +30,6 @@ mixin _$CustomerModel {
   String get balanceAmount => throw _privateConstructorUsedError;
   @JsonKey(name: "modified")
   DateTime? get modified => throw _privateConstructorUsedError;
-  List<AmountModel>? get transactionList => throw _privateConstructorUsedError;
 
   /// Serializes this CustomerModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,8 +54,7 @@ abstract class $CustomerModelCopyWith<$Res> {
       String? address,
       @JsonKey(name: "group_name") String? group,
       @JsonKey(name: "balance_amount") String balanceAmount,
-      @JsonKey(name: "modified") DateTime? modified,
-      List<AmountModel>? transactionList});
+      @JsonKey(name: "modified") DateTime? modified});
 }
 
 /// @nodoc
@@ -81,7 +79,6 @@ class _$CustomerModelCopyWithImpl<$Res, $Val extends CustomerModel>
     Object? group = freezed,
     Object? balanceAmount = null,
     Object? modified = freezed,
-    Object? transactionList = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -112,10 +109,6 @@ class _$CustomerModelCopyWithImpl<$Res, $Val extends CustomerModel>
           ? _value.modified
           : modified // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      transactionList: freezed == transactionList
-          ? _value.transactionList
-          : transactionList // ignore: cast_nullable_to_non_nullable
-              as List<AmountModel>?,
     ) as $Val);
   }
 }
@@ -135,8 +128,7 @@ abstract class _$$CustomerModelImplCopyWith<$Res>
       String? address,
       @JsonKey(name: "group_name") String? group,
       @JsonKey(name: "balance_amount") String balanceAmount,
-      @JsonKey(name: "modified") DateTime? modified,
-      List<AmountModel>? transactionList});
+      @JsonKey(name: "modified") DateTime? modified});
 }
 
 /// @nodoc
@@ -159,7 +151,6 @@ class __$$CustomerModelImplCopyWithImpl<$Res>
     Object? group = freezed,
     Object? balanceAmount = null,
     Object? modified = freezed,
-    Object? transactionList = freezed,
   }) {
     return _then(_$CustomerModelImpl(
       id: freezed == id
@@ -190,10 +181,6 @@ class __$$CustomerModelImplCopyWithImpl<$Res>
           ? _value.modified
           : modified // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      transactionList: freezed == transactionList
-          ? _value._transactionList
-          : transactionList // ignore: cast_nullable_to_non_nullable
-              as List<AmountModel>?,
     ));
   }
 }
@@ -208,9 +195,7 @@ class _$CustomerModelImpl implements _CustomerModel {
       this.address,
       @JsonKey(name: "group_name") this.group,
       @JsonKey(name: "balance_amount") this.balanceAmount = "0.0",
-      @JsonKey(name: "modified") this.modified,
-      final List<AmountModel>? transactionList})
-      : _transactionList = transactionList;
+      @JsonKey(name: "modified") this.modified});
 
   factory _$CustomerModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CustomerModelImplFromJson(json);
@@ -232,19 +217,10 @@ class _$CustomerModelImpl implements _CustomerModel {
   @override
   @JsonKey(name: "modified")
   final DateTime? modified;
-  final List<AmountModel>? _transactionList;
-  @override
-  List<AmountModel>? get transactionList {
-    final value = _transactionList;
-    if (value == null) return null;
-    if (_transactionList is EqualUnmodifiableListView) return _transactionList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
 
   @override
   String toString() {
-    return 'CustomerModel(id: $id, name: $name, phone: $phone, address: $address, group: $group, balanceAmount: $balanceAmount, modified: $modified, transactionList: $transactionList)';
+    return 'CustomerModel(id: $id, name: $name, phone: $phone, address: $address, group: $group, balanceAmount: $balanceAmount, modified: $modified)';
   }
 
   @override
@@ -260,23 +236,13 @@ class _$CustomerModelImpl implements _CustomerModel {
             (identical(other.balanceAmount, balanceAmount) ||
                 other.balanceAmount == balanceAmount) &&
             (identical(other.modified, modified) ||
-                other.modified == modified) &&
-            const DeepCollectionEquality()
-                .equals(other._transactionList, _transactionList));
+                other.modified == modified));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      phone,
-      address,
-      group,
-      balanceAmount,
-      modified,
-      const DeepCollectionEquality().hash(_transactionList));
+      runtimeType, id, name, phone, address, group, balanceAmount, modified);
 
   /// Create a copy of CustomerModel
   /// with the given fields replaced by the non-null parameter values.
@@ -296,14 +262,14 @@ class _$CustomerModelImpl implements _CustomerModel {
 
 abstract class _CustomerModel implements CustomerModel {
   const factory _CustomerModel(
-      {final int? id,
-      final String? name,
-      final String? phone,
-      final String? address,
-      @JsonKey(name: "group_name") final String? group,
-      @JsonKey(name: "balance_amount") final String balanceAmount,
-      @JsonKey(name: "modified") final DateTime? modified,
-      final List<AmountModel>? transactionList}) = _$CustomerModelImpl;
+          {final int? id,
+          final String? name,
+          final String? phone,
+          final String? address,
+          @JsonKey(name: "group_name") final String? group,
+          @JsonKey(name: "balance_amount") final String balanceAmount,
+          @JsonKey(name: "modified") final DateTime? modified}) =
+      _$CustomerModelImpl;
 
   factory _CustomerModel.fromJson(Map<String, dynamic> json) =
       _$CustomerModelImpl.fromJson;
@@ -325,8 +291,6 @@ abstract class _CustomerModel implements CustomerModel {
   @override
   @JsonKey(name: "modified")
   DateTime? get modified;
-  @override
-  List<AmountModel>? get transactionList;
 
   /// Create a copy of CustomerModel
   /// with the given fields replaced by the non-null parameter values.
@@ -336,58 +300,65 @@ abstract class _CustomerModel implements CustomerModel {
       throw _privateConstructorUsedError;
 }
 
-AmountModel _$AmountModelFromJson(Map<String, dynamic> json) {
-  return _AmountModel.fromJson(json);
+TransactionModel _$TransactionModelFromJson(Map<String, dynamic> json) {
+  return _TransactionModel.fromJson(json);
 }
 
 /// @nodoc
-mixin _$AmountModel {
+mixin _$TransactionModel {
   int? get id => throw _privateConstructorUsedError;
+  @IntConverter()
   @JsonKey(name: "customer_id")
   int? get customerId => throw _privateConstructorUsedError;
+  @DoubleConverter()
   double get amount => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
+  @BoolConverter()
   @JsonKey(name: "to_get")
   bool get toGet => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   @JsonKey(name: "date_time")
   DateTime? get dateTime => throw _privateConstructorUsedError;
+  @JsonKey(name: "transaction_type")
+  String get transactionType => throw _privateConstructorUsedError;
 
-  /// Serializes this AmountModel to a JSON map.
+  /// Serializes this TransactionModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of AmountModel
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $AmountModelCopyWith<AmountModel> get copyWith =>
+  $TransactionModelCopyWith<TransactionModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AmountModelCopyWith<$Res> {
-  factory $AmountModelCopyWith(
-          AmountModel value, $Res Function(AmountModel) then) =
-      _$AmountModelCopyWithImpl<$Res, AmountModel>;
+abstract class $TransactionModelCopyWith<$Res> {
+  factory $TransactionModelCopyWith(
+          TransactionModel value, $Res Function(TransactionModel) then) =
+      _$TransactionModelCopyWithImpl<$Res, TransactionModel>;
   @useResult
   $Res call(
       {int? id,
-      @JsonKey(name: "customer_id") int? customerId,
-      double amount,
+      @IntConverter() @JsonKey(name: "customer_id") int? customerId,
+      @DoubleConverter() double amount,
       String? description,
-      @JsonKey(name: "to_get") bool toGet,
-      @JsonKey(name: "date_time") DateTime? dateTime});
+      @BoolConverter() @JsonKey(name: "to_get") bool toGet,
+      @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
+      @JsonKey(name: "transaction_type") String transactionType});
 }
 
 /// @nodoc
-class _$AmountModelCopyWithImpl<$Res, $Val extends AmountModel>
-    implements $AmountModelCopyWith<$Res> {
-  _$AmountModelCopyWithImpl(this._value, this._then);
+class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
+    implements $TransactionModelCopyWith<$Res> {
+  _$TransactionModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AmountModel
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -398,6 +369,7 @@ class _$AmountModelCopyWithImpl<$Res, $Val extends AmountModel>
     Object? description = freezed,
     Object? toGet = null,
     Object? dateTime = freezed,
+    Object? transactionType = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -424,36 +396,41 @@ class _$AmountModelCopyWithImpl<$Res, $Val extends AmountModel>
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      transactionType: null == transactionType
+          ? _value.transactionType
+          : transactionType // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$AmountModelImplCopyWith<$Res>
-    implements $AmountModelCopyWith<$Res> {
-  factory _$$AmountModelImplCopyWith(
-          _$AmountModelImpl value, $Res Function(_$AmountModelImpl) then) =
-      __$$AmountModelImplCopyWithImpl<$Res>;
+abstract class _$$TransactionModelImplCopyWith<$Res>
+    implements $TransactionModelCopyWith<$Res> {
+  factory _$$TransactionModelImplCopyWith(_$TransactionModelImpl value,
+          $Res Function(_$TransactionModelImpl) then) =
+      __$$TransactionModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {int? id,
-      @JsonKey(name: "customer_id") int? customerId,
-      double amount,
+      @IntConverter() @JsonKey(name: "customer_id") int? customerId,
+      @DoubleConverter() double amount,
       String? description,
-      @JsonKey(name: "to_get") bool toGet,
-      @JsonKey(name: "date_time") DateTime? dateTime});
+      @BoolConverter() @JsonKey(name: "to_get") bool toGet,
+      @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
+      @JsonKey(name: "transaction_type") String transactionType});
 }
 
 /// @nodoc
-class __$$AmountModelImplCopyWithImpl<$Res>
-    extends _$AmountModelCopyWithImpl<$Res, _$AmountModelImpl>
-    implements _$$AmountModelImplCopyWith<$Res> {
-  __$$AmountModelImplCopyWithImpl(
-      _$AmountModelImpl _value, $Res Function(_$AmountModelImpl) _then)
+class __$$TransactionModelImplCopyWithImpl<$Res>
+    extends _$TransactionModelCopyWithImpl<$Res, _$TransactionModelImpl>
+    implements _$$TransactionModelImplCopyWith<$Res> {
+  __$$TransactionModelImplCopyWithImpl(_$TransactionModelImpl _value,
+      $Res Function(_$TransactionModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AmountModel
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -464,8 +441,9 @@ class __$$AmountModelImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? toGet = null,
     Object? dateTime = freezed,
+    Object? transactionType = null,
   }) {
-    return _then(_$AmountModelImpl(
+    return _then(_$TransactionModelImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -490,51 +468,64 @@ class __$$AmountModelImplCopyWithImpl<$Res>
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      transactionType: null == transactionType
+          ? _value.transactionType
+          : transactionType // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$AmountModelImpl implements _AmountModel {
-  const _$AmountModelImpl(
+class _$TransactionModelImpl implements _TransactionModel {
+  const _$TransactionModelImpl(
       {this.id,
-      @JsonKey(name: "customer_id") this.customerId,
-      this.amount = 0.0,
+      @IntConverter() @JsonKey(name: "customer_id") this.customerId,
+      @DoubleConverter() this.amount = 0.0,
       this.description,
-      @JsonKey(name: "to_get") this.toGet = false,
-      @JsonKey(name: "date_time") this.dateTime});
+      @BoolConverter() @JsonKey(name: "to_get") this.toGet = false,
+      @DateTimeConverter() @JsonKey(name: "date_time") this.dateTime,
+      @JsonKey(name: "transaction_type")
+      this.transactionType = TransactionType.normal});
 
-  factory _$AmountModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AmountModelImplFromJson(json);
+  factory _$TransactionModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TransactionModelImplFromJson(json);
 
   @override
   final int? id;
   @override
+  @IntConverter()
   @JsonKey(name: "customer_id")
   final int? customerId;
   @override
   @JsonKey()
+  @DoubleConverter()
   final double amount;
   @override
   final String? description;
   @override
+  @BoolConverter()
   @JsonKey(name: "to_get")
   final bool toGet;
   @override
+  @DateTimeConverter()
   @JsonKey(name: "date_time")
   final DateTime? dateTime;
+  @override
+  @JsonKey(name: "transaction_type")
+  final String transactionType;
 
   @override
   String toString() {
-    return 'AmountModel(id: $id, customerId: $customerId, amount: $amount, description: $description, toGet: $toGet, dateTime: $dateTime)';
+    return 'TransactionModel(id: $id, customerId: $customerId, amount: $amount, description: $description, toGet: $toGet, dateTime: $dateTime, transactionType: $transactionType)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AmountModelImpl &&
+            other is _$TransactionModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.customerId, customerId) ||
                 other.customerId == customerId) &&
@@ -543,63 +534,74 @@ class _$AmountModelImpl implements _AmountModel {
                 other.description == description) &&
             (identical(other.toGet, toGet) || other.toGet == toGet) &&
             (identical(other.dateTime, dateTime) ||
-                other.dateTime == dateTime));
+                other.dateTime == dateTime) &&
+            (identical(other.transactionType, transactionType) ||
+                other.transactionType == transactionType));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, customerId, amount, description, toGet, dateTime);
+  int get hashCode => Object.hash(runtimeType, id, customerId, amount,
+      description, toGet, dateTime, transactionType);
 
-  /// Create a copy of AmountModel
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$AmountModelImplCopyWith<_$AmountModelImpl> get copyWith =>
-      __$$AmountModelImplCopyWithImpl<_$AmountModelImpl>(this, _$identity);
+  _$$TransactionModelImplCopyWith<_$TransactionModelImpl> get copyWith =>
+      __$$TransactionModelImplCopyWithImpl<_$TransactionModelImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AmountModelImplToJson(
+    return _$$TransactionModelImplToJson(
       this,
     );
   }
 }
 
-abstract class _AmountModel implements AmountModel {
-  const factory _AmountModel(
-          {final int? id,
-          @JsonKey(name: "customer_id") final int? customerId,
-          final double amount,
-          final String? description,
-          @JsonKey(name: "to_get") final bool toGet,
-          @JsonKey(name: "date_time") final DateTime? dateTime}) =
-      _$AmountModelImpl;
+abstract class _TransactionModel implements TransactionModel {
+  const factory _TransactionModel(
+      {final int? id,
+      @IntConverter() @JsonKey(name: "customer_id") final int? customerId,
+      @DoubleConverter() final double amount,
+      final String? description,
+      @BoolConverter() @JsonKey(name: "to_get") final bool toGet,
+      @DateTimeConverter() @JsonKey(name: "date_time") final DateTime? dateTime,
+      @JsonKey(name: "transaction_type")
+      final String transactionType}) = _$TransactionModelImpl;
 
-  factory _AmountModel.fromJson(Map<String, dynamic> json) =
-      _$AmountModelImpl.fromJson;
+  factory _TransactionModel.fromJson(Map<String, dynamic> json) =
+      _$TransactionModelImpl.fromJson;
 
   @override
   int? get id;
   @override
+  @IntConverter()
   @JsonKey(name: "customer_id")
   int? get customerId;
   @override
+  @DoubleConverter()
   double get amount;
   @override
   String? get description;
   @override
+  @BoolConverter()
   @JsonKey(name: "to_get")
   bool get toGet;
   @override
+  @DateTimeConverter()
   @JsonKey(name: "date_time")
   DateTime? get dateTime;
+  @override
+  @JsonKey(name: "transaction_type")
+  String get transactionType;
 
-  /// Create a copy of AmountModel
+  /// Create a copy of TransactionModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AmountModelImplCopyWith<_$AmountModelImpl> get copyWith =>
+  _$$TransactionModelImplCopyWith<_$TransactionModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

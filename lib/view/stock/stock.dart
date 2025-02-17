@@ -7,11 +7,9 @@ import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/view/stock/add_item_popup.dart';
 import 'package:db_billmate/view/stock/item_list.dart';
 import 'package:db_billmate/view/stock/item_table_headers.dart';
-import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/item_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Stock extends HookConsumerWidget {

@@ -1,7 +1,10 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/constants/colors.dart';
+import 'package:db_billmate/helpers/sddb_helper.dart';
+import 'package:db_billmate/models/customer_model.dart';
 import 'package:db_billmate/view/customers/elements/transaction_popup.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
+import 'package:db_billmate/vm/transaction_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -27,10 +30,10 @@ class AddCustomerTransactions extends HookConsumerWidget {
                 context: context,
                 builder: (context) => TransactionPopup(
                       youGot: false,
-                      lastId: tempCustomer.state.transactionList?.length ?? 0,
                       onSave: (p0) async {
-                        tempCustomer.state = tempCustomer.state.copyWith(transactionList: [p0, ...tempCustomer.state.transactionList ?? []]);
-                        await ref.read(customerVMProvider.notifier).save(tempCustomer.state);
+                        TransactionModel model = p0.copyWith(customerId: tempCustomer.state.id);
+                        qp(model);
+                        await ref.read(transactionVMProvider.notifier).save(model);
                       },
                     ));
           },
@@ -46,10 +49,10 @@ class AddCustomerTransactions extends HookConsumerWidget {
                 context: context,
                 builder: (context) => TransactionPopup(
                       youGot: true,
-                      lastId: tempCustomer.state.transactionList?.length ?? 0,
                       onSave: (p0) async {
-                        tempCustomer.state = tempCustomer.state.copyWith(transactionList: [p0, ...tempCustomer.state.transactionList ?? []]);
-                        await ref.read(customerVMProvider.notifier).save(tempCustomer.state);
+                        TransactionModel model = p0.copyWith(customerId: tempCustomer.state.id);
+                        qp(model);
+                        await ref.read(transactionVMProvider.notifier).save(model);
                       },
                     ));
           },

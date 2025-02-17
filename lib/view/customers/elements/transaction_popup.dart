@@ -10,21 +10,19 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TransactionPopup extends HookConsumerWidget {
   final bool youGot;
-  final AmountModel? amountModel;
-  final int lastId;
-  final Function(AmountModel) onSave;
+  final TransactionModel? amountModel;
+  final Function(TransactionModel) onSave;
 
   const TransactionPopup({
     super.key,
     required this.youGot,
     this.amountModel,
-    required this.lastId,
     required this.onSave,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final model = useState<AmountModel>(amountModel ?? AmountModel());
+    final model = useState<TransactionModel>(amountModel ?? TransactionModel());
     final amountController = useTextEditingController(text: "${model.value.amount}" "");
     final noteController = useTextEditingController(text: model.value.description ?? "");
     final formKey = GlobalKey<FormState>();
@@ -101,8 +99,9 @@ class TransactionPopup extends HookConsumerWidget {
                             description: noteController.text,
                           );
                         } else {
+                          // int id = UniqueIdGenerator.generateId();
                           model.value = model.value.copyWith(
-                            id: model.value.id ?? (lastId + 1),
+                            id: model.value.id,
                             amount: double.parse(amountController.text),
                             description: noteController.text,
                             dateTime: model.value.dateTime ?? DateTime.now(),

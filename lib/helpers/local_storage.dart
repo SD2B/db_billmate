@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:db_billmate/models/customer_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -67,85 +68,82 @@ class LocalStorage {
     }
   }
 
- /// Get (Query) data from a table
-static Future<List<Map<String, dynamic>>> get(
-  String tableName, {
-  Map<String, dynamic>? where,
-  Map<String, dynamic>? search,
-  Map<String, dynamic>? notWhere,
-  int? limit,
-  int pageIndex = 1, // Page index starts from 1
-  String? orderBy, // Column to sort by
-  bool ascending = true, // Sort order: true for ASC, false for DESC
-  bool isDouble = false, // Indicates if the orderBy column is stored as a string but represents numeric values
-}) async {
-  final db = await _getDatabase();
+  /// Get (Query) data from a table
+  static Future<List<Map<String, dynamic>>> get(
+    String tableName, {
+    Map<String, dynamic>? where,
+    Map<String, dynamic>? search,
+    Map<String, dynamic>? notWhere,
+    int? limit,
+    int pageIndex = 1, // Page index starts from 1
+    String? orderBy, // Column to sort by
+    bool ascending = true, // Sort order: true for ASC, false for DESC
+    bool isDouble = false, // Indicates if the orderBy column is stored as a string but represents numeric values
+  }) async {
+    final db = await _getDatabase();
 
-  // Building the WHERE clause
-  final whereClauses = <String>[];
-  final whereArgs = <dynamic>[];
+    // Building the WHERE clause
+    final whereClauses = <String>[];
+    final whereArgs = <dynamic>[];
 
-  // Add WHERE conditions
-  if (where != null) {
-    where.forEach((key, value) {
-      whereClauses.add('$key = ?');
-      whereArgs.add(value);
-    });
-  }
+    // Add WHERE conditions
+    if (where != null) {
+      where.forEach((key, value) {
+        whereClauses.add('$key = ?');
+        whereArgs.add(value);
+      });
+    }
 
-  // Add NOT WHERE conditions
-  if (notWhere != null) {
-    notWhere.forEach((key, value) {
-      whereClauses.add('$key != ?');
-      whereArgs.add(value);
-    });
-  }
+    // Add NOT WHERE conditions
+    if (notWhere != null) {
+      notWhere.forEach((key, value) {
+        whereClauses.add('$key != ?');
+        whereArgs.add(value);
+      });
+    }
 
-  // Add SEARCH conditions
-  if (search != null) {
-    search.forEach((key, value) {
-      whereClauses.add('$key LIKE ?');
-      whereArgs.add('%$value%');
-    });
-  }
+    // Add SEARCH conditions
+    if (search != null) {
+      search.forEach((key, value) {
+        whereClauses.add('$key LIKE ?');
+        whereArgs.add('%$value%');
+      });
+    }
 
-  // Combine all conditions
-  final whereString = whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null;
+    // Combine all conditions
+    final whereString = whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null;
 
-  // Build the ORDER BY clause with CAST if isDouble is true
-  final orderByClause = orderBy != null
-      ? '${isDouble ? 'CAST($orderBy AS DECIMAL)' : orderBy} ${ascending ? 'ASC' : 'DESC'}'
-      : null;
+    // Build the ORDER BY clause with CAST if isDouble is true
+    final orderByClause = orderBy != null ? '${isDouble ? 'CAST($orderBy AS DECIMAL)' : orderBy} ${ascending ? 'ASC' : 'DESC'}' : null;
 
-  // Calculate the OFFSET for pagination
-  final offset = (pageIndex - 1) * (limit ?? 0);
+    // Calculate the OFFSET for pagination
+    final offset = (pageIndex - 1) * (limit ?? 0);
 
-  // Execute the query
-  final result = await db.query(
-    tableName,
-    where: whereString,
-    whereArgs: whereArgs,
-    limit: limit,
-    offset: offset, // Apply the offset for pagination
-    orderBy: orderByClause, // Apply sorting
-  );
+    // Execute the query
+    final result = await db.query(
+      tableName,
+      where: whereString,
+      whereArgs: whereArgs,
+      limit: limit,
+      offset: offset, // Apply the offset for pagination
+      orderBy: orderByClause, // Apply sorting
+    );
 
-  // Deserialize JSON strings back to their original types
-  return result.map((row) {
-    return row.map((key, value) {
-      if (value is String && (value.startsWith('[') || value.startsWith('{'))) {
-        // Try to decode JSON strings
-        try {
-          return MapEntry(key, jsonDecode(value));
-        } catch (_) {
-          return MapEntry(key, value); // Leave as-is if not JSON
+    // Deserialize JSON strings back to their original types
+    return result.map((row) {
+      return row.map((key, value) {
+        if (value is String && (value.startsWith('[') || value.startsWith('{'))) {
+          // Try to decode JSON strings
+          try {
+            return MapEntry(key, jsonDecode(value));
+          } catch (_) {
+            return MapEntry(key, value); // Leave as-is if not JSON
+          }
         }
-      }
-      return MapEntry(key, value);
-    });
-  }).toList();
-}
-
+        return MapEntry(key, value);
+      });
+    }).toList();
+  }
 
   /// Save (Insert) data into a table
   static Future<int> save(String tableName, Map<String, dynamic> data) async {
@@ -168,58 +166,58 @@ static Future<List<Map<String, dynamic>>> get(
   }
 
   /// Update data in a table
-static Future<int?> update(
-  String tableName,
-  Map<String, dynamic> data, {
-  Map<String, dynamic>? where,
-}) async {
-  final db = await _getDatabase();
+  static Future<int?> update(
+    String tableName,
+    Map<String, dynamic> data, {
+    Map<String, dynamic>? where,
+  }) async {
+    final db = await _getDatabase();
 
-  // Serialize complex objects to JSON strings
-  final serializedData = data.map((key, value) {
-    if (value is List || value is Map) {
-      return MapEntry(key, jsonEncode(value));
-    }
-    return MapEntry(key, value);
-  });
-
-  // Building the WHERE clause
-  final whereClauses = <String>[];
-  final whereArgs = <dynamic>[];
-
-  if (where != null) {
-    where.forEach((key, value) {
-      whereClauses.add('$key = ?');
-      whereArgs.add(value);
+    // Serialize complex objects to JSON strings
+    final serializedData = data.map((key, value) {
+      if (value is List || value is Map) {
+        return MapEntry(key, jsonEncode(value));
+      }
+      return MapEntry(key, value);
     });
-  }
 
-  final whereString = whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null;
+    // Building the WHERE clause
+    final whereClauses = <String>[];
+    final whereArgs = <dynamic>[];
 
-  // Fetch the IDs of the rows to be updated
-  final rowsToUpdate = await db.query(
-    tableName,
-    columns: ['id'], // Only fetch the 'id' column
-    where: whereString,
-    whereArgs: whereArgs,
-  );
+    if (where != null) {
+      where.forEach((key, value) {
+        whereClauses.add('$key = ?');
+        whereArgs.add(value);
+      });
+    }
 
-  // Extract the ID of the first row to be updated, if any
-  final firstUpdatedId = rowsToUpdate.isNotEmpty ? rowsToUpdate.first['id'] as int : null;
+    final whereString = whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null;
 
-  if (firstUpdatedId != null) {
-    // Execute the update
-    await db.update(
+    // Fetch the IDs of the rows to be updated
+    final rowsToUpdate = await db.query(
       tableName,
-      serializedData,
+      columns: ['id'], // Only fetch the 'id' column
       where: whereString,
       whereArgs: whereArgs,
     );
-  }
 
-  // Return the ID of the first updated row
-  return firstUpdatedId;
-}
+    // Extract the ID of the first row to be updated, if any
+    final firstUpdatedId = rowsToUpdate.isNotEmpty ? rowsToUpdate.first['id'] as int : null;
+
+    if (firstUpdatedId != null) {
+      // Execute the update
+      await db.update(
+        tableName,
+        serializedData,
+        where: whereString,
+        whereArgs: whereArgs,
+      );
+    }
+
+    // Return the ID of the first updated row
+    return firstUpdatedId;
+  }
 
   /// Delete data from a table
   static Future<int> delete(String tableName, {Map<String, dynamic>? where}) async {
@@ -246,110 +244,151 @@ static Future<int?> update(
     );
   }
 
-/// Update specific column data based on a condition
-static Future<int> updateWhere({
-  required String tableName,
-  required String columnName,
-  required Map<String, dynamic> where,
-  required dynamic data,
-}) async {
-  final db = await _getDatabase();
+  /// Update specific column data based on a condition
+  static Future<int> updateWhere({
+    required String tableName,
+    required String columnName,
+    required Map<String, dynamic> where,
+    required dynamic data,
+  }) async {
+    final db = await _getDatabase();
 
-  // Serialize the data if it is a complex object
-  final newValue = data is List || data is Map ? jsonEncode(data) : data;
+    // Serialize the data if it is a complex object
+    final newValue = data is List || data is Map ? jsonEncode(data) : data;
 
-  // Build the WHERE clause
-  final whereClauses = <String>[];
-  final whereArgs = <dynamic>[];
+    // Build the WHERE clause
+    final whereClauses = <String>[];
+    final whereArgs = <dynamic>[];
 
-  where.forEach((key, value) {
-    whereClauses.add('$key = ?');
-    whereArgs.add(value);
-  });
+    where.forEach((key, value) {
+      whereClauses.add('$key = ?');
+      whereArgs.add(value);
+    });
 
-  final whereString = whereClauses.join(' AND ');
+    final whereString = whereClauses.join(' AND ');
 
-  // Prepare the data to update
-  final updatedData = {columnName: newValue};
+    // Prepare the data to update
+    final updatedData = {columnName: newValue};
 
-  // Execute the update query
-  return await db.update(
-    tableName,
-    updatedData,
-    where: whereString,
-    whereArgs: whereArgs,
-  );
-}
+    // Execute the update query
+    return await db.update(
+      tableName,
+      updatedData,
+      where: whereString,
+      whereArgs: whereArgs,
+    );
+  }
 
+  static Future<void> ensureTableExits() async {
+    final db = await _getDatabase();
+    await Future.wait([
+      ensureAttributesTableExists(db),
+      ensureCustomerTableExists(db),
+      ensureTransactionTableExists(db),
+    ]);
+    // await ensureAttributesTableExists(db);
+    // await ensureCustomerTableExists(db);
+    // await ensureTransactionTableExists(db);
+  }
 
+  static Future<void> ensureAttributesTableExists(Database db) async {
+    const tableName = "attributes";
 
+    // Check if the table exists
+    final exists = await _checkTableExists(db, tableName);
 
-
-
-
-static Future<void> ensureAttributesTableExists() async {
-  final db = await _getDatabase();
-  const tableName = "attributes";
-
-  // Define the table structure
-  const tableStructure = {
-    "id": 0, // Example placeholder
-    "mode": "TEXT",
-    "data": "TEXT"
-  };
-
-  // Check if the table exists
-  final exists = await _checkTableExists(db, tableName);
-
-  // Create the table if it doesn't exist
-  if (!exists) {
-    final createTableQuery = '''
+    // Create the table if it doesn't exist
+    if (!exists) {
+      final createTableQuery = '''
       CREATE TABLE $tableName (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         mode TEXT,
         data TEXT
       )
     ''';
-    await db.execute(createTableQuery);
+      await db.execute(createTableQuery);
 
-    // Insert initial values into the table
-    final initialValues = [
-      {
-        "id": 1,
-        "mode": "category",
-        "data": jsonEncode(["Rice", "Oil", "Vegetables", "Fruits"])
-      },
-      {
-        "id": 2,
-        "mode": "units",
-        "data": jsonEncode(["kg", "g", "litre", "ml", "no", "pac"])
-      },
-      {
-        "id": 3,
-        "mode": "groupList",
-        "data": jsonEncode(["South"])
+      // Insert initial values into the table
+      final initialValues = [
+        {
+          "id": 1,
+          "mode": "category",
+          "data": jsonEncode(["Rice", "Oil", "Vegetables", "Fruits"])
+        },
+        {
+          "id": 2,
+          "mode": "units",
+          "data": jsonEncode(["kg", "g", "litre", "ml", "no", "pac"])
+        },
+        {
+          "id": 3,
+          "mode": "groupList",
+          "data": jsonEncode(["South"])
+        }
+      ];
+
+      for (var value in initialValues) {
+        await db.insert(tableName, value);
       }
-    ];
-
-    for (var value in initialValues) {
-      await db.insert(tableName, value);
     }
+  }
+
+  static Future<void> ensureCustomerTableExists(Database db) async {
+    const tableName = DBTable.customers;
+    // Check if the table exists
+    final exists = await _checkTableExists(db, tableName);
+    // Create the table if it doesn't exist
+    if (!exists) {
+      final createTableQuery = '''
+      CREATE TABLE $tableName (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        phone TEXT,
+        address TEXT, 
+        group_name TEXT, 
+        balance_amount TEXT, 
+        modified TEXT
+      )
+    ''';
+      await db.execute(createTableQuery);
+    }
+  }
+
+  static Future<void> ensureTransactionTableExists(Database db) async {
+    const tableName = DBTable.transactions;
+    // Check if the table exists
+    final exists = await _checkTableExists(db, tableName);
+    // Create the table if it doesn't exist
+    if (!exists) {
+      final createTableQuery = '''
+      CREATE TABLE $tableName (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        customer_id TEXT,
+        amount TEXT,
+        description TEXT,
+        to_get INT, 
+        transaction_type TEXT,
+        date_time TEXT
+      )
+    ''';
+      await db.execute(createTableQuery);
+
+      TransactionModel model = TransactionModel(id: 1, customerId: 0, amount: 0, dateTime: DateTime.now(), description: "N?A", toGet: false, transactionType: "demo");
+      await db.insert(tableName, model.toJson());
+    }
+  }
+
+// Execute raw SQL query
+  static Future<int> rawQuery(String query, [List<Object?>? arguments]) async {
+    final db = await _getDatabase();
+    return await db.rawUpdate(query, arguments);
   }
 }
 
-
-}
-
-
-
-
-
-
-
 class DBTable {
-  static String transactions = "transactions";
-  static String customers = "customers";
-  static String items = "items";
-  static String suppliers = "suppliers";
-  static String attributes = "attributes";
+  static const String transactions = "transactions";
+  static const String customers = "customers";
+  static const String items = "items";
+  static const String suppliers = "suppliers";
+  static const String attributes = "attributes";
 }

@@ -8,6 +8,7 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/customer_model.dart';
 import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/view/stock/add_category_popup.dart';
+import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/group_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,17 +17,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AddCustomerPopup extends HookConsumerWidget {
   final CustomerModel updateModel;
-  final Function(CustomerModel) onSaved;
-  const AddCustomerPopup({super.key, this.updateModel = const CustomerModel(), required this.onSaved});
+  const AddCustomerPopup({super.key, this.updateModel = const CustomerModel()});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final model = useState<CustomerModel>(updateModel);
+    final transactionModel = useState(TransactionModel());
     final nameController = useTextEditingController(text: model.value.name);
     final phoneController = useTextEditingController(text: model.value.phone);
     final addressController = useTextEditingController(text: model.value.address);
-    final openingBalanceController = useTextEditingController();
+    final openingBalanceController = useTextEditingController(text: "0.00");
     final toGet = useState(true);
     void resetFields() {
       nameController.clear();
@@ -43,18 +44,15 @@ class AddCustomerPopup extends HookConsumerWidget {
           name: nameController.text,
           phone: phoneController.text,
           address: addressController.text,
-          transactionList: [
-            if (model.value.transactionList?.isNotEmpty == true) ...model.value.transactionList ?? [],
-            if (openingBalanceController.text.isNotEmpty)
-              AmountModel(
-                id: 1,
+          balanceAmount: toGet.value ? "${double.tryParse(openingBalanceController.text)}" : "-${double.tryParse(openingBalanceController.text)}",
+        );
+        transactionModel.value = openingBalanceController.text == "0.00"
+            ? TransactionModel()
+            : TransactionModel(
                 amount: double.tryParse(openingBalanceController.text) ?? 0.0,
                 toGet: toGet.value,
                 dateTime: DateTime.now(),
-              ),
-          ],
-        );
-        onSaved(model.value);
+              );
       }
     }
 
@@ -143,6 +141,7 @@ class AddCustomerPopup extends HookConsumerWidget {
                       inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
                       hintText: "Opening balance",
                       textInputType: TextInputType.number,
+                      selectAllOnFocus: true,
                     ),
                     const SizedBox(width: 10),
                     Checkbox(
@@ -161,13 +160,16 @@ class AddCustomerPopup extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomButton(
+              isLoading: ref.read(customerVMProvider).isLoading,
               width: 140,
+              height: 45,
               text: model.value.id != null ? "Update" : "Save",
               textColor: whiteColor,
               buttonColor: model.value.id != null ? black87Color : black54Color,
-              onTap: () {
+              onTap: () async {
                 if (formKey.currentState?.validate() ?? false) {
                   saveCustomer();
+                  await ref.read(customerVMProvider.notifier).save(model.value, transactionModel: transactionModel.value);
                   formKey.currentState?.reset();
                   context.pop();
                 }
@@ -175,13 +177,16 @@ class AddCustomerPopup extends HookConsumerWidget {
             ),
             if (model.value.id == null)
               CustomButton(
+                isLoading: ref.read(customerVMProvider).isLoading,
                 width: 140,
+                height: 45,
                 text: "Save & New",
                 textColor: whiteColor,
                 buttonColor: ColorCode.colorList(context).primary,
-                onTap: () {
+                onTap: () async {
                   if (formKey.currentState?.validate() ?? false) {
                     saveCustomer();
+                    await ref.read(customerVMProvider.notifier).save(model.value, transactionModel: transactionModel.value);
                     formKey.currentState?.reset();
                     resetFields();
                   }

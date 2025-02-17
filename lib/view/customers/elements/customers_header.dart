@@ -82,7 +82,7 @@ class CustomersHeader extends HookConsumerWidget {
           width: 80,
           height: 45,
           text: "+ Add",
-          onTap: () => showDialog(context: context, builder: (context) => AddCustomerPopup( onSaved: (model) async => await ref.read(customerVMProvider.notifier).save(model))),
+          onTap: () => showDialog(context: context, builder: (context) => AddCustomerPopup()),
           buttonColor: ColorCode.colorList(context).primary,
           textColor: whiteColor,
         ),

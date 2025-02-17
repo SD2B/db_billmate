@@ -17,9 +17,6 @@ _$CustomerModelImpl _$$CustomerModelImplFromJson(Map<String, dynamic> json) =>
       modified: json['modified'] == null
           ? null
           : DateTime.parse(json['modified'] as String),
-      transactionList: (json['transactionList'] as List<dynamic>?)
-          ?.map((e) => AmountModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
 Map<String, dynamic> _$$CustomerModelImplToJson(_$CustomerModelImpl instance) =>
@@ -31,27 +28,49 @@ Map<String, dynamic> _$$CustomerModelImplToJson(_$CustomerModelImpl instance) =>
       'group_name': instance.group,
       'balance_amount': instance.balanceAmount,
       'modified': instance.modified?.toIso8601String(),
-      'transactionList': instance.transactionList,
     };
 
-_$AmountModelImpl _$$AmountModelImplFromJson(Map<String, dynamic> json) =>
-    _$AmountModelImpl(
+_$TransactionModelImpl _$$TransactionModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$TransactionModelImpl(
       id: (json['id'] as num?)?.toInt(),
-      customerId: (json['customer_id'] as num?)?.toInt(),
-      amount: (json['amount'] as num?)?.toDouble() ?? 0.0,
+      customerId: _$JsonConverterFromJson<String, int>(
+          json['customer_id'], const IntConverter().fromJson),
+      amount: json['amount'] == null
+          ? 0.0
+          : const DoubleConverter().fromJson(json['amount'] as String),
       description: json['description'] as String?,
-      toGet: json['to_get'] as bool? ?? false,
-      dateTime: json['date_time'] == null
-          ? null
-          : DateTime.parse(json['date_time'] as String),
+      toGet: json['to_get'] == null
+          ? false
+          : const BoolConverter().fromJson((json['to_get'] as num).toInt()),
+      dateTime: _$JsonConverterFromJson<String, DateTime>(
+          json['date_time'], const DateTimeConverter().fromJson),
+      transactionType:
+          json['transaction_type'] as String? ?? TransactionType.normal,
     );
 
-Map<String, dynamic> _$$AmountModelImplToJson(_$AmountModelImpl instance) =>
+Map<String, dynamic> _$$TransactionModelImplToJson(
+        _$TransactionModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'customer_id': instance.customerId,
-      'amount': instance.amount,
+      'customer_id': _$JsonConverterToJson<String, int>(
+          instance.customerId, const IntConverter().toJson),
+      'amount': const DoubleConverter().toJson(instance.amount),
       'description': instance.description,
-      'to_get': instance.toGet,
-      'date_time': instance.dateTime?.toIso8601String(),
+      'to_get': const BoolConverter().toJson(instance.toGet),
+      'date_time': _$JsonConverterToJson<String, DateTime>(
+          instance.dateTime, const DateTimeConverter().toJson),
+      'transaction_type': instance.transactionType,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

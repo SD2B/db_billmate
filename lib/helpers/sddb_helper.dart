@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
 
 qp(dynamic data, [String? tag]) {
   final String ttag = tag != null ? tag.toString() : '';
@@ -37,7 +38,6 @@ extension NameInitials on String {
   }
 }
 
-
 extension GestureWidgetExtension on Widget {
   /// Add tap gesture handling to a widget
   Widget onTap(VoidCallback? onTap) {
@@ -72,8 +72,12 @@ extension GestureWidgetExtension on Widget {
   }
 }
 
+class UniqueIdGenerator {
+  static final Random _random = Random();
 
-
-
-
-
+  static int generateId() {
+    int timestamp = DateTime.now().millisecondsSinceEpoch;
+    int randomNumber = _random.nextInt(10000000);
+    return int.parse('$timestamp$randomNumber');
+  }
+}

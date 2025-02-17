@@ -5,6 +5,7 @@ import 'package:db_billmate/helpers/form_helpers.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/customer_model.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
+import 'package:db_billmate/vm/transaction_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +18,7 @@ class AccountClosePopup extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tempCustomer = ref.read(tempCustomerProvider.notifier);
+    final transaction = useState(TransactionModel());
 
     final toGet = useState(true);
     final amountController = useTextEditingController();
@@ -62,10 +64,25 @@ class AccountClosePopup extends HookConsumerWidget {
                 onTap: () async {
                   tempCustomer.state = tempCustomer.state.copyWith(
                     modified: DateTime.now(),
-                    balanceAmount: amountController.text.isEmpty ? "0.00" : double.parse(amountController.text).toStringAsFixed(2),
-                    transactionList: amountController.text.isEmpty ? [] : [AmountModel(id: 1, amount: double.parse(amountController.text), toGet: toGet.value, customerId: tempCustomer.state.id, dateTime: DateTime.now(), description: "Balance after account closed on ${DateFormat("EEEE, MMMM dd, yyyy").format(DateTime.now())} at ${DateFormat("hh:mm aaa").format(DateTime.now())}")],
+                    balanceAmount: amountController.text.isEmpty
+                        ? "0.00"
+                        : toGet.value
+                            ? double.parse(amountController.text).toStringAsFixed(2)
+                            : "-${double.parse(amountController.text).toStringAsFixed(2)}",
                   );
-                  await ref.read(customerVMProvider.notifier).save(tempCustomer.state);
+                  if (amountController.text.isNotEmpty) {
+                    transaction.value = TransactionModel(
+                      id: 1,
+                      amount: double.parse(amountController.text),
+                      toGet: toGet.value,
+                      customerId: tempCustomer.state.id,
+                      dateTime: DateTime.now(),
+                      description: "Balance after account closed on ${DateFormat("EEEE, MMMM dd, yyyy").format(DateTime.now())} at ${DateFormat("hh:mm aaa").format(DateTime.now())}",
+                    );
+                  }
+                  await ref.read(transactionVMProvider.notifier).closeAccount(tempCustomer.state.id ?? 0);
+                  await ref.read(customerVMProvider.notifier).save(tempCustomer.state, transactionModel: transaction.value);
+                  await ref.read(transactionVMProvider.notifier).get(where: {"customer_id": tempCustomer.state.id});
                   context.pop();
                 }),
             CustomButton(width: 120, height: 40, buttonColor: ColorCode.colorList(context).borderColor, textColor: black87Color, text: "No", onTap: () => context.pop()),
