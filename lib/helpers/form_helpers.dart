@@ -61,24 +61,33 @@ class DoubleOnlyFormatter extends TextInputFormatter {
 
 
 class CapitalizeEachWordFormatter extends TextInputFormatter {
+  final bool onlyFirstLetter;
+
+  CapitalizeEachWordFormatter({this.onlyFirstLetter = false});
+
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    // Split the text by spaces, capitalize the first letter of each word, and rejoin.
-    final oldText = oldValue.text;
     final newText = newValue.text;
 
-    // Capitalize each word in the new text.
-    final formattedText = newText
-        .split(' ')
-        .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
-        .join(' ');
+    String formattedText;
+    if (onlyFirstLetter) {
+      // Capitalize only the first letter of the entire text
+      formattedText = newText.isNotEmpty
+          ? newText[0].toUpperCase() + newText.substring(1)
+          : '';
+    } else {
+      // Capitalize the first letter of each word
+      formattedText = newText
+          .split(' ')
+          .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
+          .join(' ');
+    }
 
-    // Calculate the new cursor position based on the difference in text length.
+    // Adjust cursor position
     final selectionOffset = newValue.selection.baseOffset +
         (formattedText.length - newText.length);
 
-    // Return the updated TextEditingValue with the adjusted cursor position.
     return TextEditingValue(
       text: formattedText,
       selection: TextSelection.collapsed(

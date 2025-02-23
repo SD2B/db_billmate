@@ -3,6 +3,7 @@ import 'package:db_billmate/common_widgets/custom_dropdown.dart';
 import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/constants/colors.dart';
+import 'package:db_billmate/helpers/form_helpers.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/models/ui_model.dart';
@@ -60,6 +61,7 @@ class AddItemPopup extends HookConsumerWidget {
               CustomTextField(
                 controller: nameController,
                 hintText: "Enter name",
+                inputFormatters: [CapitalizeEachWordFormatter()],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Name is required.";
@@ -133,10 +135,12 @@ class AddItemPopup extends HookConsumerWidget {
               CustomTextField(
                 controller: purchasePriceController,
                 hintText: "Enter purchase price",
+                selectAllOnFocus: true,
               ),
               CustomTextField(
                 controller: salePriceController,
                 hintText: "Enter sale price",
+                selectAllOnFocus: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Sale price is required.";

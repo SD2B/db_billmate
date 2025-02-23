@@ -81,8 +81,13 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
     final res = await TransactionRepo.delete(model.id ?? 0);
     if (res) {
       CustomerModel customerModel = ref.read(tempCustomerProvider.notifier).state;
-      customerModel = customerModel.copyWith(balanceAmount: "${double.parse(customerModel.balanceAmount) - model.amount}");
+      qp(customerModel, "ddddddddddddddddddd");
+      qp(model, "ddddddddddddddddddd");
+      final minusAmount = model.toGet ? model.amount : double.parse("-${model.amount}");
+      final balanceAmount = double.parse(customerModel.balanceAmount);
+      customerModel = customerModel.copyWith(balanceAmount: "${balanceAmount - minusAmount}");
       await ref.read(customerVMProvider.notifier).save(customerModel);
+      get(where: {"customer_id": customerModel.id});
     }
     return res;
   }

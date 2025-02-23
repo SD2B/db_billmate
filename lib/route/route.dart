@@ -2,8 +2,10 @@ import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/constants.dart';
 import 'package:db_billmate/view/custom_scaffold/custom_scaffold.dart';
 import 'package:db_billmate/view/customers/customers.dart';
+import 'package:db_billmate/view/home/home.dart';
 import 'package:db_billmate/view/sales/sales.dart';
 import 'package:db_billmate/view/settings/settings.dart';
+import 'package:db_billmate/view/stock/excel.dart';
 import 'package:db_billmate/view/stock/stock.dart';
 import 'package:db_billmate/view/suppliers/suppliers.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,7 @@ List<RouteBase> _buildRoutes() {
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
           },
-          child: const CustomScaffold(child: Customers())),
+          child: const CustomScaffold(child: Home())),
       routes: [
         ..._staticRoutes(),
       ],
@@ -39,6 +41,17 @@ List<RouteBase> _buildRoutes() {
 
 List<GoRoute> _staticRoutes() {
   return [
+    GoRoute(
+      path: RouteEnum.home.name,
+      name: RouteEnum.home.name,
+      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+        key: state.pageKey,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+        },
+        child: const CustomScaffold(child: Home()),
+      ),
+    ),
     GoRoute(
       path: RouteEnum.customers.name,
       name: RouteEnum.customers.name,
@@ -92,6 +105,17 @@ List<GoRoute> _staticRoutes() {
           return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
         },
         child: const CustomScaffold(child: Settings()),
+      ),
+    ),
+    GoRoute(
+      path: RouteEnum.excel.name,
+      name: RouteEnum.excel.name,
+      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+        key: state.pageKey,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+        },
+        child: const ExcelScreen(),
       ),
     ),
   ];

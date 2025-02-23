@@ -72,7 +72,6 @@ class AccountClosePopup extends HookConsumerWidget {
                   );
                   if (amountController.text.isNotEmpty) {
                     transaction.value = TransactionModel(
-                      id: 1,
                       amount: double.parse(amountController.text),
                       toGet: toGet.value,
                       customerId: tempCustomer.state.id,

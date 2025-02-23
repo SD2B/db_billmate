@@ -1,6 +1,8 @@
+import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tilt/flutter_tilt.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomAppbar extends StatelessWidget {
@@ -11,29 +13,49 @@ class CustomAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentRoute = GoRouter.of(context).routeInformationProvider.value.uri;
-    String routeName = currentRoute.toString() == "/" ? RouteEnum.customers.asString : currentRoute.toString().split("/").join();
+    String routeName = currentRoute.toString() == "/" ? RouteEnum.home.asString : nameFromRoute(currentRoute.toString().split("/").join());
     return Row(
       children: [
         Expanded(
           child: Container(
-            height: 60,
+            height: 60, 
             decoration: BoxDecoration(),
+            padding: EdgeInsets.only(left: 20),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  "DB - Billmate / ",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                      ),
-                ),
+                // Text(
+                //   "DB - Billmate",
+                //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                //         fontWeight: FontWeight.w500,
+                //         fontSize: 16,
+                //       ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 3.0),
+                //   child: Icon(
+                //     Icons.arrow_right_rounded,
+                //     size: 30,
+                //   ),
+                // ),
                 Text(
                   routeName.toTitleCase(),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        color: blackColor,
                       ),
                 ),
+                Spacer(),
+                Tilt(
+                  tiltConfig: TiltConfig(enableReverse: true),
+                  shadowConfig: ShadowConfig(enableReverse: true),
+                  lightConfig: LightConfig(enableReverse: true),
+                  child: Image.asset(
+                    "assets/image/billmate_logo.png",
+                    height: 45,
+                  ),
+                )
               ],
             ),
           ),

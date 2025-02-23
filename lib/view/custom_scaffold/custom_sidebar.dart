@@ -4,6 +4,7 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/view/custom_scaffold/sidebar_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomSidebar extends StatelessWidget {
   const CustomSidebar({
@@ -37,7 +38,9 @@ class CustomSidebar extends StatelessWidget {
               borderRadius: BorderRadius.circular(500),
               child: Image.asset("assets/image/db.png"),
             ),
-          ),
+          ).onTap(() {
+            context.goNamed(RouteEnum.home.name);
+          }),
           Divider(),
           Column(
             spacing: 30,
@@ -65,11 +68,6 @@ List<UiModel> sidebarButtons = [
     value: RouteEnum.customers.name,
   ),
   UiModel(
-    title: "Suppliers",
-    svg: "assets/svg/supplier.svg",
-    value: RouteEnum.supplier.name,
-  ),
-  UiModel(
     title: "Sales",
     svg: "assets/svg/sale.svg",
     value: RouteEnum.sales.name,
@@ -78,6 +76,11 @@ List<UiModel> sidebarButtons = [
     title: "Stock",
     svg: "assets/svg/stock.svg",
     value: RouteEnum.stock.name,
+  ),
+  UiModel(
+    title: "Suppliers",
+    svg: "assets/svg/supplier.svg",
+    value: RouteEnum.supplier.name,
   ),
   UiModel(
     title: "Settings",

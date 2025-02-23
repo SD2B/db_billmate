@@ -2,6 +2,7 @@ import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/constants/colors.dart';
+import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/view/stock/add_item_popup.dart';
@@ -10,6 +11,7 @@ import 'package:db_billmate/view/stock/item_table_headers.dart';
 import 'package:db_billmate/vm/item_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Stock extends HookConsumerWidget {
@@ -44,6 +46,14 @@ class Stock extends HookConsumerWidget {
               height: 45,
               text: "+ Add",
               onTap: () => showDialog(context: context, builder: (context) => AddItemPopup()),
+              buttonColor: ColorCode.colorList(context).primary,
+              textColor: whiteColor,
+            ),
+            CustomButton(
+              width: 150,
+              height: 45,
+              text: "⬇️ Import from excel",
+              onTap: () => context.pushNamed(RouteEnum.excel.name),
               buttonColor: ColorCode.colorList(context).primary,
               textColor: whiteColor,
             ),

@@ -80,7 +80,7 @@ class TransactionPopup extends HookConsumerWidget {
               CustomTextField(
                 controller: noteController,
                 hintText: "Enter note",
-                inputFormatters: [CapitalizeEachWordFormatter()],
+                inputFormatters: [CapitalizeEachWordFormatter(onlyFirstLetter: true)],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -13,7 +13,7 @@ class SidebarButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final currentRoute = GoRouter.of(context).routeInformationProvider.value.uri;
-    final isSelected = currentRoute.toString() == "/${e.value}" || (currentRoute.toString() == "/" && e.value == RouteEnum.customers.name);
+    final isSelected = currentRoute.toString() == "/${e.value}";
 
     return InkWell(
         onTap: () {
