@@ -18,26 +18,12 @@ class CustomAppbar extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            height: 60, 
+            height: 60,
             decoration: BoxDecoration(),
             padding: EdgeInsets.only(left: 20),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Text(
-                //   "DB - Billmate",
-                //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                //         fontWeight: FontWeight.w500,
-                //         fontSize: 16,
-                //       ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 3.0),
-                //   child: Icon(
-                //     Icons.arrow_right_rounded,
-                //     size: 30,
-                //   ),
-                // ),
                 Text(
                   routeName.toTitleCase(),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(

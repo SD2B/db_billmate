@@ -21,7 +21,7 @@ class FilePickerHelper {
     return null; // Return null if user cancels
   }
 
-  Future<List<ItemModel>> importExcel() async {
+ static Future<List<ItemModel>> importExcel() async {
     List<ItemModel> items = [];
 
     // Pick an Excel file

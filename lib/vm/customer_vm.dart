@@ -12,7 +12,7 @@ class CustomerVM extends AsyncNotifier<List<CustomerModel>> {
     return await get(noLoad: true);
   }
 
-  Future<List<CustomerModel>> get({bool noLoad = false, int? id, Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = false, Map<String, dynamic>? search, int? pageIndex}) async {
+  Future<List<CustomerModel>> get({bool noLoad = false, int? id, Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = false, Map<String, dynamic>? search, int? pageIndex, bool noWait = false}) async {
     try {
       if (!noLoad) state = AsyncValue.loading();
       List<CustomerModel> customers = state.value ?? [];
@@ -24,7 +24,7 @@ class CustomerVM extends AsyncNotifier<List<CustomerModel>> {
       } else {
         customers = await CustomerRepo.fetchCustomers(where: where, orderBy: orderBy ?? "modified", isDouble: isDouble, ascending: ascending, search: search);
       }
-      await Future.delayed(Duration(seconds: 2));
+      if (!noWait) await Future.delayed(Duration(seconds: 2));
       state = AsyncValue.data(customers);
       return customers;
     } catch (e, stackTrace) {

@@ -84,7 +84,14 @@ class Stock extends HookConsumerWidget {
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               ItemTableHeaders(value: "Category"),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
-              ItemTableHeaders(flex: 0, value: "Unit"),
+              // ItemTableHeaders(flex: 0, value: "Unit"),
+              SizedBox(
+                width: 30,
+                child: Text(
+                  "Unit",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+                ),
+              ),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               ItemTableHeaders(value: "Purchse Price"),
               VerticalDivider(color: ColorCode.colorList(context).secondary),

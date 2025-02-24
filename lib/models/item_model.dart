@@ -12,6 +12,7 @@ class ItemModel with _$ItemModel {
     @JsonKey(name: "purchase_price") String? purchasePrice,
     String? unit,
     String? quantity,
+    @JsonKey(name: "bill_price") String? billPrice,
   }) = _ItemModel;
 
   factory ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);

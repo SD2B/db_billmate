@@ -25,6 +25,20 @@ class ItemRepo {
     }
   }
 
+  static Future<bool> multiSave(List<ItemModel> itemList) async {
+    try {
+      final tempList = await get();
+      for (ItemModel model in itemList) {
+        if (tempList.where((e) => e.name?.toLowerCase() == model.name?.toLowerCase()).toList().isEmpty) {
+          await LocalStorage.save(DBTable.items, model.toJson());
+        }
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   static Future<bool> delete(int id) async {
     try {
       await LocalStorage.delete(DBTable.items, where: {"id": id});

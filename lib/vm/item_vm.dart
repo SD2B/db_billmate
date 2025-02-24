@@ -2,6 +2,9 @@ import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/vm/repositories/item_repo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+final tempItemProvider = StateProvider<ItemModel>((ref) => ItemModel());
+final tempItemListProvider = StateProvider<List<ItemModel>>((ref) => []);
+
 class ItemVM extends AsyncNotifier<List<ItemModel>> {
   @override
   Future<List<ItemModel>> build() async {
@@ -20,6 +23,13 @@ class ItemVM extends AsyncNotifier<List<ItemModel>> {
     if (res) await get();
     return res;
   }
+
+  Future<bool> multiSave(List<ItemModel> itemList) async {
+    final res = await ItemRepo.multiSave(itemList);
+    if (res) await get();
+    return res;
+  }
+
   Future<bool> delete(int id) async {
     final res = await ItemRepo.delete(id);
     if (res) await get();

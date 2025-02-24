@@ -29,6 +29,8 @@ mixin _$ItemModel {
   String? get purchasePrice => throw _privateConstructorUsedError;
   String? get unit => throw _privateConstructorUsedError;
   String? get quantity => throw _privateConstructorUsedError;
+  @JsonKey(name: "bill_price")
+  String? get billPrice => throw _privateConstructorUsedError;
 
   /// Serializes this ItemModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +54,8 @@ abstract class $ItemModelCopyWith<$Res> {
       @JsonKey(name: "sale_price") String? salePrice,
       @JsonKey(name: "purchase_price") String? purchasePrice,
       String? unit,
-      String? quantity});
+      String? quantity,
+      @JsonKey(name: "bill_price") String? billPrice});
 }
 
 /// @nodoc
@@ -77,6 +80,7 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
     Object? purchasePrice = freezed,
     Object? unit = freezed,
     Object? quantity = freezed,
+    Object? billPrice = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -107,6 +111,10 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
           ? _value.quantity
           : quantity // ignore: cast_nullable_to_non_nullable
               as String?,
+      billPrice: freezed == billPrice
+          ? _value.billPrice
+          : billPrice // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -126,7 +134,8 @@ abstract class _$$ItemModelImplCopyWith<$Res>
       @JsonKey(name: "sale_price") String? salePrice,
       @JsonKey(name: "purchase_price") String? purchasePrice,
       String? unit,
-      String? quantity});
+      String? quantity,
+      @JsonKey(name: "bill_price") String? billPrice});
 }
 
 /// @nodoc
@@ -149,6 +158,7 @@ class __$$ItemModelImplCopyWithImpl<$Res>
     Object? purchasePrice = freezed,
     Object? unit = freezed,
     Object? quantity = freezed,
+    Object? billPrice = freezed,
   }) {
     return _then(_$ItemModelImpl(
       id: freezed == id
@@ -179,6 +189,10 @@ class __$$ItemModelImplCopyWithImpl<$Res>
           ? _value.quantity
           : quantity // ignore: cast_nullable_to_non_nullable
               as String?,
+      billPrice: freezed == billPrice
+          ? _value.billPrice
+          : billPrice // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -193,7 +207,8 @@ class _$ItemModelImpl implements _ItemModel {
       @JsonKey(name: "sale_price") this.salePrice,
       @JsonKey(name: "purchase_price") this.purchasePrice,
       this.unit,
-      this.quantity});
+      this.quantity,
+      @JsonKey(name: "bill_price") this.billPrice});
 
   factory _$ItemModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ItemModelImplFromJson(json);
@@ -214,10 +229,13 @@ class _$ItemModelImpl implements _ItemModel {
   final String? unit;
   @override
   final String? quantity;
+  @override
+  @JsonKey(name: "bill_price")
+  final String? billPrice;
 
   @override
   String toString() {
-    return 'ItemModel(id: $id, name: $name, category: $category, salePrice: $salePrice, purchasePrice: $purchasePrice, unit: $unit, quantity: $quantity)';
+    return 'ItemModel(id: $id, name: $name, category: $category, salePrice: $salePrice, purchasePrice: $purchasePrice, unit: $unit, quantity: $quantity, billPrice: $billPrice)';
   }
 
   @override
@@ -235,13 +253,15 @@ class _$ItemModelImpl implements _ItemModel {
                 other.purchasePrice == purchasePrice) &&
             (identical(other.unit, unit) || other.unit == unit) &&
             (identical(other.quantity, quantity) ||
-                other.quantity == quantity));
+                other.quantity == quantity) &&
+            (identical(other.billPrice, billPrice) ||
+                other.billPrice == billPrice));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, category, salePrice,
-      purchasePrice, unit, quantity);
+      purchasePrice, unit, quantity, billPrice);
 
   /// Create a copy of ItemModel
   /// with the given fields replaced by the non-null parameter values.
@@ -267,7 +287,8 @@ abstract class _ItemModel implements ItemModel {
       @JsonKey(name: "sale_price") final String? salePrice,
       @JsonKey(name: "purchase_price") final String? purchasePrice,
       final String? unit,
-      final String? quantity}) = _$ItemModelImpl;
+      final String? quantity,
+      @JsonKey(name: "bill_price") final String? billPrice}) = _$ItemModelImpl;
 
   factory _ItemModel.fromJson(Map<String, dynamic> json) =
       _$ItemModelImpl.fromJson;
@@ -288,6 +309,9 @@ abstract class _ItemModel implements ItemModel {
   String? get unit;
   @override
   String? get quantity;
+  @override
+  @JsonKey(name: "bill_price")
+  String? get billPrice;
 
   /// Create a copy of ItemModel
   /// with the given fields replaced by the non-null parameter values.

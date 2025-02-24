@@ -15,6 +15,7 @@ _$ItemModelImpl _$$ItemModelImplFromJson(Map<String, dynamic> json) =>
       purchasePrice: json['purchase_price'] as String?,
       unit: json['unit'] as String?,
       quantity: json['quantity'] as String?,
+      billPrice: json['bill_price'] as String?,
     );
 
 Map<String, dynamic> _$$ItemModelImplToJson(_$ItemModelImpl instance) =>
@@ -26,4 +27,5 @@ Map<String, dynamic> _$$ItemModelImplToJson(_$ItemModelImpl instance) =>
       'purchase_price': instance.purchasePrice,
       'unit': instance.unit,
       'quantity': instance.quantity,
+      'bill_price': instance.billPrice,
     };

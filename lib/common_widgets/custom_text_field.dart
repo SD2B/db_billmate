@@ -23,7 +23,8 @@ class CustomTextField extends HookWidget {
   final double? boarderRadius;
   final int? maxLines;
   final bool firstLetterCapital;
-  final bool selectAllOnFocus; // New parameter
+  final bool selectAllOnFocus; 
+  final bool readOnly; 
 
   const CustomTextField({
     super.key,
@@ -46,7 +47,8 @@ class CustomTextField extends HookWidget {
     this.boarderRadius,
     this.maxLines,
     this.firstLetterCapital = false,
-    this.selectAllOnFocus = false, // Default is false
+    this.selectAllOnFocus = false, 
+    this.readOnly = false, 
   });
 
   @override
@@ -74,6 +76,7 @@ class CustomTextField extends HookWidget {
       width: width,
       height: (errorText.value != null && errorText.value != "") ? (height ?? 50) + 20 : (height ?? 50),
       child: TextFormField(
+        readOnly: readOnly,
         textCapitalization: firstLetterCapital ? TextCapitalization.words : TextCapitalization.none,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontSize: 16,

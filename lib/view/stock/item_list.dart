@@ -58,7 +58,15 @@ class ItemList extends HookConsumerWidget {
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
                         ItemTableValues(value: "${item.category}"),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                        ItemTableValues(flex: 0, value: "${item.unit}"),
+                        // ItemTableValues(flex: 0, value: "${item.unit}"),
+                        SizedBox(
+                          width: 30,
+                          child: Text(
+                            "${item.unit}",
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w400, color: ColorCode.colorList(context).primary),
+                          ),
+                        ),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
                         ItemTableValues(value: "${item.purchasePrice}"),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
