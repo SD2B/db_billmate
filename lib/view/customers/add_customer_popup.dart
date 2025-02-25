@@ -44,7 +44,11 @@ class AddCustomerPopup extends HookConsumerWidget {
           name: nameController.text,
           phone: phoneController.text,
           address: addressController.text,
-          balanceAmount: toGet.value ? "${double.tryParse(openingBalanceController.text)}" : "-${double.tryParse(openingBalanceController.text)}",
+          balanceAmount: model.value.id != null
+              ? model.value.balanceAmount
+              : toGet.value
+                  ? "${double.tryParse(openingBalanceController.text)}"
+                  : "-${double.tryParse(openingBalanceController.text)}",
         );
         transactionModel.value = openingBalanceController.text == "0.00"
             ? TransactionModel()

@@ -1,3 +1,4 @@
+import 'package:db_billmate/helpers/model_helper.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part '../gen/item_model.freezed.dart';
 part '../gen/item_model.g.dart';
@@ -6,6 +7,7 @@ part '../gen/item_model.g.dart';
 class ItemModel with _$ItemModel {
   const factory ItemModel({
     int? id,
+    @JsonKey(name: "bill_id") int? billId,
     String? name,
     String? category,
     @JsonKey(name: "sale_price") String? salePrice,
@@ -16,4 +18,23 @@ class ItemModel with _$ItemModel {
   }) = _ItemModel;
 
   factory ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);
+}
+
+@freezed
+class BillModel with _$BillModel {
+  const factory BillModel({
+    int? id,
+    @JsonKey(name: "invoice_number") String? invoiceNumber,
+    @JsonKey(name: "customer_id") String? customerId,
+    @JsonKey(name: "customer_name") String? customerName,
+    List<ItemModel>? items,
+    String? total,
+    String? ob,
+    @JsonKey(name: "grand_total") String? grandTotal,
+    @Default("0.00") String received,
+    @JsonKey(name: "current_balance") String? currentBalance,
+    @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
+  }) = _BillModel;
+
+  factory BillModel.fromJson(Map<String, dynamic> json) => _$BillModelFromJson(json);
 }

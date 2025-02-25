@@ -6,7 +6,7 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/customer_model.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/view/sales/bill_items_header.dart';
-import 'package:db_billmate/view/stock/item_table_headers.dart';
+import 'package:db_billmate/view/sales/label_text.dart';
 import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/item_vm.dart';
@@ -22,13 +22,16 @@ class Sales extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ItemModel billItem = ref.watch(tempItemProvider);
     List<ItemModel> billItemList = ref.watch(tempItemListProvider);
-    CustomerModel billCustomer = ref.watch(tempCustomerProvider);
+    CustomerModel billCustomer = ref.watch(billCustomerProvider);
+    FocusNode itemFocus = useFocusNode();
     final customerNameController = useTextEditingController(text: "");
     final itemNameController = useTextEditingController();
     final quantityController = useTextEditingController(text: billItem.quantity ?? "0");
     final unitPriceController = useTextEditingController(text: billItem.salePrice ?? "0");
     final itemPrice = (double.tryParse(quantityController.text) ?? 1) * double.parse(billItem.salePrice ?? '0');
     final priceController = useTextEditingController(text: itemPrice.toString());
+    final receivedController = useTextEditingController(text: "0.00");
+    final currentBalance = useState(0.00);
 
     void getItemTotalPrice() {
       final itemPriceTotal = (double.tryParse(unitPriceController.text) ?? 0) * (double.tryParse(quantityController.text) ?? 1);
@@ -37,13 +40,62 @@ class Sales extends HookConsumerWidget {
 
     void addToItemLst() {
       if (itemNameController.text.isNotEmpty && quantityController.text.isNotEmpty && unitPriceController.text.isNotEmpty) {
-        ref.read(tempItemListProvider.notifier).state.add(billItem.copyWith(
+        if (billItem.billId != null) {
+          // Update the existing item in the list
+          ref.read(tempItemListProvider.notifier).state = ref
+              .read(tempItemListProvider)
+              .map((item) => item.billId == billItem.billId
+                  ? billItem.copyWith(
+                      salePrice: unitPriceController.text,
+                      quantity: quantityController.text,
+                      billPrice: priceController.text,
+                    )
+                  : item)
+              .toList();
+        } else {
+          // Add a new item to the list
+          ref.read(tempItemListProvider.notifier).state = [
+            ...ref.read(tempItemListProvider),
+            billItem.copyWith(
+              billId: ref.read(tempItemListProvider).length + 1,
               salePrice: unitPriceController.text,
               quantity: quantityController.text,
               billPrice: priceController.text,
-            ));
+            ),
+          ];
+        }
+
+        // Reset the temp item
         ref.read(tempItemProvider.notifier).state = ItemModel();
+
+        // Request focus for the next item
+        itemFocus.requestFocus();
       }
+    }
+
+    void removeFromList(int billId) {
+      ref.read(tempItemListProvider.notifier).state = ref.read(tempItemListProvider).where((item) => item.billId != billId).toList();
+    }
+
+    double getTotal() {
+      double total = billItemList.fold<double>(
+        0.0,
+        (sum, item) => sum + (double.tryParse(item.billPrice ?? '0') ?? 0),
+      );
+      return double.parse(total.toStringAsFixed(2));
+    }
+
+    double getGrandTotal() {
+      double total = getTotal();
+      double ob = double.parse(billCustomer.balanceAmount);
+      return double.parse((ob + total).toStringAsFixed(2));
+    }
+
+    double getcurrentBalance() {
+      double gTotal = getGrandTotal();
+      double recieved = double.tryParse(receivedController.text) ?? 0.00;
+      currentBalance.value = double.parse((gTotal - recieved).toStringAsFixed(2));
+      return currentBalance.value;
     }
 
     // Update itemNameController when billItem changes
@@ -58,38 +110,63 @@ class Sales extends HookConsumerWidget {
       getItemTotalPrice();
       return null;
     }, [billItem]);
+    useEffect(() {
+      qp(getcurrentBalance());
+      return null;
+    }, [receivedController]);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TypeAheadField<CustomerModel>(
-          suggestionsCallback: (search) async {
-            qp(search);
-            List<CustomerModel> customers = await ref.read(customerVMProvider.notifier).get(search: {"name": search}, noWait: true);
-            return customers;
-          },
-          builder: (context, controller, focusNode) {
-            return CustomTextField(
-              width: 300,
-              focusNode: focusNode,
-              controller: customerNameController,
-              selectAllOnFocus: true,
-              hintText: "",
-              label: "Customer name",
-              onChanged: (value) => controller.text = value,
-            );
-          },
-          itemBuilder: (context, customer) {
-            return ListTile(
-              tileColor: whiteColor,
-              title: Text(customer.name ?? ""),
-              subtitle: Text(customer.phone ?? ""),
-            );
-          },
-          onSelected: (customer) {
-            ref.read(tempCustomerProvider.notifier).state = customer;
-          },
+        Row(
+          spacing: 10,
+          children: [
+            TypeAheadField<CustomerModel>(
+              suggestionsCallback: (search) async {
+                qp(search);
+                List<CustomerModel> customers = await ref.read(customerVMProvider.notifier).get(search: {"name": search}, noWait: true);
+                return customers;
+              },
+              builder: (context, controller, focusNode) {
+                return CustomTextField(
+                  width: 300,
+                  focusNode: focusNode,
+                  controller: customerNameController,
+                  selectAllOnFocus: true,
+                  hintText: "",
+                  label: "Customer name",
+                  onChanged: (value) => controller.text = value,
+                );
+              },
+              itemBuilder: (context, customer) {
+                return ListTile(
+                  tileColor: whiteColor,
+                  title: Text(customer.name ?? ""),
+                  subtitle: Text(customer.phone ?? ""),
+                );
+              },
+              onSelected: (customer) {
+                ref.read(billCustomerProvider.notifier).state = customer;
+              },
+            ),
+            if (billCustomer != CustomerModel())
+              CustomButtonCard(
+                width: 200,
+                height: 45,
+                text: "Account Balance: ${billCustomer.balanceAmount}",
+                buttonColor: ColorCode.colorList(context).borderColor!,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+              ),
+            Spacer(),
+            CustomButtonCard(
+              width: 200,
+              height: 45,
+              text: "Invoice No: 1",
+              buttonColor: ColorCode.colorList(context).borderColor!,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+            ),
+          ],
         ),
         20.height,
         Row(
@@ -102,9 +179,10 @@ class Sales extends HookConsumerWidget {
                 return item;
               },
               builder: (context, controller, focusNode) {
+                itemFocus = focusNode;
                 return CustomTextField(
                   width: 300,
-                  focusNode: focusNode,
+                  focusNode: itemFocus,
                   controller: itemNameController,
                   selectAllOnFocus: true,
                   hintText: "",
@@ -118,10 +196,11 @@ class Sales extends HookConsumerWidget {
                 );
               },
               itemBuilder: (context, item) {
+                final pricePer = "${item.salePrice}/${item.unit}";
                 return ListTile(
                   tileColor: whiteColor,
                   title: Text(item.name ?? ""),
-                  subtitle: Text(item.salePrice ?? ""),
+                  subtitle: Text(pricePer),
                 );
               },
               onSelected: (item) {
@@ -233,20 +312,71 @@ class Sales extends HookConsumerWidget {
                           ItemTableValues(value: "${item.billPrice}"),
                           VerticalDivider(color: ColorCode.colorList(context).borderColor),
                           SizedBox(
-                            width: 100,
-                            child: PopupMenuButton(
-                                color: whiteColor,
-                                itemBuilder: (context) {
-                                  return [];
-                                }),
-                          )
+                              width: 100,
+                              child: IconButton(
+                                onPressed: () => removeFromList(item.billId ?? 0),
+                                icon: Icon(Icons.delete),
+                              ))
                         ],
                       ),
                     ),
                   ),
                 );
               }),
-        )
+        ),
+        if (billItemList.isNotEmpty) ...[
+          20.height,
+          Row(
+            spacing: 10,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Column(
+                children: [
+                  LabelText(
+                    label: "Total:",
+                    text: getTotal().toString(),
+                  ),
+                  LabelText(
+                    label: "Old Balance:",
+                    text: billCustomer.balanceAmount,
+                  ),
+                  LabelText(
+                    label: "Grand Total:",
+                    text: getGrandTotal().toString(),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  CustomTextField(
+                    width: 200,
+                    selectAllOnFocus: true,
+                    controller: receivedController,
+                    hintText: "",
+                    label: "Recieved",
+                    onChanged: (p0) {
+                      getcurrentBalance();
+                    },
+                  ),
+                  LabelText(
+                    label: "Current Balance:",
+                    text: (currentBalance.value).toString(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          20.height,
+          Row(
+            spacing: 10,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              CustomButton(width: 100, buttonColor: blackColor, textColor: whiteColor, text: "Save", onTap: () {}),
+              CustomButton(width: 100, buttonColor: blackColor, textColor: whiteColor, text: "Save & Print", onTap: () {}),
+              CustomButton(width: 100, buttonColor: ColorCode.colorList(context).borderColor, textColor: blackColor, text: "Clear", onTap: () {}),
+            ],
+          )
+        ]
       ],
     );
   }

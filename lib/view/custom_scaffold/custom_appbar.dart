@@ -39,7 +39,7 @@ class CustomAppbar extends StatelessWidget {
                   lightConfig: LightConfig(enableReverse: true),
                   child: Image.asset(
                     "assets/image/billmate_logo.png",
-                    height: 45,
+                    height: 30,
                   ),
                 )
               ],

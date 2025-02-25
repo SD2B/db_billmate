@@ -5,6 +5,7 @@ import 'package:db_billmate/vm/repositories/transaction_repo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final tempCustomerProvider = StateProvider<CustomerModel>((ref) => CustomerModel());
+final billCustomerProvider = StateProvider<CustomerModel>((ref) => CustomerModel());
 
 class CustomerVM extends AsyncNotifier<List<CustomerModel>> {
   @override

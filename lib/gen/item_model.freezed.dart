@@ -21,6 +21,8 @@ ItemModel _$ItemModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ItemModel {
   int? get id => throw _privateConstructorUsedError;
+  @JsonKey(name: "bill_id")
+  int? get billId => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get category => throw _privateConstructorUsedError;
   @JsonKey(name: "sale_price")
@@ -49,6 +51,7 @@ abstract class $ItemModelCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
+      @JsonKey(name: "bill_id") int? billId,
       String? name,
       String? category,
       @JsonKey(name: "sale_price") String? salePrice,
@@ -74,6 +77,7 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
   @override
   $Res call({
     Object? id = freezed,
+    Object? billId = freezed,
     Object? name = freezed,
     Object? category = freezed,
     Object? salePrice = freezed,
@@ -86,6 +90,10 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      billId: freezed == billId
+          ? _value.billId
+          : billId // ignore: cast_nullable_to_non_nullable
               as int?,
       name: freezed == name
           ? _value.name
@@ -129,6 +137,7 @@ abstract class _$$ItemModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
+      @JsonKey(name: "bill_id") int? billId,
       String? name,
       String? category,
       @JsonKey(name: "sale_price") String? salePrice,
@@ -152,6 +161,7 @@ class __$$ItemModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
+    Object? billId = freezed,
     Object? name = freezed,
     Object? category = freezed,
     Object? salePrice = freezed,
@@ -164,6 +174,10 @@ class __$$ItemModelImplCopyWithImpl<$Res>
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      billId: freezed == billId
+          ? _value.billId
+          : billId // ignore: cast_nullable_to_non_nullable
               as int?,
       name: freezed == name
           ? _value.name
@@ -202,6 +216,7 @@ class __$$ItemModelImplCopyWithImpl<$Res>
 class _$ItemModelImpl implements _ItemModel {
   const _$ItemModelImpl(
       {this.id,
+      @JsonKey(name: "bill_id") this.billId,
       this.name,
       this.category,
       @JsonKey(name: "sale_price") this.salePrice,
@@ -215,6 +230,9 @@ class _$ItemModelImpl implements _ItemModel {
 
   @override
   final int? id;
+  @override
+  @JsonKey(name: "bill_id")
+  final int? billId;
   @override
   final String? name;
   @override
@@ -235,7 +253,7 @@ class _$ItemModelImpl implements _ItemModel {
 
   @override
   String toString() {
-    return 'ItemModel(id: $id, name: $name, category: $category, salePrice: $salePrice, purchasePrice: $purchasePrice, unit: $unit, quantity: $quantity, billPrice: $billPrice)';
+    return 'ItemModel(id: $id, billId: $billId, name: $name, category: $category, salePrice: $salePrice, purchasePrice: $purchasePrice, unit: $unit, quantity: $quantity, billPrice: $billPrice)';
   }
 
   @override
@@ -244,6 +262,7 @@ class _$ItemModelImpl implements _ItemModel {
         (other.runtimeType == runtimeType &&
             other is _$ItemModelImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.billId, billId) || other.billId == billId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.category, category) ||
                 other.category == category) &&
@@ -260,8 +279,8 @@ class _$ItemModelImpl implements _ItemModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, category, salePrice,
-      purchasePrice, unit, quantity, billPrice);
+  int get hashCode => Object.hash(runtimeType, id, billId, name, category,
+      salePrice, purchasePrice, unit, quantity, billPrice);
 
   /// Create a copy of ItemModel
   /// with the given fields replaced by the non-null parameter values.
@@ -282,6 +301,7 @@ class _$ItemModelImpl implements _ItemModel {
 abstract class _ItemModel implements ItemModel {
   const factory _ItemModel(
       {final int? id,
+      @JsonKey(name: "bill_id") final int? billId,
       final String? name,
       final String? category,
       @JsonKey(name: "sale_price") final String? salePrice,
@@ -295,6 +315,9 @@ abstract class _ItemModel implements ItemModel {
 
   @override
   int? get id;
+  @override
+  @JsonKey(name: "bill_id")
+  int? get billId;
   @override
   String? get name;
   @override
@@ -318,5 +341,409 @@ abstract class _ItemModel implements ItemModel {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ItemModelImplCopyWith<_$ItemModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+BillModel _$BillModelFromJson(Map<String, dynamic> json) {
+  return _BillModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$BillModel {
+  int? get id => throw _privateConstructorUsedError;
+  @JsonKey(name: "invoice_number")
+  String? get invoiceNumber => throw _privateConstructorUsedError;
+  @JsonKey(name: "customer_id")
+  String? get customerId => throw _privateConstructorUsedError;
+  @JsonKey(name: "customer_name")
+  String? get customerName => throw _privateConstructorUsedError;
+  List<ItemModel>? get items => throw _privateConstructorUsedError;
+  String? get total => throw _privateConstructorUsedError;
+  String? get ob => throw _privateConstructorUsedError;
+  @JsonKey(name: "grand_total")
+  String? get grandTotal => throw _privateConstructorUsedError;
+  String get received => throw _privateConstructorUsedError;
+  @JsonKey(name: "current_balance")
+  String? get currentBalance => throw _privateConstructorUsedError;
+  @DateTimeConverter()
+  @JsonKey(name: "date_time")
+  DateTime? get dateTime => throw _privateConstructorUsedError;
+
+  /// Serializes this BillModel to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of BillModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $BillModelCopyWith<BillModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BillModelCopyWith<$Res> {
+  factory $BillModelCopyWith(BillModel value, $Res Function(BillModel) then) =
+      _$BillModelCopyWithImpl<$Res, BillModel>;
+  @useResult
+  $Res call(
+      {int? id,
+      @JsonKey(name: "invoice_number") String? invoiceNumber,
+      @JsonKey(name: "customer_id") String? customerId,
+      @JsonKey(name: "customer_name") String? customerName,
+      List<ItemModel>? items,
+      String? total,
+      String? ob,
+      @JsonKey(name: "grand_total") String? grandTotal,
+      String received,
+      @JsonKey(name: "current_balance") String? currentBalance,
+      @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime});
+}
+
+/// @nodoc
+class _$BillModelCopyWithImpl<$Res, $Val extends BillModel>
+    implements $BillModelCopyWith<$Res> {
+  _$BillModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of BillModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? invoiceNumber = freezed,
+    Object? customerId = freezed,
+    Object? customerName = freezed,
+    Object? items = freezed,
+    Object? total = freezed,
+    Object? ob = freezed,
+    Object? grandTotal = freezed,
+    Object? received = null,
+    Object? currentBalance = freezed,
+    Object? dateTime = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      invoiceNumber: freezed == invoiceNumber
+          ? _value.invoiceNumber
+          : invoiceNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerId: freezed == customerId
+          ? _value.customerId
+          : customerId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerName: freezed == customerName
+          ? _value.customerName
+          : customerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      items: freezed == items
+          ? _value.items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<ItemModel>?,
+      total: freezed == total
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as String?,
+      ob: freezed == ob
+          ? _value.ob
+          : ob // ignore: cast_nullable_to_non_nullable
+              as String?,
+      grandTotal: freezed == grandTotal
+          ? _value.grandTotal
+          : grandTotal // ignore: cast_nullable_to_non_nullable
+              as String?,
+      received: null == received
+          ? _value.received
+          : received // ignore: cast_nullable_to_non_nullable
+              as String,
+      currentBalance: freezed == currentBalance
+          ? _value.currentBalance
+          : currentBalance // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dateTime: freezed == dateTime
+          ? _value.dateTime
+          : dateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$BillModelImplCopyWith<$Res>
+    implements $BillModelCopyWith<$Res> {
+  factory _$$BillModelImplCopyWith(
+          _$BillModelImpl value, $Res Function(_$BillModelImpl) then) =
+      __$$BillModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      @JsonKey(name: "invoice_number") String? invoiceNumber,
+      @JsonKey(name: "customer_id") String? customerId,
+      @JsonKey(name: "customer_name") String? customerName,
+      List<ItemModel>? items,
+      String? total,
+      String? ob,
+      @JsonKey(name: "grand_total") String? grandTotal,
+      String received,
+      @JsonKey(name: "current_balance") String? currentBalance,
+      @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime});
+}
+
+/// @nodoc
+class __$$BillModelImplCopyWithImpl<$Res>
+    extends _$BillModelCopyWithImpl<$Res, _$BillModelImpl>
+    implements _$$BillModelImplCopyWith<$Res> {
+  __$$BillModelImplCopyWithImpl(
+      _$BillModelImpl _value, $Res Function(_$BillModelImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of BillModel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? invoiceNumber = freezed,
+    Object? customerId = freezed,
+    Object? customerName = freezed,
+    Object? items = freezed,
+    Object? total = freezed,
+    Object? ob = freezed,
+    Object? grandTotal = freezed,
+    Object? received = null,
+    Object? currentBalance = freezed,
+    Object? dateTime = freezed,
+  }) {
+    return _then(_$BillModelImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      invoiceNumber: freezed == invoiceNumber
+          ? _value.invoiceNumber
+          : invoiceNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerId: freezed == customerId
+          ? _value.customerId
+          : customerId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerName: freezed == customerName
+          ? _value.customerName
+          : customerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      items: freezed == items
+          ? _value._items
+          : items // ignore: cast_nullable_to_non_nullable
+              as List<ItemModel>?,
+      total: freezed == total
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as String?,
+      ob: freezed == ob
+          ? _value.ob
+          : ob // ignore: cast_nullable_to_non_nullable
+              as String?,
+      grandTotal: freezed == grandTotal
+          ? _value.grandTotal
+          : grandTotal // ignore: cast_nullable_to_non_nullable
+              as String?,
+      received: null == received
+          ? _value.received
+          : received // ignore: cast_nullable_to_non_nullable
+              as String,
+      currentBalance: freezed == currentBalance
+          ? _value.currentBalance
+          : currentBalance // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dateTime: freezed == dateTime
+          ? _value.dateTime
+          : dateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$BillModelImpl implements _BillModel {
+  const _$BillModelImpl(
+      {this.id,
+      @JsonKey(name: "invoice_number") this.invoiceNumber,
+      @JsonKey(name: "customer_id") this.customerId,
+      @JsonKey(name: "customer_name") this.customerName,
+      final List<ItemModel>? items,
+      this.total,
+      this.ob,
+      @JsonKey(name: "grand_total") this.grandTotal,
+      this.received = "0.00",
+      @JsonKey(name: "current_balance") this.currentBalance,
+      @DateTimeConverter() @JsonKey(name: "date_time") this.dateTime})
+      : _items = items;
+
+  factory _$BillModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BillModelImplFromJson(json);
+
+  @override
+  final int? id;
+  @override
+  @JsonKey(name: "invoice_number")
+  final String? invoiceNumber;
+  @override
+  @JsonKey(name: "customer_id")
+  final String? customerId;
+  @override
+  @JsonKey(name: "customer_name")
+  final String? customerName;
+  final List<ItemModel>? _items;
+  @override
+  List<ItemModel>? get items {
+    final value = _items;
+    if (value == null) return null;
+    if (_items is EqualUnmodifiableListView) return _items;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? total;
+  @override
+  final String? ob;
+  @override
+  @JsonKey(name: "grand_total")
+  final String? grandTotal;
+  @override
+  @JsonKey()
+  final String received;
+  @override
+  @JsonKey(name: "current_balance")
+  final String? currentBalance;
+  @override
+  @DateTimeConverter()
+  @JsonKey(name: "date_time")
+  final DateTime? dateTime;
+
+  @override
+  String toString() {
+    return 'BillModel(id: $id, invoiceNumber: $invoiceNumber, customerId: $customerId, customerName: $customerName, items: $items, total: $total, ob: $ob, grandTotal: $grandTotal, received: $received, currentBalance: $currentBalance, dateTime: $dateTime)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BillModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.invoiceNumber, invoiceNumber) ||
+                other.invoiceNumber == invoiceNumber) &&
+            (identical(other.customerId, customerId) ||
+                other.customerId == customerId) &&
+            (identical(other.customerName, customerName) ||
+                other.customerName == customerName) &&
+            const DeepCollectionEquality().equals(other._items, _items) &&
+            (identical(other.total, total) || other.total == total) &&
+            (identical(other.ob, ob) || other.ob == ob) &&
+            (identical(other.grandTotal, grandTotal) ||
+                other.grandTotal == grandTotal) &&
+            (identical(other.received, received) ||
+                other.received == received) &&
+            (identical(other.currentBalance, currentBalance) ||
+                other.currentBalance == currentBalance) &&
+            (identical(other.dateTime, dateTime) ||
+                other.dateTime == dateTime));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      invoiceNumber,
+      customerId,
+      customerName,
+      const DeepCollectionEquality().hash(_items),
+      total,
+      ob,
+      grandTotal,
+      received,
+      currentBalance,
+      dateTime);
+
+  /// Create a copy of BillModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BillModelImplCopyWith<_$BillModelImpl> get copyWith =>
+      __$$BillModelImplCopyWithImpl<_$BillModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BillModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _BillModel implements BillModel {
+  const factory _BillModel(
+      {final int? id,
+      @JsonKey(name: "invoice_number") final String? invoiceNumber,
+      @JsonKey(name: "customer_id") final String? customerId,
+      @JsonKey(name: "customer_name") final String? customerName,
+      final List<ItemModel>? items,
+      final String? total,
+      final String? ob,
+      @JsonKey(name: "grand_total") final String? grandTotal,
+      final String received,
+      @JsonKey(name: "current_balance") final String? currentBalance,
+      @DateTimeConverter()
+      @JsonKey(name: "date_time")
+      final DateTime? dateTime}) = _$BillModelImpl;
+
+  factory _BillModel.fromJson(Map<String, dynamic> json) =
+      _$BillModelImpl.fromJson;
+
+  @override
+  int? get id;
+  @override
+  @JsonKey(name: "invoice_number")
+  String? get invoiceNumber;
+  @override
+  @JsonKey(name: "customer_id")
+  String? get customerId;
+  @override
+  @JsonKey(name: "customer_name")
+  String? get customerName;
+  @override
+  List<ItemModel>? get items;
+  @override
+  String? get total;
+  @override
+  String? get ob;
+  @override
+  @JsonKey(name: "grand_total")
+  String? get grandTotal;
+  @override
+  String get received;
+  @override
+  @JsonKey(name: "current_balance")
+  String? get currentBalance;
+  @override
+  @DateTimeConverter()
+  @JsonKey(name: "date_time")
+  DateTime? get dateTime;
+
+  /// Create a copy of BillModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$BillModelImplCopyWith<_$BillModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

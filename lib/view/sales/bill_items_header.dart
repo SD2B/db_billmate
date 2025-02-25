@@ -52,7 +52,7 @@ class BillItemsHeader extends StatelessWidget {
               width: 100,
               child: Center(
                 child: Text(
-                  "Edit / Delete",
+                  "Actions",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
                 ),
               )),

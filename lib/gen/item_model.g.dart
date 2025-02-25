@@ -9,6 +9,7 @@ part of '../models/item_model.dart';
 _$ItemModelImpl _$$ItemModelImplFromJson(Map<String, dynamic> json) =>
     _$ItemModelImpl(
       id: (json['id'] as num?)?.toInt(),
+      billId: (json['bill_id'] as num?)?.toInt(),
       name: json['name'] as String?,
       category: json['category'] as String?,
       salePrice: json['sale_price'] as String?,
@@ -21,6 +22,7 @@ _$ItemModelImpl _$$ItemModelImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ItemModelImplToJson(_$ItemModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'bill_id': instance.billId,
       'name': instance.name,
       'category': instance.category,
       'sale_price': instance.salePrice,
@@ -29,3 +31,49 @@ Map<String, dynamic> _$$ItemModelImplToJson(_$ItemModelImpl instance) =>
       'quantity': instance.quantity,
       'bill_price': instance.billPrice,
     };
+
+_$BillModelImpl _$$BillModelImplFromJson(Map<String, dynamic> json) =>
+    _$BillModelImpl(
+      id: (json['id'] as num?)?.toInt(),
+      invoiceNumber: json['invoice_number'] as String?,
+      customerId: json['customer_id'] as String?,
+      customerName: json['customer_name'] as String?,
+      items: (json['items'] as List<dynamic>?)
+          ?.map((e) => ItemModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      total: json['total'] as String?,
+      ob: json['ob'] as String?,
+      grandTotal: json['grand_total'] as String?,
+      received: json['received'] as String? ?? "0.00",
+      currentBalance: json['current_balance'] as String?,
+      dateTime: _$JsonConverterFromJson<String, DateTime>(
+          json['date_time'], const DateTimeConverter().fromJson),
+    );
+
+Map<String, dynamic> _$$BillModelImplToJson(_$BillModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'invoice_number': instance.invoiceNumber,
+      'customer_id': instance.customerId,
+      'customer_name': instance.customerName,
+      'items': instance.items,
+      'total': instance.total,
+      'ob': instance.ob,
+      'grand_total': instance.grandTotal,
+      'received': instance.received,
+      'current_balance': instance.currentBalance,
+      'date_time': _$JsonConverterToJson<String, DateTime>(
+          instance.dateTime, const DateTimeConverter().toJson),
+    };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
