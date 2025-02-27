@@ -4,6 +4,7 @@ import 'package:db_billmate/view/custom_scaffold/custom_scaffold.dart';
 import 'package:db_billmate/view/customers/customers.dart';
 import 'package:db_billmate/view/home/home.dart';
 import 'package:db_billmate/view/sales/sales.dart';
+import 'package:db_billmate/view/sales/sales_report/sales_report.dart';
 import 'package:db_billmate/view/settings/settings.dart';
 import 'package:db_billmate/view/stock/excel.dart';
 import 'package:db_billmate/view/stock/stock.dart';
@@ -83,6 +84,17 @@ List<GoRoute> _staticRoutes() {
           return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
         },
         child: const CustomScaffold(child: Sales()),
+      ),
+    ),
+    GoRoute(
+      path: RouteEnum.salesReport.name,
+      name: RouteEnum.salesReport.name,
+      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+        key: state.pageKey,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+        },
+        child: const CustomScaffold(child: SalesReport()),
       ),
     ),
     GoRoute(

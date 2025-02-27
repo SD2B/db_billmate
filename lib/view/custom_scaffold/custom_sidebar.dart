@@ -3,8 +3,10 @@ import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/view/custom_scaffold/sidebar_button.dart';
+import 'package:db_billmate/vm/invoice_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CustomSidebar extends StatelessWidget {
   const CustomSidebar({
@@ -72,6 +74,13 @@ List<UiModel> sidebarButtons = [
     svg: "assets/svg/sale.svg",
     value: RouteEnum.sales.name,
   ),
+  UiModel(
+      title: "Sales Report",
+      svg: "assets/svg/inv_report.svg",
+      value: RouteEnum.salesReport.name,
+      onTap: (WidgetRef ref) {
+        // ref.read(invoiceVMProvider.notifier).get();
+      }),
   UiModel(
     title: "Stock",
     svg: "assets/svg/stock.svg",

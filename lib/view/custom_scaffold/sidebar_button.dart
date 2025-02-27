@@ -1,23 +1,23 @@
 import 'package:db_billmate/constants/colors.dart';
-import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/models/ui_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SidebarButton extends HookWidget {
+class SidebarButton extends HookConsumerWidget {
   final UiModel e;
   const SidebarButton({super.key, required this.e});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentRoute = GoRouter.of(context).routeInformationProvider.value.uri;
     final isSelected = currentRoute.toString() == "/${e.value}";
 
     return InkWell(
         onTap: () {
           context.goNamed(e.value!);
+          e.onTap?.call(ref);
         },
         child: Container(
           decoration: BoxDecoration(

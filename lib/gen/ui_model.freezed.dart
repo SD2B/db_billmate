@@ -29,6 +29,8 @@ mixin _$UiModel {
   String? get svg => throw _privateConstructorUsedError;
   List<String>? get valueList => throw _privateConstructorUsedError;
   List<String>? get labelList => throw _privateConstructorUsedError;
+  @FunctionConverter()
+  Function? get onTap => throw _privateConstructorUsedError;
 
   /// Serializes this UiModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,7 +55,8 @@ abstract class $UiModelCopyWith<$Res> {
       String? count,
       String? svg,
       List<String>? valueList,
-      List<String>? labelList});
+      List<String>? labelList,
+      @FunctionConverter() Function? onTap});
 }
 
 /// @nodoc
@@ -80,6 +83,7 @@ class _$UiModelCopyWithImpl<$Res, $Val extends UiModel>
     Object? svg = freezed,
     Object? valueList = freezed,
     Object? labelList = freezed,
+    Object? onTap = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -118,6 +122,10 @@ class _$UiModelCopyWithImpl<$Res, $Val extends UiModel>
           ? _value.labelList
           : labelList // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      onTap: freezed == onTap
+          ? _value.onTap
+          : onTap // ignore: cast_nullable_to_non_nullable
+              as Function?,
     ) as $Val);
   }
 }
@@ -138,7 +146,8 @@ abstract class _$$UiModelImplCopyWith<$Res> implements $UiModelCopyWith<$Res> {
       String? count,
       String? svg,
       List<String>? valueList,
-      List<String>? labelList});
+      List<String>? labelList,
+      @FunctionConverter() Function? onTap});
 }
 
 /// @nodoc
@@ -163,6 +172,7 @@ class __$$UiModelImplCopyWithImpl<$Res>
     Object? svg = freezed,
     Object? valueList = freezed,
     Object? labelList = freezed,
+    Object? onTap = freezed,
   }) {
     return _then(_$UiModelImpl(
       id: freezed == id
@@ -201,6 +211,10 @@ class __$$UiModelImplCopyWithImpl<$Res>
           ? _value._labelList
           : labelList // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      onTap: freezed == onTap
+          ? _value.onTap
+          : onTap // ignore: cast_nullable_to_non_nullable
+              as Function?,
     ));
   }
 }
@@ -217,7 +231,8 @@ class _$UiModelImpl implements _UiModel {
       this.count,
       this.svg,
       final List<String>? valueList,
-      final List<String>? labelList})
+      final List<String>? labelList,
+      @FunctionConverter() this.onTap})
       : _valueList = valueList,
         _labelList = labelList;
 
@@ -259,8 +274,12 @@ class _$UiModelImpl implements _UiModel {
   }
 
   @override
+  @FunctionConverter()
+  final Function? onTap;
+
+  @override
   String toString() {
-    return 'UiModel(id: $id, title: $title, subTitle: $subTitle, description: $description, value: $value, count: $count, svg: $svg, valueList: $valueList, labelList: $labelList)';
+    return 'UiModel(id: $id, title: $title, subTitle: $subTitle, description: $description, value: $value, count: $count, svg: $svg, valueList: $valueList, labelList: $labelList, onTap: $onTap)';
   }
 
   @override
@@ -280,7 +299,8 @@ class _$UiModelImpl implements _UiModel {
             const DeepCollectionEquality()
                 .equals(other._valueList, _valueList) &&
             const DeepCollectionEquality()
-                .equals(other._labelList, _labelList));
+                .equals(other._labelList, _labelList) &&
+            (identical(other.onTap, onTap) || other.onTap == onTap));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -295,7 +315,8 @@ class _$UiModelImpl implements _UiModel {
       count,
       svg,
       const DeepCollectionEquality().hash(_valueList),
-      const DeepCollectionEquality().hash(_labelList));
+      const DeepCollectionEquality().hash(_labelList),
+      onTap);
 
   /// Create a copy of UiModel
   /// with the given fields replaced by the non-null parameter values.
@@ -323,7 +344,8 @@ abstract class _UiModel implements UiModel {
       final String? count,
       final String? svg,
       final List<String>? valueList,
-      final List<String>? labelList}) = _$UiModelImpl;
+      final List<String>? labelList,
+      @FunctionConverter() final Function? onTap}) = _$UiModelImpl;
 
   factory _UiModel.fromJson(Map<String, dynamic> json) = _$UiModelImpl.fromJson;
 
@@ -345,6 +367,9 @@ abstract class _UiModel implements UiModel {
   List<String>? get valueList;
   @override
   List<String>? get labelList;
+  @override
+  @FunctionConverter()
+  Function? get onTap;
 
   /// Create a copy of UiModel
   /// with the given fields replaced by the non-null parameter values.

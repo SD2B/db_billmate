@@ -1,6 +1,7 @@
 enum RouteEnum {
   home,
   sales,
+  salesReport,
   stock,
   customers,
   supplier,
@@ -15,6 +16,8 @@ extension RouteEnumExtension on RouteEnum {
         return 'Dashboard';
       case RouteEnum.sales:
         return 'Sales';
+      case RouteEnum.salesReport:
+        return 'Sales Report';
       case RouteEnum.stock:
         return 'Stock';
       case RouteEnum.customers:

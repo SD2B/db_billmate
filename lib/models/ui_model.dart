@@ -1,3 +1,4 @@
+import 'package:db_billmate/helpers/model_helper.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part '../gen/ui_model.freezed.dart';
 part '../gen/ui_model.g.dart';
@@ -14,6 +15,7 @@ class UiModel with _$UiModel {
     String? svg,
     List<String>? valueList,
     List<String>? labelList,
+    @FunctionConverter() Function? onTap,
   }) = _UiModel;
 
   factory UiModel.fromJson(Map<String, dynamic> json) => _$UiModelFromJson(json);

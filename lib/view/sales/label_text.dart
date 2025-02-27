@@ -1,3 +1,4 @@
+import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:flutter/material.dart';
 
 class LabelText extends StatelessWidget {
@@ -14,8 +15,21 @@ class LabelText extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(label),
-        Text(text),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+        ),
+        5.width,
+        Text(
+          text,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: 12,
+                fontWeight: FontWeight.w900,
+              ),
+        ),
       ],
     );
   }

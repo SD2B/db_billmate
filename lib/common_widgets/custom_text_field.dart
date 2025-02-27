@@ -23,8 +23,9 @@ class CustomTextField extends HookWidget {
   final double? boarderRadius;
   final int? maxLines;
   final bool firstLetterCapital;
-  final bool selectAllOnFocus; 
-  final bool readOnly; 
+  final bool selectAllOnFocus;
+  final bool readOnly;
+  final bool isAmount;
 
   const CustomTextField({
     super.key,
@@ -47,8 +48,9 @@ class CustomTextField extends HookWidget {
     this.boarderRadius,
     this.maxLines,
     this.firstLetterCapital = false,
-    this.selectAllOnFocus = false, 
-    this.readOnly = false, 
+    this.selectAllOnFocus = false,
+    this.readOnly = false,
+    this.isAmount = false,
   });
 
   @override
@@ -137,18 +139,20 @@ class CustomTextField extends HookWidget {
                 color: Colors.red,
               ),
           prefixIcon: prefix,
-          suffixIcon: suffix ?? (isPassword
-              ? IconButton(
-                  icon: Icon(
-                    obscureText.value ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    obscureText.value = !obscureText.value;
-                  },
-                )
-              : null),
+          suffixIcon: suffix ??
+              (isPassword
+                  ? IconButton(
+                      icon: Icon(
+                        obscureText.value ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        obscureText.value = !obscureText.value;
+                      },
+                    )
+                  : null),
         ),
+        textAlign: isAmount ? TextAlign.right : TextAlign.left,
         inputFormatters: inputFormatters,
         onChanged: onChanged,
         onFieldSubmitted: onSubmitted,

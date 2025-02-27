@@ -354,7 +354,7 @@ mixin _$BillModel {
   @JsonKey(name: "invoice_number")
   String? get invoiceNumber => throw _privateConstructorUsedError;
   @JsonKey(name: "customer_id")
-  String? get customerId => throw _privateConstructorUsedError;
+  int? get customerId => throw _privateConstructorUsedError;
   @JsonKey(name: "customer_name")
   String? get customerName => throw _privateConstructorUsedError;
   List<ItemModel>? get items => throw _privateConstructorUsedError;
@@ -362,12 +362,14 @@ mixin _$BillModel {
   String? get ob => throw _privateConstructorUsedError;
   @JsonKey(name: "grand_total")
   String? get grandTotal => throw _privateConstructorUsedError;
+  String get discount => throw _privateConstructorUsedError;
   String get received => throw _privateConstructorUsedError;
   @JsonKey(name: "current_balance")
   String? get currentBalance => throw _privateConstructorUsedError;
   @DateTimeConverter()
   @JsonKey(name: "date_time")
   DateTime? get dateTime => throw _privateConstructorUsedError;
+  String? get note => throw _privateConstructorUsedError;
 
   /// Serializes this BillModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -387,15 +389,17 @@ abstract class $BillModelCopyWith<$Res> {
   $Res call(
       {int? id,
       @JsonKey(name: "invoice_number") String? invoiceNumber,
-      @JsonKey(name: "customer_id") String? customerId,
+      @JsonKey(name: "customer_id") int? customerId,
       @JsonKey(name: "customer_name") String? customerName,
       List<ItemModel>? items,
       String? total,
       String? ob,
       @JsonKey(name: "grand_total") String? grandTotal,
+      String discount,
       String received,
       @JsonKey(name: "current_balance") String? currentBalance,
-      @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime});
+      @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
+      String? note});
 }
 
 /// @nodoc
@@ -421,9 +425,11 @@ class _$BillModelCopyWithImpl<$Res, $Val extends BillModel>
     Object? total = freezed,
     Object? ob = freezed,
     Object? grandTotal = freezed,
+    Object? discount = null,
     Object? received = null,
     Object? currentBalance = freezed,
     Object? dateTime = freezed,
+    Object? note = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -437,7 +443,7 @@ class _$BillModelCopyWithImpl<$Res, $Val extends BillModel>
       customerId: freezed == customerId
           ? _value.customerId
           : customerId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       customerName: freezed == customerName
           ? _value.customerName
           : customerName // ignore: cast_nullable_to_non_nullable
@@ -458,6 +464,10 @@ class _$BillModelCopyWithImpl<$Res, $Val extends BillModel>
           ? _value.grandTotal
           : grandTotal // ignore: cast_nullable_to_non_nullable
               as String?,
+      discount: null == discount
+          ? _value.discount
+          : discount // ignore: cast_nullable_to_non_nullable
+              as String,
       received: null == received
           ? _value.received
           : received // ignore: cast_nullable_to_non_nullable
@@ -470,6 +480,10 @@ class _$BillModelCopyWithImpl<$Res, $Val extends BillModel>
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      note: freezed == note
+          ? _value.note
+          : note // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -485,15 +499,17 @@ abstract class _$$BillModelImplCopyWith<$Res>
   $Res call(
       {int? id,
       @JsonKey(name: "invoice_number") String? invoiceNumber,
-      @JsonKey(name: "customer_id") String? customerId,
+      @JsonKey(name: "customer_id") int? customerId,
       @JsonKey(name: "customer_name") String? customerName,
       List<ItemModel>? items,
       String? total,
       String? ob,
       @JsonKey(name: "grand_total") String? grandTotal,
+      String discount,
       String received,
       @JsonKey(name: "current_balance") String? currentBalance,
-      @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime});
+      @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
+      String? note});
 }
 
 /// @nodoc
@@ -517,9 +533,11 @@ class __$$BillModelImplCopyWithImpl<$Res>
     Object? total = freezed,
     Object? ob = freezed,
     Object? grandTotal = freezed,
+    Object? discount = null,
     Object? received = null,
     Object? currentBalance = freezed,
     Object? dateTime = freezed,
+    Object? note = freezed,
   }) {
     return _then(_$BillModelImpl(
       id: freezed == id
@@ -533,7 +551,7 @@ class __$$BillModelImplCopyWithImpl<$Res>
       customerId: freezed == customerId
           ? _value.customerId
           : customerId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       customerName: freezed == customerName
           ? _value.customerName
           : customerName // ignore: cast_nullable_to_non_nullable
@@ -554,6 +572,10 @@ class __$$BillModelImplCopyWithImpl<$Res>
           ? _value.grandTotal
           : grandTotal // ignore: cast_nullable_to_non_nullable
               as String?,
+      discount: null == discount
+          ? _value.discount
+          : discount // ignore: cast_nullable_to_non_nullable
+              as String,
       received: null == received
           ? _value.received
           : received // ignore: cast_nullable_to_non_nullable
@@ -566,6 +588,10 @@ class __$$BillModelImplCopyWithImpl<$Res>
           ? _value.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      note: freezed == note
+          ? _value.note
+          : note // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -582,9 +608,11 @@ class _$BillModelImpl implements _BillModel {
       this.total,
       this.ob,
       @JsonKey(name: "grand_total") this.grandTotal,
+      this.discount = "0.00",
       this.received = "0.00",
       @JsonKey(name: "current_balance") this.currentBalance,
-      @DateTimeConverter() @JsonKey(name: "date_time") this.dateTime})
+      @DateTimeConverter() @JsonKey(name: "date_time") this.dateTime,
+      this.note})
       : _items = items;
 
   factory _$BillModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -597,7 +625,7 @@ class _$BillModelImpl implements _BillModel {
   final String? invoiceNumber;
   @override
   @JsonKey(name: "customer_id")
-  final String? customerId;
+  final int? customerId;
   @override
   @JsonKey(name: "customer_name")
   final String? customerName;
@@ -620,6 +648,9 @@ class _$BillModelImpl implements _BillModel {
   final String? grandTotal;
   @override
   @JsonKey()
+  final String discount;
+  @override
+  @JsonKey()
   final String received;
   @override
   @JsonKey(name: "current_balance")
@@ -628,10 +659,12 @@ class _$BillModelImpl implements _BillModel {
   @DateTimeConverter()
   @JsonKey(name: "date_time")
   final DateTime? dateTime;
+  @override
+  final String? note;
 
   @override
   String toString() {
-    return 'BillModel(id: $id, invoiceNumber: $invoiceNumber, customerId: $customerId, customerName: $customerName, items: $items, total: $total, ob: $ob, grandTotal: $grandTotal, received: $received, currentBalance: $currentBalance, dateTime: $dateTime)';
+    return 'BillModel(id: $id, invoiceNumber: $invoiceNumber, customerId: $customerId, customerName: $customerName, items: $items, total: $total, ob: $ob, grandTotal: $grandTotal, discount: $discount, received: $received, currentBalance: $currentBalance, dateTime: $dateTime, note: $note)';
   }
 
   @override
@@ -651,12 +684,15 @@ class _$BillModelImpl implements _BillModel {
             (identical(other.ob, ob) || other.ob == ob) &&
             (identical(other.grandTotal, grandTotal) ||
                 other.grandTotal == grandTotal) &&
+            (identical(other.discount, discount) ||
+                other.discount == discount) &&
             (identical(other.received, received) ||
                 other.received == received) &&
             (identical(other.currentBalance, currentBalance) ||
                 other.currentBalance == currentBalance) &&
             (identical(other.dateTime, dateTime) ||
-                other.dateTime == dateTime));
+                other.dateTime == dateTime) &&
+            (identical(other.note, note) || other.note == note));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -671,9 +707,11 @@ class _$BillModelImpl implements _BillModel {
       total,
       ob,
       grandTotal,
+      discount,
       received,
       currentBalance,
-      dateTime);
+      dateTime,
+      note);
 
   /// Create a copy of BillModel
   /// with the given fields replaced by the non-null parameter values.
@@ -695,17 +733,17 @@ abstract class _BillModel implements BillModel {
   const factory _BillModel(
       {final int? id,
       @JsonKey(name: "invoice_number") final String? invoiceNumber,
-      @JsonKey(name: "customer_id") final String? customerId,
+      @JsonKey(name: "customer_id") final int? customerId,
       @JsonKey(name: "customer_name") final String? customerName,
       final List<ItemModel>? items,
       final String? total,
       final String? ob,
       @JsonKey(name: "grand_total") final String? grandTotal,
+      final String discount,
       final String received,
       @JsonKey(name: "current_balance") final String? currentBalance,
-      @DateTimeConverter()
-      @JsonKey(name: "date_time")
-      final DateTime? dateTime}) = _$BillModelImpl;
+      @DateTimeConverter() @JsonKey(name: "date_time") final DateTime? dateTime,
+      final String? note}) = _$BillModelImpl;
 
   factory _BillModel.fromJson(Map<String, dynamic> json) =
       _$BillModelImpl.fromJson;
@@ -717,7 +755,7 @@ abstract class _BillModel implements BillModel {
   String? get invoiceNumber;
   @override
   @JsonKey(name: "customer_id")
-  String? get customerId;
+  int? get customerId;
   @override
   @JsonKey(name: "customer_name")
   String? get customerName;
@@ -731,6 +769,8 @@ abstract class _BillModel implements BillModel {
   @JsonKey(name: "grand_total")
   String? get grandTotal;
   @override
+  String get discount;
+  @override
   String get received;
   @override
   @JsonKey(name: "current_balance")
@@ -739,6 +779,8 @@ abstract class _BillModel implements BillModel {
   @DateTimeConverter()
   @JsonKey(name: "date_time")
   DateTime? get dateTime;
+  @override
+  String? get note;
 
   /// Create a copy of BillModel
   /// with the given fields replaced by the non-null parameter values.

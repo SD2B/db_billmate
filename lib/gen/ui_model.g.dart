@@ -21,6 +21,7 @@ _$UiModelImpl _$$UiModelImplFromJson(Map<String, dynamic> json) =>
       labelList: (json['labelList'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      onTap: const FunctionConverter().fromJson(json['onTap'] as String?),
     );
 
 Map<String, dynamic> _$$UiModelImplToJson(_$UiModelImpl instance) =>
@@ -34,4 +35,5 @@ Map<String, dynamic> _$$UiModelImplToJson(_$UiModelImpl instance) =>
       'svg': instance.svg,
       'valueList': instance.valueList,
       'labelList': instance.labelList,
+      'onTap': const FunctionConverter().toJson(instance.onTap),
     };

@@ -25,15 +25,17 @@ class BillModel with _$BillModel {
   const factory BillModel({
     int? id,
     @JsonKey(name: "invoice_number") String? invoiceNumber,
-    @JsonKey(name: "customer_id") String? customerId,
+    @JsonKey(name: "customer_id") int? customerId,
     @JsonKey(name: "customer_name") String? customerName,
     List<ItemModel>? items,
     String? total,
     String? ob,
     @JsonKey(name: "grand_total") String? grandTotal,
+    @Default("0.00") String discount,
     @Default("0.00") String received,
     @JsonKey(name: "current_balance") String? currentBalance,
     @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
+    String? note,
   }) = _BillModel;
 
   factory BillModel.fromJson(Map<String, dynamic> json) => _$BillModelFromJson(json);

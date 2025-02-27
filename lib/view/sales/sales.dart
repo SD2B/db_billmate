@@ -1,5 +1,6 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
+import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/form_helpers.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
@@ -9,11 +10,13 @@ import 'package:db_billmate/view/sales/bill_items_header.dart';
 import 'package:db_billmate/view/sales/label_text.dart';
 import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
+import 'package:db_billmate/vm/invoice_vm.dart';
 import 'package:db_billmate/vm/item_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:toastification/toastification.dart';
 
 class Sales extends HookConsumerWidget {
   const Sales({super.key});
@@ -23,15 +26,33 @@ class Sales extends HookConsumerWidget {
     ItemModel billItem = ref.watch(tempItemProvider);
     List<ItemModel> billItemList = ref.watch(tempItemListProvider);
     CustomerModel billCustomer = ref.watch(billCustomerProvider);
+    FocusNode customerFocus = useFocusNode();
     FocusNode itemFocus = useFocusNode();
     final customerNameController = useTextEditingController(text: "");
     final itemNameController = useTextEditingController();
     final quantityController = useTextEditingController(text: billItem.quantity ?? "0");
     final unitPriceController = useTextEditingController(text: billItem.salePrice ?? "0");
-    final itemPrice = (double.tryParse(quantityController.text) ?? 1) * double.parse(billItem.salePrice ?? '0');
+    double itemPrice = (double.tryParse(quantityController.text) ?? 1) * double.parse(billItem.salePrice ?? '0');
     final priceController = useTextEditingController(text: itemPrice.toString());
     final receivedController = useTextEditingController(text: "0.00");
+    final discountController = useTextEditingController(text: "0.00");
+    final noteController = useTextEditingController(text: "");
     final currentBalance = useState(0.00);
+    void reset() {
+      ref.read(billCustomerProvider.notifier).state = CustomerModel();
+      ref.read(tempItemListProvider.notifier).state = [];
+      ref.read(tempItemProvider.notifier).state = ItemModel();
+      customerNameController.text = "";
+      itemNameController.text = "";
+      quantityController.text = "";
+      unitPriceController.text = "";
+      itemPrice = (double.tryParse(quantityController.text) ?? 1) * double.parse(billItem.salePrice ?? '0');
+      priceController.text = itemPrice.toString();
+      receivedController.text = "0.00";
+      discountController.text = "0.00";
+      noteController.text = "";
+      currentBalance.value = 0.00;
+    }
 
     void getItemTotalPrice() {
       final itemPriceTotal = (double.tryParse(unitPriceController.text) ?? 0) * (double.tryParse(quantityController.text) ?? 1);
@@ -94,8 +115,34 @@ class Sales extends HookConsumerWidget {
     double getcurrentBalance() {
       double gTotal = getGrandTotal();
       double recieved = double.tryParse(receivedController.text) ?? 0.00;
-      currentBalance.value = double.parse((gTotal - recieved).toStringAsFixed(2));
+      double discount = double.tryParse(discountController.text) ?? 0.00;
+      currentBalance.value = double.parse((gTotal - discount - recieved).toStringAsFixed(2));
       return currentBalance.value;
+    }
+
+    double getDiscount() {
+      double discount = double.tryParse(discountController.text) ?? 0.00;
+      getcurrentBalance();
+      return discount;
+    }
+
+    BillModel saveToBillModel() {
+      BillModel model = BillModel(
+        invoiceNumber: "1",
+        customerId: billCustomer.id,
+        customerName: billCustomer.name,
+        items: billItemList,
+        total: getTotal().toStringAsFixed(2),
+        ob: (double.tryParse(billCustomer.balanceAmount) ?? 0.00).toStringAsFixed(2),
+        grandTotal: getGrandTotal().toStringAsFixed(2),
+        discount: getDiscount().toStringAsFixed(2),
+        received: (double.tryParse(receivedController.text) ?? 0.00).toStringAsFixed(2),
+        currentBalance: getcurrentBalance().toStringAsFixed(2),
+        dateTime: DateTime.now(),
+        note: noteController.text,
+      );
+      qp(model);
+      return model;
     }
 
     // Update itemNameController when billItem changes
@@ -110,10 +157,15 @@ class Sales extends HookConsumerWidget {
       getItemTotalPrice();
       return null;
     }, [billItem]);
-    useEffect(() {
-      qp(getcurrentBalance());
-      return null;
-    }, [receivedController]);
+
+    // useEffect(() {
+    //   customerFocus.addListener(() {
+    //     if (customerFocus.hasFocus) {
+    //       qp("Focused on the field");
+    //     }
+    //   });
+    //   return null;
+    // }, [customerFocus]);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -124,14 +176,23 @@ class Sales extends HookConsumerWidget {
           children: [
             TypeAheadField<CustomerModel>(
               suggestionsCallback: (search) async {
-                qp(search);
+                qp(search, "hiiiiii");
                 List<CustomerModel> customers = await ref.read(customerVMProvider.notifier).get(search: {"name": search}, noWait: true);
                 return customers;
               },
               builder: (context, controller, focusNode) {
+                customerFocus = focusNode;
+                // Add listener to refresh data when the field gains focus
+                customerFocus.addListener(() {
+                  if (customerFocus.hasFocus) {
+                    controller.text = " ";
+                    controller.text = "";
+                  }
+                });
+
                 return CustomTextField(
                   width: 300,
-                  focusNode: focusNode,
+                  focusNode: customerFocus,
                   controller: customerNameController,
                   selectAllOnFocus: true,
                   hintText: "",
@@ -263,7 +324,7 @@ class Sales extends HookConsumerWidget {
         BillItemsHeader(),
         10.height,
         SizedBox(
-          height: context.height() - 500,
+          height: context.height() - 600,
           width: context.width() - 150,
           child: ListView.builder(
               itemCount: billItemList.length,
@@ -327,42 +388,94 @@ class Sales extends HookConsumerWidget {
         if (billItemList.isNotEmpty) ...[
           20.height,
           Row(
-            spacing: 10,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  LabelText(
-                    label: "Total:",
-                    text: getTotal().toString(),
-                  ),
-                  LabelText(
-                    label: "Old Balance:",
-                    text: billCustomer.balanceAmount,
-                  ),
-                  LabelText(
-                    label: "Grand Total:",
-                    text: getGrandTotal().toString(),
-                  ),
-                ],
+              CustomTextField(
+                width: 400,
+                height: 120,
+                maxLines: 5,
+                controller: noteController,
+                hintText: "Add Note",
+                label: "Add note",
               ),
-              Column(
-                children: [
-                  CustomTextField(
-                    width: 200,
-                    selectAllOnFocus: true,
-                    controller: receivedController,
-                    hintText: "",
-                    label: "Recieved",
-                    onChanged: (p0) {
-                      getcurrentBalance();
-                    },
-                  ),
-                  LabelText(
-                    label: "Current Balance:",
-                    text: (currentBalance.value).toString(),
-                  ),
-                ],
+              Container(
+                height: 120,
+                width: 450,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: ColorCode.colorList(context).borderColor!),
+                ),
+                child: Row(
+                  spacing: 10,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        LabelText(
+                          label: "Total:",
+                          text: getTotal().toStringAsFixed(2),
+                        ),
+                        LabelText(
+                          label: "Old Balance:",
+                          text: (double.tryParse(billCustomer.balanceAmount) ?? 0.00).toStringAsFixed(2),
+                        ),
+                        LabelText(
+                          label: "Grand Total:",
+                          text: getGrandTotal().toStringAsFixed(2),
+                        ),
+                        LabelText(
+                          label: "Discount:",
+                          text: getDiscount().toStringAsFixed(2),
+                        ),
+                        LabelText(
+                          label: "Recieved:",
+                          text: (double.tryParse(receivedController.text) ?? 0.00).toStringAsFixed(2),
+                        ),
+                        LabelText(
+                          label: "Current Balance:",
+                          text: (getcurrentBalance()).toStringAsFixed(2),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    VerticalDivider(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomTextField(
+                          width: 200,
+                          height: 45,
+                          isAmount: true,
+                          selectAllOnFocus: true,
+                          controller: discountController,
+                          inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                          hintText: "",
+                          label: "Discount",
+                          onChanged: (p0) {
+                            getDiscount();
+                          },
+                        ),
+                        CustomTextField(
+                          width: 200,
+                          height: 45,
+                          isAmount: true,
+                          selectAllOnFocus: true,
+                          controller: receivedController,
+                          inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                          hintText: "",
+                          label: "Recieved",
+                          onChanged: (p0) {
+                            getcurrentBalance();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -371,7 +484,20 @@ class Sales extends HookConsumerWidget {
             spacing: 10,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              CustomButton(width: 100, buttonColor: blackColor, textColor: whiteColor, text: "Save", onTap: () {}),
+              CustomButton(
+                  width: 100,
+                  buttonColor: blackColor,
+                  textColor: whiteColor,
+                  text: "Save",
+                  onTap: () async {
+                    final data = saveToBillModel();
+                    qp(data.toJson());
+                    bool res = await ref.read(invoiceVMProvider.notifier).save(data);
+                    if (res) {
+                      reset();
+                      SDToast.showToast(context, description: "invoice Generated Successfully", type: ToastificationType.success);
+                    }
+                  }),
               CustomButton(width: 100, buttonColor: blackColor, textColor: whiteColor, text: "Save & Print", onTap: () {}),
               CustomButton(width: 100, buttonColor: ColorCode.colorList(context).borderColor, textColor: blackColor, text: "Clear", onTap: () {}),
             ],

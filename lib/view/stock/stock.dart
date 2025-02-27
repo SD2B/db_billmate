@@ -4,7 +4,6 @@ import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/view/stock/add_item_popup.dart';
 import 'package:db_billmate/view/stock/item_list.dart';
 import 'package:db_billmate/view/stock/item_table_headers.dart';
@@ -19,7 +18,7 @@ class Stock extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final itemModel = useState(ItemModel());
+    // final itemModel = useState(ItemModel());
     final searchController = useTextEditingController();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

@@ -386,6 +386,7 @@ class LocalStorage {
 }
 
 class DBTable {
+  static const String invoice = "invoice";
   static const String transactions = "transactions";
   static const String customers = "customers";
   static const String items = "items";

@@ -36,7 +36,7 @@ _$BillModelImpl _$$BillModelImplFromJson(Map<String, dynamic> json) =>
     _$BillModelImpl(
       id: (json['id'] as num?)?.toInt(),
       invoiceNumber: json['invoice_number'] as String?,
-      customerId: json['customer_id'] as String?,
+      customerId: (json['customer_id'] as num?)?.toInt(),
       customerName: json['customer_name'] as String?,
       items: (json['items'] as List<dynamic>?)
           ?.map((e) => ItemModel.fromJson(e as Map<String, dynamic>))
@@ -44,10 +44,12 @@ _$BillModelImpl _$$BillModelImplFromJson(Map<String, dynamic> json) =>
       total: json['total'] as String?,
       ob: json['ob'] as String?,
       grandTotal: json['grand_total'] as String?,
+      discount: json['discount'] as String? ?? "0.00",
       received: json['received'] as String? ?? "0.00",
       currentBalance: json['current_balance'] as String?,
       dateTime: _$JsonConverterFromJson<String, DateTime>(
           json['date_time'], const DateTimeConverter().fromJson),
+      note: json['note'] as String?,
     );
 
 Map<String, dynamic> _$$BillModelImplToJson(_$BillModelImpl instance) =>
@@ -60,10 +62,12 @@ Map<String, dynamic> _$$BillModelImplToJson(_$BillModelImpl instance) =>
       'total': instance.total,
       'ob': instance.ob,
       'grand_total': instance.grandTotal,
+      'discount': instance.discount,
       'received': instance.received,
       'current_balance': instance.currentBalance,
       'date_time': _$JsonConverterToJson<String, DateTime>(
           instance.dateTime, const DateTimeConverter().toJson),
+      'note': instance.note,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(
