@@ -58,14 +58,16 @@ class ApiHelper {
   Future<dynamic> uploadFile(String endpoint, File file, String keyName) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
-      final request = http.MultipartRequest('POST', url)..files.add(await http.MultipartFile.fromPath(keyName, file.path));
+      final request = http.MultipartRequest('POST', url)
+        ..files.add(await http.MultipartFile.fromPath(keyName, file.path));
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(responseBody);
         return data['location'];
       } else {
-        throw Exception('File upload failed with status: ${response.statusCode}, body: $responseBody');
+        throw Exception(
+            'File upload failed with status: ${response.statusCode}, body: $responseBody');
       }
     } catch (e) {
       throw Exception('File upload error: $e');
@@ -85,6 +87,8 @@ class ApiHelper {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

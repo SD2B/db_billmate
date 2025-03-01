@@ -17,7 +17,8 @@ class ItemModel with _$ItemModel {
     @JsonKey(name: "bill_price") String? billPrice,
   }) = _ItemModel;
 
-  factory ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);
+  factory ItemModel.fromJson(Map<String, dynamic> json) =>
+      _$ItemModelFromJson(json);
 }
 
 @freezed
@@ -38,5 +39,6 @@ class BillModel with _$BillModel {
     String? note,
   }) = _BillModel;
 
-  factory BillModel.fromJson(Map<String, dynamic> json) => _$BillModelFromJson(json);
+  factory BillModel.fromJson(Map<String, dynamic> json) =>
+      _$BillModelFromJson(json);
 }

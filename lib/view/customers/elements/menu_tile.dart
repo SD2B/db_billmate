@@ -24,10 +24,10 @@ class MenuTile extends PopupMenuItem<int> {
               children: [
                 Text(title, style: textStyle ?? const TextStyle(fontSize: 14)),
                 Spacer(),
-                if (selected) Icon(Icons.check_circle, size: 15, color: black87Color),
+                if (selected)
+                  Icon(Icons.check_circle, size: 15, color: black87Color),
               ],
             ),
           ),
         );
 }
-

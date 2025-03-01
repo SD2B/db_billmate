@@ -30,10 +30,14 @@ class Sales extends HookConsumerWidget {
     FocusNode itemFocus = useFocusNode();
     final customerNameController = useTextEditingController(text: "");
     final itemNameController = useTextEditingController();
-    final quantityController = useTextEditingController(text: billItem.quantity ?? "0");
-    final unitPriceController = useTextEditingController(text: billItem.salePrice ?? "0");
-    double itemPrice = (double.tryParse(quantityController.text) ?? 1) * double.parse(billItem.salePrice ?? '0');
-    final priceController = useTextEditingController(text: itemPrice.toString());
+    final quantityController =
+        useTextEditingController(text: billItem.quantity ?? "0");
+    final unitPriceController =
+        useTextEditingController(text: billItem.salePrice ?? "0");
+    double itemPrice = (double.tryParse(quantityController.text) ?? 1) *
+        double.parse(billItem.salePrice ?? '0');
+    final priceController =
+        useTextEditingController(text: itemPrice.toString());
     final receivedController = useTextEditingController(text: "0.00");
     final discountController = useTextEditingController(text: "0.00");
     final noteController = useTextEditingController(text: "");
@@ -46,7 +50,8 @@ class Sales extends HookConsumerWidget {
       itemNameController.text = "";
       quantityController.text = "";
       unitPriceController.text = "";
-      itemPrice = (double.tryParse(quantityController.text) ?? 1) * double.parse(billItem.salePrice ?? '0');
+      itemPrice = (double.tryParse(quantityController.text) ?? 1) *
+          double.parse(billItem.salePrice ?? '0');
       priceController.text = itemPrice.toString();
       receivedController.text = "0.00";
       discountController.text = "0.00";
@@ -55,12 +60,15 @@ class Sales extends HookConsumerWidget {
     }
 
     void getItemTotalPrice() {
-      final itemPriceTotal = (double.tryParse(unitPriceController.text) ?? 0) * (double.tryParse(quantityController.text) ?? 1);
+      final itemPriceTotal = (double.tryParse(unitPriceController.text) ?? 0) *
+          (double.tryParse(quantityController.text) ?? 1);
       priceController.text = "$itemPriceTotal";
     }
 
     void addToItemLst() {
-      if (itemNameController.text.isNotEmpty && quantityController.text.isNotEmpty && unitPriceController.text.isNotEmpty) {
+      if (itemNameController.text.isNotEmpty &&
+          quantityController.text.isNotEmpty &&
+          unitPriceController.text.isNotEmpty) {
         if (billItem.billId != null) {
           // Update the existing item in the list
           ref.read(tempItemListProvider.notifier).state = ref
@@ -95,7 +103,10 @@ class Sales extends HookConsumerWidget {
     }
 
     void removeFromList(int billId) {
-      ref.read(tempItemListProvider.notifier).state = ref.read(tempItemListProvider).where((item) => item.billId != billId).toList();
+      ref.read(tempItemListProvider.notifier).state = ref
+          .read(tempItemListProvider)
+          .where((item) => item.billId != billId)
+          .toList();
     }
 
     double getTotal() {
@@ -116,7 +127,8 @@ class Sales extends HookConsumerWidget {
       double gTotal = getGrandTotal();
       double recieved = double.tryParse(receivedController.text) ?? 0.00;
       double discount = double.tryParse(discountController.text) ?? 0.00;
-      currentBalance.value = double.parse((gTotal - discount - recieved).toStringAsFixed(2));
+      currentBalance.value =
+          double.parse((gTotal - discount - recieved).toStringAsFixed(2));
       return currentBalance.value;
     }
 
@@ -133,10 +145,12 @@ class Sales extends HookConsumerWidget {
         customerName: billCustomer.name,
         items: billItemList,
         total: getTotal().toStringAsFixed(2),
-        ob: (double.tryParse(billCustomer.balanceAmount) ?? 0.00).toStringAsFixed(2),
+        ob: (double.tryParse(billCustomer.balanceAmount) ?? 0.00)
+            .toStringAsFixed(2),
         grandTotal: getGrandTotal().toStringAsFixed(2),
         discount: getDiscount().toStringAsFixed(2),
-        received: (double.tryParse(receivedController.text) ?? 0.00).toStringAsFixed(2),
+        received: (double.tryParse(receivedController.text) ?? 0.00)
+            .toStringAsFixed(2),
         currentBalance: getcurrentBalance().toStringAsFixed(2),
         dateTime: DateTime.now(),
         note: noteController.text,
@@ -177,7 +191,9 @@ class Sales extends HookConsumerWidget {
             TypeAheadField<CustomerModel>(
               suggestionsCallback: (search) async {
                 qp(search, "hiiiiii");
-                List<CustomerModel> customers = await ref.read(customerVMProvider.notifier).get(search: {"name": search}, noWait: true);
+                List<CustomerModel> customers = await ref
+                    .read(customerVMProvider.notifier)
+                    .get(search: {"name": search}, noWait: true);
                 return customers;
               },
               builder: (context, controller, focusNode) {
@@ -217,7 +233,10 @@ class Sales extends HookConsumerWidget {
                 height: 45,
                 text: "Account Balance: ${billCustomer.balanceAmount}",
                 buttonColor: ColorCode.colorList(context).borderColor!,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: ColorCode.colorList(context).primary),
               ),
             Spacer(),
             CustomButtonCard(
@@ -225,7 +244,10 @@ class Sales extends HookConsumerWidget {
               height: 45,
               text: "Invoice No: 1",
               buttonColor: ColorCode.colorList(context).borderColor!,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: ColorCode.colorList(context).primary),
             ),
           ],
         ),
@@ -236,7 +258,9 @@ class Sales extends HookConsumerWidget {
             TypeAheadField<ItemModel>(
               suggestionsCallback: (search) async {
                 qp(search);
-                List<ItemModel> item = await ref.read(itemVMProvider.notifier).get(search: {"name": search});
+                List<ItemModel> item = await ref
+                    .read(itemVMProvider.notifier)
+                    .get(search: {"name": search});
                 return item;
               },
               builder: (context, controller, focusNode) {
@@ -340,7 +364,8 @@ class Sales extends HookConsumerWidget {
                       height: 50,
                       width: 300,
                       decoration: BoxDecoration(
-                        border: Border.all(color: ColorCode.colorList(context).borderColor!),
+                        border: Border.all(
+                            color: ColorCode.colorList(context).borderColor!),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -350,32 +375,53 @@ class Sales extends HookConsumerWidget {
                             width: 40,
                             child: Text(
                               "${index + 1}",
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      color:
+                                          ColorCode.colorList(context).primary),
                             ),
                           ),
                           10.width,
-                          VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                          VerticalDivider(
+                              color: ColorCode.colorList(context).borderColor),
                           ItemTableValues(flex: 2, value: "${item.name}"),
-                          VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                          VerticalDivider(
+                              color: ColorCode.colorList(context).borderColor),
                           ItemTableValues(value: "${item.quantity}"),
-                          VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                          VerticalDivider(
+                              color: ColorCode.colorList(context).borderColor),
                           SizedBox(
                             width: 30,
                             child: Text(
                               "${item.unit}",
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w400, color: ColorCode.colorList(context).primary),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      color:
+                                          ColorCode.colorList(context).primary),
                             ),
                           ),
-                          VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                          VerticalDivider(
+                              color: ColorCode.colorList(context).borderColor),
                           ItemTableValues(value: "${item.salePrice}"),
-                          VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                          VerticalDivider(
+                              color: ColorCode.colorList(context).borderColor),
                           ItemTableValues(value: "${item.billPrice}"),
-                          VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                          VerticalDivider(
+                              color: ColorCode.colorList(context).borderColor),
                           SizedBox(
                               width: 100,
                               child: IconButton(
-                                onPressed: () => removeFromList(item.billId ?? 0),
+                                onPressed: () =>
+                                    removeFromList(item.billId ?? 0),
                                 icon: Icon(Icons.delete),
                               ))
                         ],
@@ -404,7 +450,8 @@ class Sales extends HookConsumerWidget {
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: ColorCode.colorList(context).borderColor!),
+                  border: Border.all(
+                      color: ColorCode.colorList(context).borderColor!),
                 ),
                 child: Row(
                   spacing: 10,
@@ -420,7 +467,9 @@ class Sales extends HookConsumerWidget {
                         ),
                         LabelText(
                           label: "Old Balance:",
-                          text: (double.tryParse(billCustomer.balanceAmount) ?? 0.00).toStringAsFixed(2),
+                          text: (double.tryParse(billCustomer.balanceAmount) ??
+                                  0.00)
+                              .toStringAsFixed(2),
                         ),
                         LabelText(
                           label: "Grand Total:",
@@ -432,7 +481,9 @@ class Sales extends HookConsumerWidget {
                         ),
                         LabelText(
                           label: "Recieved:",
-                          text: (double.tryParse(receivedController.text) ?? 0.00).toStringAsFixed(2),
+                          text:
+                              (double.tryParse(receivedController.text) ?? 0.00)
+                                  .toStringAsFixed(2),
                         ),
                         LabelText(
                           label: "Current Balance:",
@@ -452,7 +503,9 @@ class Sales extends HookConsumerWidget {
                           isAmount: true,
                           selectAllOnFocus: true,
                           controller: discountController,
-                          inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                          inputFormatters: [
+                            DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)
+                          ],
                           hintText: "",
                           label: "Discount",
                           onChanged: (p0) {
@@ -465,7 +518,9 @@ class Sales extends HookConsumerWidget {
                           isAmount: true,
                           selectAllOnFocus: true,
                           controller: receivedController,
-                          inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                          inputFormatters: [
+                            DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)
+                          ],
                           hintText: "",
                           label: "Recieved",
                           onChanged: (p0) {
@@ -492,14 +547,27 @@ class Sales extends HookConsumerWidget {
                   onTap: () async {
                     final data = saveToBillModel();
                     qp(data.toJson());
-                    bool res = await ref.read(invoiceVMProvider.notifier).save(data);
+                    bool res =
+                        await ref.read(invoiceVMProvider.notifier).save(data);
                     if (res) {
                       reset();
-                      SDToast.showToast(context, description: "invoice Generated Successfully", type: ToastificationType.success);
+                      SDToast.showToast(context,
+                          description: "invoice Generated Successfully",
+                          type: ToastificationType.success);
                     }
                   }),
-              CustomButton(width: 100, buttonColor: blackColor, textColor: whiteColor, text: "Save & Print", onTap: () {}),
-              CustomButton(width: 100, buttonColor: ColorCode.colorList(context).borderColor, textColor: blackColor, text: "Clear", onTap: () {}),
+              CustomButton(
+                  width: 100,
+                  buttonColor: blackColor,
+                  textColor: whiteColor,
+                  text: "Save & Print",
+                  onTap: () {}),
+              CustomButton(
+                  width: 100,
+                  buttonColor: ColorCode.colorList(context).borderColor,
+                  textColor: blackColor,
+                  text: "Clear",
+                  onTap: () {}),
             ],
           )
         ]

@@ -31,7 +31,10 @@ class CustomerTransactionHeader extends HookConsumerWidget {
             backgroundColor: whiteColor,
             child: Text(
               "${tempCustomer.state.name?.initials}",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: black87Color),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: black87Color),
             ),
           ),
           VerticalDivider(),
@@ -44,12 +47,18 @@ class CustomerTransactionHeader extends HookConsumerWidget {
                 ),
           ),
           VerticalDivider(),
-          Text( 
-            double.parse(tempCustomer.state.balanceAmount).toStringAsFixed(2).split("-").join(),
+          Text(
+            double.parse(tempCustomer.state.balanceAmount)
+                .toStringAsFixed(2)
+                .split("-")
+                .join(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: (tempCustomer.state.balanceAmount.contains("-") || double.parse(tempCustomer.state.balanceAmount) == 0) ? greenColor : redColor,
+                  color: (tempCustomer.state.balanceAmount.contains("-") ||
+                          double.parse(tempCustomer.state.balanceAmount) == 0)
+                      ? greenColor
+                      : redColor,
                 ),
           ),
           Spacer(),
@@ -75,7 +84,10 @@ class CustomerTransactionHeader extends HookConsumerWidget {
               textColor: whiteColor,
               text: "Close Account",
               onTap: () {
-                if (ref.read(transactionVMProvider).value?.isNotEmpty == true) showDialog(context: context, builder: (context) => AccountClosePopup());
+                if (ref.read(transactionVMProvider).value?.isNotEmpty == true)
+                  showDialog(
+                      context: context,
+                      builder: (context) => AccountClosePopup());
               })
         ],
       ),

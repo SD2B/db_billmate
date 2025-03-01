@@ -11,7 +11,10 @@ class ItemVM extends AsyncNotifier<List<ItemModel>> {
     return await get(noLoad: true);
   }
 
-  Future<List<ItemModel>> get({bool noLoad = false, Map<String, dynamic>? search, Map<String, dynamic>? where}) async {
+  Future<List<ItemModel>> get(
+      {bool noLoad = false,
+      Map<String, dynamic>? search,
+      Map<String, dynamic>? where}) async {
     if (!noLoad) state = AsyncValue.loading();
     final itemList = await ItemRepo.get(search: search, where: where);
     state = AsyncValue.data(itemList);
@@ -37,4 +40,5 @@ class ItemVM extends AsyncNotifier<List<ItemModel>> {
   }
 }
 
-final itemVMProvider = AsyncNotifierProvider<ItemVM, List<ItemModel>>(ItemVM.new);
+final itemVMProvider =
+    AsyncNotifierProvider<ItemVM, List<ItemModel>>(ItemVM.new);

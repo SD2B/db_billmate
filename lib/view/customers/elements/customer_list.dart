@@ -10,7 +10,8 @@ class CustomerList extends HookConsumerWidget {
   final List<CustomerModel> customerList;
   final ValueNotifier<CustomerModel> customerModel;
 
-  const CustomerList({super.key, required this.customerList, required this.customerModel});
+  const CustomerList(
+      {super.key, required this.customerList, required this.customerModel});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,7 +31,8 @@ class CustomerList extends HookConsumerWidget {
 class CustomerListTile extends HookConsumerWidget {
   final CustomerModel model;
   final ValueNotifier<CustomerModel> customerModel;
-  const CustomerListTile({super.key, required this.model, required this.customerModel});
+  const CustomerListTile(
+      {super.key, required this.model, required this.customerModel});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,16 +43,22 @@ class CustomerListTile extends HookConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: tempCustomer.state == model ? blackColor : ColorCode.colorList(context).borderColor!),
+          border: Border.all(
+              color: tempCustomer.state == model
+                  ? blackColor
+                  : ColorCode.colorList(context).borderColor!),
         ),
         child: ListTile(
           onTap: () async {
             tempCustomer.state = model;
             customerModel.value = model;
-            await ref.watch(transactionVMProvider.notifier).get(where: {"customer_id": model.id});
+            await ref
+                .watch(transactionVMProvider.notifier)
+                .get(where: {"customer_id": model.id});
           },
           contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           leading: CircleAvatar(
             backgroundColor: greyColor.shade300,
             child: Text(
@@ -67,10 +75,16 @@ class CustomerListTile extends HookConsumerWidget {
                 ),
           ),
           trailing: Text(
-            double.parse(model.balanceAmount).toStringAsFixed(2).split("-").join(),
+            double.parse(model.balanceAmount)
+                .toStringAsFixed(2)
+                .split("-")
+                .join(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: (model.balanceAmount.toString().contains("-") || double.parse(model.balanceAmount) == 0) ? greenColor : redColor,
+                  color: (model.balanceAmount.toString().contains("-") ||
+                          double.parse(model.balanceAmount) == 0)
+                      ? greenColor
+                      : redColor,
                 ),
           ),
         ),

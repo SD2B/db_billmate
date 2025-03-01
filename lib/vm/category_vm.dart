@@ -15,11 +15,15 @@ class CategoryVM extends AsyncNotifier<List<UiModel>> {
   }
 
   Future<bool> save(String value) async {
-    List<String> data = [...(state.value ?? []).map((e) => e.value.toString()), value];
-    final res = await AttributeRepo.save(1,data);
+    List<String> data = [
+      ...(state.value ?? []).map((e) => e.value.toString()),
+      value
+    ];
+    final res = await AttributeRepo.save(1, data);
     if (res) await get();
     return res;
   }
 }
 
-final categoryVMProvider = AsyncNotifierProvider<CategoryVM, List<UiModel>>(CategoryVM.new);
+final categoryVMProvider =
+    AsyncNotifierProvider<CategoryVM, List<UiModel>>(CategoryVM.new);

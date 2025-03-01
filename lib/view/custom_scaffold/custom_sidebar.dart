@@ -3,7 +3,6 @@ import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/view/custom_scaffold/sidebar_button.dart';
-import 'package:db_billmate/vm/invoice_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -41,11 +40,11 @@ class CustomSidebar extends StatelessWidget {
               child: Image.asset("assets/image/db.png"),
             ),
           ).onTap(() {
-            context.goNamed(RouteEnum.home.name);
+            context.goNamed(RouteEnum.profile.name);
           }),
           Divider(),
           Column(
-            spacing: 30,
+            spacing: 20,
             children: [
               ...sidebarButtons.map(
                 (e) => SidebarButton(e: e),
@@ -59,11 +58,11 @@ class CustomSidebar extends StatelessWidget {
 }
 
 List<UiModel> sidebarButtons = [
-  // UiModel(
-  //   title: "Customers",
-  //   svg: "assets/svg/home.svg",
-  //   value: RouteEnum.customers.name,
-  // ),
+  UiModel(
+    title: "Dashboard",
+    svg: "assets/svg/home.svg",
+    value: RouteEnum.home.name,
+  ),
   UiModel(
     title: "Customers",
     svg: "assets/svg/customer.svg",

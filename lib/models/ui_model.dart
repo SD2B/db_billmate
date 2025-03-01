@@ -18,5 +18,6 @@ class UiModel with _$UiModel {
     @FunctionConverter() Function? onTap,
   }) = _UiModel;
 
-  factory UiModel.fromJson(Map<String, dynamic> json) => _$UiModelFromJson(json);
+  factory UiModel.fromJson(Map<String, dynamic> json) =>
+      _$UiModelFromJson(json);
 }

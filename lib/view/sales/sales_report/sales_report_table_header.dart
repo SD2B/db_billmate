@@ -25,7 +25,10 @@ class SalesReportTableHeader extends StatelessWidget {
             width: 40,
             child: Text(
               "Sl.No.",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: ColorCode.colorList(context).primary),
             ),
           ),
           10.width,

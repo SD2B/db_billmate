@@ -13,7 +13,14 @@ class InvoiceVM extends AsyncNotifier<List<BillModel>> {
     return await get(noLoad: true);
   }
 
-  Future<List<BillModel>> get({bool noLoad = false, Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = false, Map<String, dynamic>? search, int? pageIndex}) async {
+  Future<List<BillModel>> get(
+      {bool noLoad = false,
+      Map<String, dynamic>? where,
+      String? orderBy,
+      bool? isDouble,
+      bool ascending = false,
+      Map<String, dynamic>? search,
+      int? pageIndex}) async {
     try {
       if (!noLoad) state = AsyncValue.loading();
       List<BillModel> invoiceList = state.value ?? [];
@@ -58,4 +65,5 @@ class InvoiceVM extends AsyncNotifier<List<BillModel>> {
   }
 }
 
-final invoiceVMProvider = AsyncNotifierProvider<InvoiceVM, List<BillModel>>(InvoiceVM.new);
+final invoiceVMProvider =
+    AsyncNotifierProvider<InvoiceVM, List<BillModel>>(InvoiceVM.new);

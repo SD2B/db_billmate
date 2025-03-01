@@ -6,7 +6,8 @@ class IntegerOnlyFormatter extends TextInputFormatter {
   IntegerOnlyFormatter({this.maxDigits});
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     final RegExp integerRegExp = RegExp(r'^[0-9]*$');
 
     if (!integerRegExp.hasMatch(newValue.text)) {
@@ -21,19 +22,19 @@ class IntegerOnlyFormatter extends TextInputFormatter {
   }
 }
 
-
 class DoubleOnlyFormatter extends TextInputFormatter {
   final int? maxDigitsBeforeDecimal;
   final int? maxDigitsAfterDecimal;
 
-  DoubleOnlyFormatter({this.maxDigitsBeforeDecimal, this.maxDigitsAfterDecimal});
+  DoubleOnlyFormatter(
+      {this.maxDigitsBeforeDecimal, this.maxDigitsAfterDecimal});
 
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     // Regular expression for matching valid double values (e.g., "123", "123.45", ".45")
     final RegExp doubleRegExp = RegExp(
-      r'^[0-9]*\.?[0-9]*$', 
+      r'^[0-9]*\.?[0-9]*$',
     );
 
     // Check if the new value matches the double pattern
@@ -59,7 +60,6 @@ class DoubleOnlyFormatter extends TextInputFormatter {
   }
 }
 
-
 class CapitalizeEachWordFormatter extends TextInputFormatter {
   final bool onlyFirstLetter;
 
@@ -80,13 +80,14 @@ class CapitalizeEachWordFormatter extends TextInputFormatter {
       // Capitalize the first letter of each word
       formattedText = newText
           .split(' ')
-          .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
+          .map((word) =>
+              word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
           .join(' ');
     }
 
     // Adjust cursor position
-    final selectionOffset = newValue.selection.baseOffset +
-        (formattedText.length - newText.length);
+    final selectionOffset =
+        newValue.selection.baseOffset + (formattedText.length - newText.length);
 
     return TextEditingValue(
       text: formattedText,

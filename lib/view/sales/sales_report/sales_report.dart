@@ -26,7 +26,8 @@ class SalesReport extends HookConsumerWidget {
               height: 100,
               width: 200,
               decoration: BoxDecoration(
-                border: Border.all(color: ColorCode.colorList(context).borderColor!),
+                border: Border.all(
+                    color: ColorCode.colorList(context).borderColor!),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -41,7 +42,11 @@ class SalesReport extends HookConsumerWidget {
         Row(
           spacing: 10,
           children: [
-            CustomTextField(width: 300, height: 45, controller: searchController, hintText: "Search..."),
+            CustomTextField(
+                width: 300,
+                height: 45,
+                controller: searchController,
+                hintText: "Search..."),
             CustomIconButton(
               buttonSize: 45,
               icon: Icons.tune_rounded,
@@ -52,7 +57,8 @@ class SalesReport extends HookConsumerWidget {
               buttonSize: 45,
               icon: Icons.refresh_rounded,
               shape: BoxShape.rectangle,
-              onTap: () async => await ref.read(invoiceVMProvider.notifier).get(),
+              onTap: () async =>
+                  await ref.read(invoiceVMProvider.notifier).get(),
             ),
           ],
         ),
@@ -76,7 +82,9 @@ class SalesReport extends HookConsumerWidget {
                               height: 50,
                               width: 300,
                               decoration: BoxDecoration(
-                                border: Border.all(color: ColorCode.colorList(context).borderColor!),
+                                border: Border.all(
+                                    color: ColorCode.colorList(context)
+                                        .borderColor!),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -86,26 +94,55 @@ class SalesReport extends HookConsumerWidget {
                                     width: 40,
                                     child: Text(
                                       "${index + 1}",
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              color:
+                                                  ColorCode.colorList(context)
+                                                      .primary),
                                     ),
                                   ),
                                   10.width,
-                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                                  ItemTableValues(flex: 2, value: "${invoice.customerName}"),
-                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                                  ItemTableValues(value: "${invoice.invoiceNumber}"),
-                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                                  VerticalDivider(
+                                      color: ColorCode.colorList(context)
+                                          .borderColor),
+                                  ItemTableValues(
+                                      flex: 2,
+                                      value: "${invoice.customerName}"),
+                                  VerticalDivider(
+                                      color: ColorCode.colorList(context)
+                                          .borderColor),
+                                  ItemTableValues(
+                                      value: "${invoice.invoiceNumber}"),
+                                  VerticalDivider(
+                                      color: ColorCode.colorList(context)
+                                          .borderColor),
                                   ItemTableValues(value: "${invoice.total}"),
-                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                                  VerticalDivider(
+                                      color: ColorCode.colorList(context)
+                                          .borderColor),
                                   ItemTableValues(value: "${invoice.ob}"),
-                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                                  ItemTableValues(value: "${invoice.grandTotal}"),
-                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                                  VerticalDivider(
+                                      color: ColorCode.colorList(context)
+                                          .borderColor),
+                                  ItemTableValues(
+                                      value: "${invoice.grandTotal}"),
+                                  VerticalDivider(
+                                      color: ColorCode.colorList(context)
+                                          .borderColor),
                                   ItemTableValues(value: invoice.discount),
-                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                                  VerticalDivider(
+                                      color: ColorCode.colorList(context)
+                                          .borderColor),
                                   ItemTableValues(value: invoice.received),
-                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                                  ItemTableValues(value: "${invoice.currentBalance}"),
+                                  VerticalDivider(
+                                      color: ColorCode.colorList(context)
+                                          .borderColor),
+                                  ItemTableValues(
+                                      value: "${invoice.currentBalance}"),
                                 ],
                               ),
                             ),

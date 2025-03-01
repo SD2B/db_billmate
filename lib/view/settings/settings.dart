@@ -8,9 +8,7 @@ class Settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        
-      ],
+      children: [],
     );
   }
 }

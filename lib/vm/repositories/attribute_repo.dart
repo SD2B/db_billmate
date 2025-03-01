@@ -6,9 +6,11 @@ class AttributeRepo {
   //catogory*****************************************************************
   static Future<List<UiModel>> get(int attributeId) async {
     try {
-      final rawData = await LocalStorage.get(DBTable.attributes, where: {"id": attributeId});
+      final rawData = await LocalStorage.get(DBTable.attributes,
+          where: {"id": attributeId});
       List<dynamic> rawDataList = rawData.first["data"];
-      List<UiModel> data = rawDataList.map((item) => UiModel(value: item)).toList();
+      List<UiModel> data =
+          rawDataList.map((item) => UiModel(value: item)).toList();
       return data;
     } catch (e) {
       return [];
@@ -18,7 +20,11 @@ class AttributeRepo {
   static Future<bool> save(int attributeId, List<String> data) async {
     try {
       qp(data);
-      await LocalStorage.updateWhere(tableName: DBTable.attributes, columnName: "data", where: {"id": attributeId}, data: data);
+      await LocalStorage.updateWhere(
+          tableName: DBTable.attributes,
+          columnName: "data",
+          where: {"id": attributeId},
+          data: data);
       return true;
     } catch (e) {
       return false;

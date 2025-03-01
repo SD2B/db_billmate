@@ -29,7 +29,24 @@ class CustomButton extends StatelessWidget {
       onTap: () {
         onTap();
       },
-      child: width == null ? Expanded(child: CustomButtonCard(width: width, height: height, buttonColor: buttonColor, textColor: textColor, text: text, isLoading: isLoading, style: style)) : CustomButtonCard(width: width, height: height, buttonColor: buttonColor, textColor: textColor, text: text, isLoading: isLoading, style: style),
+      child: width == null
+          ? Expanded(
+              child: CustomButtonCard(
+                  width: width,
+                  height: height,
+                  buttonColor: buttonColor,
+                  textColor: textColor,
+                  text: text,
+                  isLoading: isLoading,
+                  style: style))
+          : CustomButtonCard(
+              width: width,
+              height: height,
+              buttonColor: buttonColor,
+              textColor: textColor,
+              text: text,
+              isLoading: isLoading,
+              style: style),
     );
   }
 }

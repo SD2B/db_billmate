@@ -8,7 +8,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await LocalStorage.init(); // Initialize the database
-  await LocalStorage.ensureTableExits(); // Ensure the attributes table exists and is populated
 
   runApp(ProviderScope(child: const MyApp()));
 }

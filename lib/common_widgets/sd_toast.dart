@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
 class SDToast {
-  static void showToast(BuildContext context, {String? title, required String description, required ToastificationType type}) {
+  static void showToast(BuildContext context,
+      {String? title,
+      required String description,
+      required ToastificationType type}) {
     toastification.show(
       context: context,
       type: type,

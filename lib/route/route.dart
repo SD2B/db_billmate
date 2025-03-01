@@ -1,14 +1,19 @@
 import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/constants.dart';
+import 'package:db_billmate/helpers/sddb_helper.dart';
+import 'package:db_billmate/models/login_model.dart';
 import 'package:db_billmate/view/custom_scaffold/custom_scaffold.dart';
 import 'package:db_billmate/view/customers/customers.dart';
 import 'package:db_billmate/view/home/home.dart';
+import 'package:db_billmate/view/login/login.dart';
+import 'package:db_billmate/view/profile/profile.dart';
 import 'package:db_billmate/view/sales/sales.dart';
 import 'package:db_billmate/view/sales/sales_report/sales_report.dart';
 import 'package:db_billmate/view/settings/settings.dart';
 import 'package:db_billmate/view/stock/excel.dart';
 import 'package:db_billmate/view/stock/stock.dart';
 import 'package:db_billmate/view/suppliers/suppliers.dart';
+import 'package:db_billmate/vm/repositories/login_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -25,23 +30,71 @@ final GoRouter myRoute = GoRouter(
 List<RouteBase> _buildRoutes() {
   return [
     GoRoute(
-      path: '/',
-      parentNavigatorKey: ConstantData.navigatorKey,
-      pageBuilder: (context, state) => CustomTransitionPage(
-          key: state.pageKey,
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-          },
-          child: const CustomScaffold(child: Home())),
-      routes: [
-        ..._staticRoutes(),
-      ],
-    ),
+        path: '/',
+        parentNavigatorKey: ConstantData.navigatorKey,
+        pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+              },
+              child: FutureBuilder<bool>(
+                future: isLoggedIn(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError || !snapshot.hasData || !snapshot.data!) {
+                    return const Login();
+                  } else {
+                    return const CustomScaffold(child: Home());
+                  }
+                },
+              ),
+            ),
+        routes: [..._staticRoutes()]),
   ];
+}
+
+Future<bool> isLoggedIn() async {
+  LoginModel model = await LoginRepo.get();
+  return model.isLoggedIn;
 }
 
 List<GoRoute> _staticRoutes() {
   return [
+    GoRoute(
+      path: RouteEnum.login.name,
+      name: RouteEnum.login.name,
+      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+        key: state.pageKey,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+        },
+        child: const Login(),
+      ),
+    ),
+    GoRoute(
+      path: RouteEnum.scaffold.name,
+      name: RouteEnum.scaffold.name,
+      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+        key: state.pageKey,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+        },
+        child: const CustomScaffold(child: Home()),
+      ),
+      routes: []
+    ),
+    GoRoute(
+      path: RouteEnum.profile.name,
+      name: RouteEnum.profile.name,
+      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+        key: state.pageKey,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+        },
+        child: const CustomScaffold(child: Profile()),
+      ),
+    ),
     GoRoute(
       path: RouteEnum.home.name,
       name: RouteEnum.home.name,
@@ -132,3 +185,6 @@ List<GoRoute> _staticRoutes() {
     ),
   ];
 }
+
+
+

@@ -13,7 +13,18 @@ class ColorList {
   final Color? customTextColor;
   final Color? bgColor;
 
-  ColorList({this.primary, this.secondary, this.middlePrimary, this.middleSecondary, this.labelColor, this.success, this.error, this.borderColor, this.ratingColor, this.customTextColor, this.bgColor});
+  ColorList(
+      {this.primary,
+      this.secondary,
+      this.middlePrimary,
+      this.middleSecondary,
+      this.labelColor,
+      this.success,
+      this.error,
+      this.borderColor,
+      this.ratingColor,
+      this.customTextColor,
+      this.bgColor});
 
   factory ColorList.light() {
     return ColorList(
@@ -50,7 +61,9 @@ class ColorList {
 
 class ColorCode {
   static ColorList colorList(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.light ? ColorList.light() : ColorList.dark();
+    return Theme.of(context).brightness == Brightness.light
+        ? ColorList.light()
+        : ColorList.dark();
   }
 }
 
@@ -127,3 +140,7 @@ const white60Color = Colors.white60;
 const white70Color = Colors.white70;
 
 const transparentColor = Colors.transparent;
+
+//********************************app */
+final appPrimary = black87Color;
+final appSecondary = Colors.grey[350]!;

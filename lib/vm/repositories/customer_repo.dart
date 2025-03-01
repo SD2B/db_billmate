@@ -7,9 +7,23 @@ double sumOfElements(List<double> numbers) {
 }
 
 class CustomerRepo {
-  static Future<List<CustomerModel>> fetchCustomers({Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = true, Map<String, dynamic>? search, int? limit, int? pageIndex}) async {
+  static Future<List<CustomerModel>> fetchCustomers(
+      {Map<String, dynamic>? where,
+      String? orderBy,
+      bool? isDouble,
+      bool ascending = true,
+      Map<String, dynamic>? search,
+      int? limit,
+      int? pageIndex}) async {
     try {
-      final data = await LocalStorage.get(DBTable.customers, where: where, orderBy: orderBy, isDouble: isDouble ?? false, ascending: ascending, search: search, limit: limit, pageIndex: pageIndex ?? 1);
+      final data = await LocalStorage.get(DBTable.customers,
+          where: where,
+          orderBy: orderBy,
+          isDouble: isDouble ?? false,
+          ascending: ascending,
+          search: search,
+          limit: limit,
+          pageIndex: pageIndex ?? 1);
 
       final List<CustomerModel> outData = (data as List<dynamic>).map((e) {
         return CustomerModel.fromJson(e);
@@ -29,7 +43,8 @@ class CustomerRepo {
 
       model = model.copyWith(modified: DateTime.now());
       if (model.id != null) {
-        id = await LocalStorage.update(DBTable.customers, model.toJson(), where: {"id": model.id});
+        id = await LocalStorage.update(DBTable.customers, model.toJson(),
+            where: {"id": model.id});
         qp(id, "...........................");
       } else {
         id = await LocalStorage.save(DBTable.customers, model.toJson());

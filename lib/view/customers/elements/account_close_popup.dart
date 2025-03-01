@@ -29,7 +29,8 @@ class AccountClosePopup extends HookConsumerWidget {
         width: 200,
         child: Text(
           "Are you sure you want to close this account?",
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 20, fontWeight: FontWeight.w400, color: black87Color),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontSize: 20, fontWeight: FontWeight.w400, color: black87Color),
         ),
       ),
       content: SizedBox(
@@ -47,7 +48,8 @@ class AccountClosePopup extends HookConsumerWidget {
               value: toGet.value,
               onChanged: (value) => toGet.value = value ?? true,
             ),
-            const Expanded(child: Text('To get', style: TextStyle(fontSize: 16.0))),
+            const Expanded(
+                child: Text('To get', style: TextStyle(fontSize: 16.0))),
           ],
         ),
       ),
@@ -67,7 +69,8 @@ class AccountClosePopup extends HookConsumerWidget {
                     balanceAmount: amountController.text.isEmpty
                         ? "0.00"
                         : toGet.value
-                            ? double.parse(amountController.text).toStringAsFixed(2)
+                            ? double.parse(amountController.text)
+                                .toStringAsFixed(2)
                             : "-${double.parse(amountController.text).toStringAsFixed(2)}",
                   );
                   if (amountController.text.isNotEmpty) {
@@ -76,15 +79,28 @@ class AccountClosePopup extends HookConsumerWidget {
                       toGet: toGet.value,
                       customerId: tempCustomer.state.id,
                       dateTime: DateTime.now(),
-                      description: "Balance after account closed on ${DateFormat("EEEE, MMMM dd, yyyy").format(DateTime.now())} at ${DateFormat("hh:mm aaa").format(DateTime.now())}",
+                      description:
+                          "Balance after account closed on ${DateFormat("EEEE, MMMM dd, yyyy").format(DateTime.now())} at ${DateFormat("hh:mm aaa").format(DateTime.now())}",
                     );
                   }
-                  await ref.read(transactionVMProvider.notifier).closeAccount(tempCustomer.state.id ?? 0);
-                  await ref.read(customerVMProvider.notifier).save(tempCustomer.state, transactionModel: transaction.value);
-                  await ref.read(transactionVMProvider.notifier).get(where: {"customer_id": tempCustomer.state.id});
+                  await ref
+                      .read(transactionVMProvider.notifier)
+                      .closeAccount(tempCustomer.state.id ?? 0);
+                  await ref.read(customerVMProvider.notifier).save(
+                      tempCustomer.state,
+                      transactionModel: transaction.value);
+                  await ref
+                      .read(transactionVMProvider.notifier)
+                      .get(where: {"customer_id": tempCustomer.state.id});
                   context.pop();
                 }),
-            CustomButton(width: 120, height: 40, buttonColor: ColorCode.colorList(context).borderColor, textColor: black87Color, text: "No", onTap: () => context.pop()),
+            CustomButton(
+                width: 120,
+                height: 40,
+                buttonColor: ColorCode.colorList(context).borderColor,
+                textColor: black87Color,
+                text: "No",
+                onTap: () => context.pop()),
           ],
         )
       ],

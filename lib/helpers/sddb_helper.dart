@@ -25,13 +25,12 @@ extension StringExtension on String {
   String toTitleCase() {
     return trim() // Remove leading/trailing spaces
         .split(RegExp(r'\s+')) // Split on multiple spaces
-        .map((word) => word.isNotEmpty && word[0].contains(RegExp(r'[a-zA-Z]')) 
-            ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}' 
+        .map((word) => word.isNotEmpty && word[0].contains(RegExp(r'[a-zA-Z]'))
+            ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
             : word) // Keep numbers/special chars unchanged
         .join(' '); // Rejoin words with a single space
   }
 }
-
 
 extension NameInitials on String {
   String get initials {
@@ -99,7 +98,8 @@ Future<void> shareDatabase() async {
     // Check if the database file exists
     if (await dbFile.exists()) {
       // Share the database file via WhatsApp
-      await Share.shareXFiles([XFile(dbFile.path)], text: 'Here is the database file.');
+      await Share.shareXFiles([XFile(dbFile.path)],
+          text: 'Here is the database file.');
     } else {
       qp("Database file does not exist.");
     }
@@ -107,4 +107,3 @@ Future<void> shareDatabase() async {
     qp('Error sharing database: $e');
   }
 }
-

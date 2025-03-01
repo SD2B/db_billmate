@@ -3,9 +3,11 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/customer_model.dart';
 
 class TransactionRepo {
-  static Future<List<TransactionModel>> get({Map<String, dynamic>? where}) async {
+  static Future<List<TransactionModel>> get(
+      {Map<String, dynamic>? where}) async {
     try {
-      final rawData = await LocalStorage.get(DBTable.transactions, where: where);
+      final rawData =
+          await LocalStorage.get(DBTable.transactions, where: where);
       final data = rawData.map((e) => TransactionModel.fromJson(e)).toList();
 
       return data;
@@ -30,7 +32,9 @@ class TransactionRepo {
         ]);
         qp(results, "TransactionRepoSave");
       } else {
-        final res = await LocalStorage.update(DBTable.transactions, model.toJson(), where: {"id": model.id});
+        final res = await LocalStorage.update(
+            DBTable.transactions, model.toJson(),
+            where: {"id": model.id});
         qp(res);
       }
 
@@ -42,12 +46,13 @@ class TransactionRepo {
 
   static Future<bool> delete(int id) async {
     try {
-      await LocalStorage.delete(DBTable.transactions, where: {"id":id} );
+      await LocalStorage.delete(DBTable.transactions, where: {"id": id});
       return true;
     } catch (e) {
       return false;
     }
   }
+
   static Future<bool> closeAccount(int customerId) async {
     try {
       await LocalStorage.rawQuery('''

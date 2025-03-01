@@ -26,7 +26,8 @@ class AddCustomerPopup extends HookConsumerWidget {
     final transactionModel = useState(TransactionModel());
     final nameController = useTextEditingController(text: model.value.name);
     final phoneController = useTextEditingController(text: model.value.phone);
-    final addressController = useTextEditingController(text: model.value.address);
+    final addressController =
+        useTextEditingController(text: model.value.address);
     final openingBalanceController = useTextEditingController(text: "0.00");
     final toGet = useState(true);
     void resetFields() {
@@ -74,7 +75,9 @@ class AddCustomerPopup extends HookConsumerWidget {
                 ),
           ),
           const Spacer(),
-          IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.close_rounded)),
+          IconButton(
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.close_rounded)),
         ],
       ),
       content: Form(
@@ -90,7 +93,8 @@ class AddCustomerPopup extends HookConsumerWidget {
                 controller: nameController,
                 inputFormatters: [CapitalizeEachWordFormatter()],
                 hintText: "Name",
-                validator: (value) => value == null || value.isEmpty ? 'Name is required' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Name is required' : null,
               ),
               CustomTextField(
                 width: 300,
@@ -112,8 +116,11 @@ class AddCustomerPopup extends HookConsumerWidget {
                   SearchableDropdown<UiModel>(
                     width: 250,
                     hint: "Group",
-                    initialValue: model.value.group == null ? null : UiModel(value: model.value.group),
-                    asyncValues: () async => await ref.read(groupVMProvider.notifier).get(),
+                    initialValue: model.value.group == null
+                        ? null
+                        : UiModel(value: model.value.group),
+                    asyncValues: () async =>
+                        await ref.read(groupVMProvider.notifier).get(),
                     itemAsString: (p0) => p0.value ?? "",
                     onChanged: (value) {
                       qp(value);
@@ -126,7 +133,13 @@ class AddCustomerPopup extends HookConsumerWidget {
                     shape: BoxShape.rectangle,
                     icon: Icons.add,
                     onTap: () {
-                      showDialog(context: context, builder: (context) => AddAttributePopup(title: "New Group", onSave: (p0) async => await ref.read(groupVMProvider.notifier).save(p0)));
+                      showDialog(
+                          context: context,
+                          builder: (context) => AddAttributePopup(
+                              title: "New Group",
+                              onSave: (p0) async => await ref
+                                  .read(groupVMProvider.notifier)
+                                  .save(p0)));
                     },
                   )
                 ],
@@ -142,7 +155,9 @@ class AddCustomerPopup extends HookConsumerWidget {
                     CustomTextField(
                       width: 200,
                       controller: openingBalanceController,
-                      inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                      inputFormatters: [
+                        DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)
+                      ],
                       hintText: "Opening balance",
                       textInputType: TextInputType.number,
                       selectAllOnFocus: true,
@@ -152,7 +167,9 @@ class AddCustomerPopup extends HookConsumerWidget {
                       value: toGet.value,
                       onChanged: (value) => toGet.value = value ?? true,
                     ),
-                    const Expanded(child: Text('To get', style: TextStyle(fontSize: 16.0))),
+                    const Expanded(
+                        child:
+                            Text('To get', style: TextStyle(fontSize: 16.0))),
                   ],
                 ),
             ],
@@ -173,7 +190,8 @@ class AddCustomerPopup extends HookConsumerWidget {
               onTap: () async {
                 if (formKey.currentState?.validate() ?? false) {
                   saveCustomer();
-                  await ref.read(customerVMProvider.notifier).save(model.value, transactionModel: transactionModel.value);
+                  await ref.read(customerVMProvider.notifier).save(model.value,
+                      transactionModel: transactionModel.value);
                   formKey.currentState?.reset();
                   context.pop();
                 }
@@ -190,7 +208,9 @@ class AddCustomerPopup extends HookConsumerWidget {
                 onTap: () async {
                   if (formKey.currentState?.validate() ?? false) {
                     saveCustomer();
-                    await ref.read(customerVMProvider.notifier).save(model.value, transactionModel: transactionModel.value);
+                    await ref.read(customerVMProvider.notifier).save(
+                        model.value,
+                        transactionModel: transactionModel.value);
                     formKey.currentState?.reset();
                     resetFields();
                   }

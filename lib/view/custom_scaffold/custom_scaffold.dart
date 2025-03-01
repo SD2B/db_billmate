@@ -22,7 +22,8 @@ class CustomScaffold extends HookWidget {
       autofocus: true,
       onKeyEvent: (KeyEvent event) {
         bool alt = HardwareKeyboard.instance.isAltPressed;
-        bool s = HardwareKeyboard.instance.isLogicalKeyPressed(LogicalKeyboardKey.keyS);
+        bool s = HardwareKeyboard.instance
+            .isLogicalKeyPressed(LogicalKeyboardKey.keyS);
 
         if (alt && s) {
           qp("Alt + S Pressed!");

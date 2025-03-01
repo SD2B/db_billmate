@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ScaffoldFooter extends StatelessWidget {
-  const ScaffoldFooter({
-    super.key
-  });
+  const ScaffoldFooter({super.key});
 
   @override
   Widget build(BuildContext context) {

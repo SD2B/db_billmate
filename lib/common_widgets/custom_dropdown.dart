@@ -90,7 +90,11 @@ class SearchableDropdown<T> extends HookWidget {
                                     focusNode: searchFocus,
                                     hintText: "Search..",
                                     onChanged: (p0) {
-                                      dropdownItems.value = originalItems.value!.where((item) => itemAsString!(item).toLowerCase().contains(p0.toLowerCase())).toList();
+                                      dropdownItems.value = originalItems.value!
+                                          .where((item) => itemAsString!(item)
+                                              .toLowerCase()
+                                              .contains(p0.toLowerCase()))
+                                          .toList();
                                     },
                                   ),
                                 ),
@@ -99,10 +103,13 @@ class SearchableDropdown<T> extends HookWidget {
                                     valueListenable: dropdownItems,
                                     builder: (context, currentItems, child) {
                                       if (isLoading.value) {
-                                        return const Center(child: CircularProgressIndicator());
+                                        return const Center(
+                                            child: CircularProgressIndicator());
                                       }
-                                      if (currentItems == null || currentItems.isEmpty) {
-                                        return const Center(child: Text("No items found"));
+                                      if (currentItems == null ||
+                                          currentItems.isEmpty) {
+                                        return const Center(
+                                            child: Text("No items found"));
                                       }
                                       return ListView.builder(
                                         itemCount: currentItems.length,
@@ -138,18 +145,26 @@ class SearchableDropdown<T> extends HookWidget {
                   color: Colors.white54,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: state.hasError ? Colors.red : ColorCode.colorList(context).borderColor!,
+                    color: state.hasError
+                        ? Colors.red
+                        : ColorCode.colorList(context).borderColor!,
                   ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      selectedValue.value != null ? itemAsString!(selectedValue.value!) : hint ?? "Select an item",
+                      selectedValue.value != null
+                          ? itemAsString!(selectedValue.value!)
+                          : hint ?? "Select an item",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontSize: selectedValue.value == null ? 16 : null,
-                            fontWeight: selectedValue.value == null ? FontWeight.w400 : null,
-                            color: selectedValue.value == null ? const Color(0xffA8B1BE) : Colors.black,
+                            fontWeight: selectedValue.value == null
+                                ? FontWeight.w400
+                                : null,
+                            color: selectedValue.value == null
+                                ? const Color(0xffA8B1BE)
+                                : Colors.black,
                           ),
                     ),
                     const Icon(Icons.arrow_drop_down),

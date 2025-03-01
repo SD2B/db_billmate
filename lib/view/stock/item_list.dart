@@ -22,7 +22,10 @@ class ItemList extends HookConsumerWidget {
               child: Center(
                 child: Text(
                   "No data",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: black87Color),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: black87Color),
                 ),
               ),
             );
@@ -39,7 +42,8 @@ class ItemList extends HookConsumerWidget {
                     width: 300,
                     margin: EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                      border: Border.all(color: ColorCode.colorList(context).borderColor!),
+                      border: Border.all(
+                          color: ColorCode.colorList(context).borderColor!),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 20),
@@ -49,29 +53,49 @@ class ItemList extends HookConsumerWidget {
                           width: 40,
                           child: Text(
                             "${index + 1}",
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color:
+                                        ColorCode.colorList(context).primary),
                           ),
                         ),
                         10.width,
-                        VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        VerticalDivider(
+                            color: ColorCode.colorList(context).borderColor),
                         ItemTableValues(flex: 2, value: "${item.name}"),
-                        VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        VerticalDivider(
+                            color: ColorCode.colorList(context).borderColor),
                         ItemTableValues(value: "${item.category}"),
-                        VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        VerticalDivider(
+                            color: ColorCode.colorList(context).borderColor),
                         // ItemTableValues(flex: 0, value: "${item.unit}"),
                         SizedBox(
                           width: 30,
                           child: Text(
                             "${item.unit}",
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w400, color: ColorCode.colorList(context).primary),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                    color:
+                                        ColorCode.colorList(context).primary),
                           ),
                         ),
-                        VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        VerticalDivider(
+                            color: ColorCode.colorList(context).borderColor),
                         ItemTableValues(value: "${item.purchasePrice}"),
-                        VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        VerticalDivider(
+                            color: ColorCode.colorList(context).borderColor),
                         ItemTableValues(value: "${item.salePrice}"),
-                        VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        VerticalDivider(
+                            color: ColorCode.colorList(context).borderColor),
                         SizedBox(
                           width: 50,
                           child: PopupMenuButton(
@@ -79,21 +103,44 @@ class ItemList extends HookConsumerWidget {
                               itemBuilder: (context) {
                                 return [
                                   PopupMenuItem(
-                                      onTap: () => showDialog(context: context, builder: (context) => AddItemPopup(updateModel: item)),
+                                      onTap: () => showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              AddItemPopup(updateModel: item)),
                                       child: Text(
                                         "Edit",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 13, fontWeight: FontWeight.w400, color: ColorCode.colorList(context).primary),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w400,
+                                                color:
+                                                    ColorCode.colorList(context)
+                                                        .primary),
                                       )),
                                   PopupMenuItem(
                                       onTap: () async => showDialog(
                                           context: context,
                                           builder: (context) => DeletePopup(
-                                                title: "Delete item - ${item.name}?",
-                                                onYes: () async => await ref.read(itemVMProvider.notifier).delete(item.id!),
+                                                title:
+                                                    "Delete item - ${item.name}?",
+                                                onYes: () async => await ref
+                                                    .read(
+                                                        itemVMProvider.notifier)
+                                                    .delete(item.id!),
                                               )),
                                       child: Text(
                                         "Delete",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 13, fontWeight: FontWeight.w400, color: ColorCode.colorList(context).primary),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w400,
+                                                color:
+                                                    ColorCode.colorList(context)
+                                                        .primary),
                                       ))
                                 ];
                               }),
@@ -105,6 +152,9 @@ class ItemList extends HookConsumerWidget {
           );
         },
         error: (error, stackTrace) => Text(error.toString()),
-        loading: () => SizedBox(height: context.height() - 300, width: context.width() - 200, child: LoadingWidget()));
+        loading: () => SizedBox(
+            height: context.height() - 300,
+            width: context.width() - 200,
+            child: LoadingWidget()));
   }
 }

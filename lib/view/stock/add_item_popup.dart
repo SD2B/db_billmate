@@ -25,8 +25,10 @@ class AddItemPopup extends HookConsumerWidget {
     final formKey = GlobalKey<FormState>(); // Form key for validation
     final itemModel = useState(updateModel ?? ItemModel());
     final nameController = useTextEditingController(text: itemModel.value.name);
-    final purchasePriceController = useTextEditingController(text: itemModel.value.purchasePrice);
-    final salePriceController = useTextEditingController(text: itemModel.value.salePrice);
+    final purchasePriceController =
+        useTextEditingController(text: itemModel.value.purchasePrice);
+    final salePriceController =
+        useTextEditingController(text: itemModel.value.salePrice);
     void resetFields() {
       itemModel.value = ItemModel();
       nameController.clear();
@@ -47,7 +49,9 @@ class AddItemPopup extends HookConsumerWidget {
                 ),
           ),
           const Spacer(),
-          IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.close_rounded)),
+          IconButton(
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.close_rounded)),
         ],
       ),
       content: SizedBox(
@@ -74,11 +78,15 @@ class AddItemPopup extends HookConsumerWidget {
                   SearchableDropdown<UiModel>(
                     width: 250,
                     hint: "Select category",
-                    initialValue: itemModel.value.category == null ? null : UiModel(value: itemModel.value.category),
-                    asyncValues: () async => await ref.read(categoryVMProvider.notifier).get(),
+                    initialValue: itemModel.value.category == null
+                        ? null
+                        : UiModel(value: itemModel.value.category),
+                    asyncValues: () async =>
+                        await ref.read(categoryVMProvider.notifier).get(),
                     itemAsString: (p0) => p0.value ?? "",
                     onChanged: (value) {
-                      itemModel.value = itemModel.value.copyWith(category: value?.value);
+                      itemModel.value =
+                          itemModel.value.copyWith(category: value?.value);
                     },
                   ),
                   5.width,
@@ -91,7 +99,9 @@ class AddItemPopup extends HookConsumerWidget {
                           context: context,
                           builder: (context) => AddAttributePopup(
                                 title: "Category",
-                                onSave: (p0) async => await ref.read(categoryVMProvider.notifier).save(p0),
+                                onSave: (p0) async => await ref
+                                    .read(categoryVMProvider.notifier)
+                                    .save(p0),
                               ));
                     },
                   )
@@ -102,14 +112,19 @@ class AddItemPopup extends HookConsumerWidget {
                   SearchableDropdown<UiModel>(
                     width: 250,
                     hint: "Select unit",
-                    initialValue: itemModel.value.unit == null ? null : UiModel(value: itemModel.value.unit),
-                    asyncValues: () async => await ref.read(unitVMProvider.notifier).get(),
+                    initialValue: itemModel.value.unit == null
+                        ? null
+                        : UiModel(value: itemModel.value.unit),
+                    asyncValues: () async =>
+                        await ref.read(unitVMProvider.notifier).get(),
                     itemAsString: (p0) => p0.value ?? "",
                     onChanged: (value) {
-                      itemModel.value = itemModel.value.copyWith(unit: value?.value);
+                      itemModel.value =
+                          itemModel.value.copyWith(unit: value?.value);
                     },
                     validator: (model) {
-                      if (itemModel.value.unit == null || itemModel.value.unit?.isEmpty == true) {
+                      if (itemModel.value.unit == null ||
+                          itemModel.value.unit?.isEmpty == true) {
                         return "Unit is required.";
                       }
 
@@ -126,7 +141,9 @@ class AddItemPopup extends HookConsumerWidget {
                           context: context,
                           builder: (context) => AddAttributePopup(
                                 title: "Unit",
-                                onSave: (p0) async => await ref.read(unitVMProvider.notifier).save(p0),
+                                onSave: (p0) async => await ref
+                                    .read(unitVMProvider.notifier)
+                                    .save(p0),
                               ));
                     },
                   )
@@ -164,7 +181,8 @@ class AddItemPopup extends HookConsumerWidget {
               width: 145,
               text: itemModel.value.id != null ? "Update" : "Save",
               textColor: whiteColor,
-              buttonColor: itemModel.value.id != null ? black87Color : black54Color,
+              buttonColor:
+                  itemModel.value.id != null ? black87Color : black54Color,
               onTap: () async {
                 if (formKey.currentState!.validate()) {
                   itemModel.value = itemModel.value.copyWith(
@@ -190,7 +208,9 @@ class AddItemPopup extends HookConsumerWidget {
                       purchasePrice: purchasePriceController.text,
                       salePrice: salePriceController.text,
                     );
-                    await ref.read(itemVMProvider.notifier).save(itemModel.value);
+                    await ref
+                        .read(itemVMProvider.notifier)
+                        .save(itemModel.value);
                     resetFields();
                   }
                 },

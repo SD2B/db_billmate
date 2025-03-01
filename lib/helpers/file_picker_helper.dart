@@ -21,7 +21,7 @@ class FilePickerHelper {
     return null; // Return null if user cancels
   }
 
- static Future<List<ItemModel>> importExcel() async {
+  static Future<List<ItemModel>> importExcel() async {
     List<ItemModel> items = [];
 
     // Pick an Excel file
@@ -44,7 +44,9 @@ class FilePickerHelper {
         }
 
         // Read headers from the first row
-        List<String> headers = sheet.rows.first.map((cell) => cell?.value.toString() ?? "").toList();
+        List<String> headers = sheet.rows.first
+            .map((cell) => cell?.value.toString() ?? "")
+            .toList();
 
         // Read data starting from row 1
         for (int rowIndex = 1; rowIndex < sheet.rows.length; rowIndex++) {

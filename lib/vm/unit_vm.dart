@@ -15,7 +15,10 @@ class UnitVM extends AsyncNotifier<List<UiModel>> {
   }
 
   Future<bool> save(String value) async {
-    List<String> data = [...(state.value ?? []).map((e) => e.value.toString()), value];
+    List<String> data = [
+      ...(state.value ?? []).map((e) => e.value.toString()),
+      value
+    ];
     final res = await AttributeRepo.save(2, data);
     if (res) await get();
     return res;

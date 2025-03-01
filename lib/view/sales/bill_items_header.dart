@@ -25,7 +25,10 @@ class BillItemsHeader extends StatelessWidget {
             width: 40,
             child: Text(
               "Sl.No.",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: ColorCode.colorList(context).primary),
             ),
           ),
           10.width,
@@ -39,7 +42,10 @@ class BillItemsHeader extends StatelessWidget {
             width: 30,
             child: Text(
               "Unit",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: ColorCode.colorList(context).primary),
             ),
           ),
 
@@ -53,7 +59,10 @@ class BillItemsHeader extends StatelessWidget {
               child: Center(
                 child: Text(
                   "Actions",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: ColorCode.colorList(context).primary),
                 ),
               )),
         ],

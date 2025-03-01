@@ -31,9 +31,12 @@ class CustomerTransactionList extends HookConsumerWidget {
                           showDialog(
                               context: context,
                               builder: (context) => DeletePopup(
-                                    title: "Are you sure about deleting this transaction?",
+                                    title:
+                                        "Are you sure about deleting this transaction?",
                                     onYes: () {
-                                      ref.read(transactionVMProvider.notifier).delete(transaction);
+                                      ref
+                                          .read(transactionVMProvider.notifier)
+                                          .delete(transaction);
                                     },
                                   ));
                         },
@@ -44,7 +47,9 @@ class CustomerTransactionList extends HookConsumerWidget {
                                     youGot: !transaction.toGet,
                                     amountModel: transaction,
                                     onSave: (p0) async {
-                                      await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0);
+                                      await ref
+                                          .read(transactionVMProvider.notifier)
+                                          .updateTransactionModel(p0);
                                     },
                                   ));
                         },
@@ -54,14 +59,19 @@ class CustomerTransactionList extends HookConsumerWidget {
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: ColorCode.colorList(context).borderColor!),
+                            border: Border.all(
+                                color:
+                                    ColorCode.colorList(context).borderColor!),
                           ),
                           child: Row(
                             children: [
                               Expanded(
                                   child: Text(
                                 "📅 ${DateFormat("EEEE, MMMM dd, yyyy").format(transaction.dateTime!)}\n🕧 ${DateFormat("hh:mm aaa").format(transaction.dateTime!)}",
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -75,7 +85,10 @@ class CustomerTransactionList extends HookConsumerWidget {
                                     if (transaction.toGet)
                                       Text(
                                         "${transaction.amount}",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w700,
                                               color: redColor,
@@ -84,10 +97,15 @@ class CustomerTransactionList extends HookConsumerWidget {
                                     if (!transaction.toGet)
                                       Text(
                                         transaction.description ?? "",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400,
-                                              color: ColorCode.colorList(context).primary,
+                                              color:
+                                                  ColorCode.colorList(context)
+                                                      .primary,
                                             ),
                                       ),
                                   ],
@@ -101,8 +119,13 @@ class CustomerTransactionList extends HookConsumerWidget {
                                   children: [
                                     if (!transaction.toGet)
                                       Text(
-                                        transaction.toGet ? "" : "${transaction.amount}",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        transaction.toGet
+                                            ? ""
+                                            : "${transaction.amount}",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w700,
                                               color: greenColor,
@@ -111,10 +134,15 @@ class CustomerTransactionList extends HookConsumerWidget {
                                     if (transaction.toGet)
                                       Text(
                                         transaction.description ?? "",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400,
-                                              color: ColorCode.colorList(context).primary,
+                                              color:
+                                                  ColorCode.colorList(context)
+                                                      .primary,
                                             ),
                                       ),
                                   ],
@@ -128,7 +156,10 @@ class CustomerTransactionList extends HookConsumerWidget {
                   });
             },
             error: (error, stackTrace) => Text(error.toString()),
-            loading: () => SizedBox(height: context.height() - 300, width: context.width() - 200, child: LoadingWidget()),
+            loading: () => SizedBox(
+                height: context.height() - 300,
+                width: context.width() - 200,
+                child: LoadingWidget()),
           ),
     );
   }

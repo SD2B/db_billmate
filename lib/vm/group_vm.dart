@@ -15,11 +15,15 @@ class GroupVM extends AsyncNotifier<List<UiModel>> {
   }
 
   Future<bool> save(String value) async {
-    List<String> data = [...(state.value ?? []).map((e) => e.value.toString()), value];
+    List<String> data = [
+      ...(state.value ?? []).map((e) => e.value.toString()),
+      value
+    ];
     final res = await AttributeRepo.save(3, data);
     if (res) await get();
     return res;
   }
 }
 
-final groupVMProvider = AsyncNotifierProvider<GroupVM, List<UiModel>>(GroupVM.new);
+final groupVMProvider =
+    AsyncNotifierProvider<GroupVM, List<UiModel>>(GroupVM.new);

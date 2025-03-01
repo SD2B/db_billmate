@@ -16,7 +16,8 @@ class CustomerModel with _$CustomerModel {
     @JsonKey(name: "modified") DateTime? modified,
   }) = _CustomerModel;
 
-  factory CustomerModel.fromJson(Map<String, dynamic> json) => _$CustomerModelFromJson(json);
+  factory CustomerModel.fromJson(Map<String, dynamic> json) =>
+      _$CustomerModelFromJson(json);
 }
 
 @freezed
@@ -28,10 +29,13 @@ class TransactionModel with _$TransactionModel {
     String? description,
     @BoolConverter() @JsonKey(name: "to_get") @Default(false) bool toGet,
     @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
-    @Default(TransactionType.normal) @JsonKey(name: "transaction_type") String transactionType,
+    @Default(TransactionType.normal)
+    @JsonKey(name: "transaction_type")
+    String transactionType,
   }) = _TransactionModel;
 
-  factory TransactionModel.fromJson(Map<String, dynamic> json) => _$TransactionModelFromJson(json);
+  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
+      _$TransactionModelFromJson(json);
 }
 
 class TransactionType {

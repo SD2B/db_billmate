@@ -9,7 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class CustomerTransactions extends HookConsumerWidget {
   final ValueNotifier<CustomerModel> customerModel2;
   final ValueNotifier<int> selected;
-  const CustomerTransactions({super.key, required this.customerModel2, required this.selected});
+  const CustomerTransactions(
+      {super.key, required this.customerModel2, required this.selected});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

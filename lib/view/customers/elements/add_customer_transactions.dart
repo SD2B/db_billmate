@@ -31,16 +31,27 @@ class AddCustomerTransactions extends HookConsumerWidget {
                 builder: (context) => TransactionPopup(
                       youGot: false,
                       onSave: (p0) async {
-                        TransactionModel model = p0.copyWith(customerId: tempCustomer.state.id);
+                        TransactionModel model =
+                            p0.copyWith(customerId: tempCustomer.state.id);
                         qp(model);
-                        await ref.read(transactionVMProvider.notifier).save(model);
+                        await ref
+                            .read(transactionVMProvider.notifier)
+                            .save(model);
                       },
                     ));
           },
           buttonColor: redColor,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor),
         ),
-        CircleAvatar(radius: 18, backgroundColor: black45Color, child: CircleAvatar(radius: 14, backgroundColor: black54Color, child: CircleAvatar(radius: 10, backgroundColor: black87Color))),
+        CircleAvatar(
+            radius: 18,
+            backgroundColor: black45Color,
+            child: CircleAvatar(
+                radius: 14,
+                backgroundColor: black54Color,
+                child:
+                    CircleAvatar(radius: 10, backgroundColor: black87Color))),
         CustomButton(
           width: 200,
           text: "You Got",
@@ -50,14 +61,18 @@ class AddCustomerTransactions extends HookConsumerWidget {
                 builder: (context) => TransactionPopup(
                       youGot: true,
                       onSave: (p0) async {
-                        TransactionModel model = p0.copyWith(customerId: tempCustomer.state.id);
+                        TransactionModel model =
+                            p0.copyWith(customerId: tempCustomer.state.id);
                         qp(model);
-                        await ref.read(transactionVMProvider.notifier).save(model);
+                        await ref
+                            .read(transactionVMProvider.notifier)
+                            .save(model);
                       },
                     ));
           },
           buttonColor: greenColor,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor),
         ),
       ],
     );

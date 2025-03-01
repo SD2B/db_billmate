@@ -1,4 +1,3 @@
-
 import 'package:db_billmate/constants/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -11,19 +10,40 @@ class CustomIconButton extends StatelessWidget {
   final double? iconSize;
   final BoxShape? shape;
   final bool noTap;
-  const CustomIconButton({super.key, required this.icon, this.onTap, this.buttonColor, this.iconColor, this.buttonSize, this.iconSize, this.shape, this.noTap = false});
+  const CustomIconButton(
+      {super.key,
+      required this.icon,
+      this.onTap,
+      this.buttonColor,
+      this.iconColor,
+      this.buttonSize,
+      this.iconSize,
+      this.shape,
+      this.noTap = false});
 
   @override
   Widget build(BuildContext context) {
     return noTap
-        ? CustomIconButtonCard(buttonSize: buttonSize, shape: shape, buttonColor: buttonColor, icon: icon, iconColor: iconColor, iconSize: iconSize)
+        ? CustomIconButtonCard(
+            buttonSize: buttonSize,
+            shape: shape,
+            buttonColor: buttonColor,
+            icon: icon,
+            iconColor: iconColor,
+            iconSize: iconSize)
         : InkWell(
             onTap: () {
               onTap?.call();
             },
             splashColor: Colors.transparent,
             borderRadius: BorderRadius.circular(500),
-            child: CustomIconButtonCard(buttonSize: buttonSize, shape: shape, buttonColor: buttonColor, icon: icon, iconColor: iconColor, iconSize: iconSize),
+            child: CustomIconButtonCard(
+                buttonSize: buttonSize,
+                shape: shape,
+                buttonColor: buttonColor,
+                icon: icon,
+                iconColor: iconColor,
+                iconSize: iconSize),
           );
   }
 }

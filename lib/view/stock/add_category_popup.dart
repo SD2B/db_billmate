@@ -10,7 +10,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class AddAttributePopup extends HookConsumerWidget {
   final String title;
   final Function(String) onSave;
-  const AddAttributePopup({super.key, required this.title, required this.onSave});
+  const AddAttributePopup(
+      {super.key, required this.title, required this.onSave});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,7 +31,9 @@ class AddAttributePopup extends HookConsumerWidget {
                 ),
           ),
           const Spacer(),
-          IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.close_rounded)),
+          IconButton(
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.close_rounded)),
         ],
       ),
       content: CustomTextField(

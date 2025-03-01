@@ -11,7 +11,8 @@ class SidebarButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentRoute = GoRouter.of(context).routeInformationProvider.value.uri;
+    final currentRoute =
+        GoRouter.of(context).routeInformationProvider.value.uri;
     final isSelected = currentRoute.toString() == "/${e.value}";
 
     return InkWell(
@@ -21,7 +22,9 @@ class SidebarButton extends HookConsumerWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: isSelected ? whiteColor.withValues(alpha: .2) : transparentColor,
+            color: isSelected
+                ? whiteColor.withValues(alpha: .2)
+                : transparentColor,
             borderRadius: BorderRadius.circular(10),
           ),
           padding: EdgeInsets.all(10),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/login_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -26,6 +27,7 @@ class LocalStorage {
         // Tables can be created here if needed
       },
     );
+    await ensureTableExits();
   }
 
   // Get the database instance
@@ -285,6 +287,7 @@ class LocalStorage {
       ensureAttributesTableExists(db),
       ensureCustomerTableExists(db),
       ensureTransactionTableExists(db),
+      ensureLoginTableExists(db),
     ]);
     // await ensureAttributesTableExists(db);
     // await ensureCustomerTableExists(db);
@@ -378,6 +381,31 @@ class LocalStorage {
     }
   }
 
+  static Future<void> ensureLoginTableExists(Database db) async {
+    const tableName = DBTable.login;
+
+    // Check if the table exists
+    final exists = await _checkTableExists(db, tableName);
+
+    // Create the table if it doesn't exist
+    if (!exists) {
+      final createTableQuery = '''
+    CREATE TABLE $tableName (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      isLoggedIn INTEGER,
+      name TEXT,
+      userName TEXT,
+      address TEXT,
+      password TEXT,
+      modified TEXT
+    )
+    ''';
+      await db.execute(createTableQuery);
+      LoginModel model = LoginModel(name: "Admin",isLoggedIn: false, userName: "admin", password: "admin", address: "N/A", modified: DateTime.now());
+      await db.insert(tableName, model.toJson());
+    }
+  }
+
 // Execute raw SQL query
   static Future<int> rawQuery(String query, [List<Object?>? arguments]) async {
     final db = await _getDatabase();
@@ -392,4 +420,5 @@ class DBTable {
   static const String items = "items";
   static const String suppliers = "suppliers";
   static const String attributes = "attributes";
+  static const String login = "login";
 }

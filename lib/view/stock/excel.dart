@@ -38,7 +38,8 @@ class ExcelScreen extends HookConsumerWidget {
                 },
               ),
               20.height,
-              if (itemList.value.isNotEmpty) ...itemList.value.map((e) => Text(e.toString())),
+              if (itemList.value.isNotEmpty)
+                ...itemList.value.map((e) => Text(e.toString())),
               20.height,
               CustomButton(
                 width: 80,
@@ -47,9 +48,13 @@ class ExcelScreen extends HookConsumerWidget {
                 textColor: whiteColor,
                 text: "Save items",
                 onTap: () async {
-                  bool res = await ref.read(itemVMProvider.notifier).multiSave(itemList.value);
+                  bool res = await ref
+                      .read(itemVMProvider.notifier)
+                      .multiSave(itemList.value);
                   if (res) {
-                    SDToast.showToast(context, description: "Successfully added these items", type: ToastificationType.success);
+                    SDToast.showToast(context,
+                        description: "Successfully added these items",
+                        type: ToastificationType.success);
                   }
                 },
               ),

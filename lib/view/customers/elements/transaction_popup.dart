@@ -23,8 +23,10 @@ class TransactionPopup extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final model = useState<TransactionModel>(amountModel ?? TransactionModel());
-    final amountController = useTextEditingController(text: "${model.value.amount}" "");
-    final noteController = useTextEditingController(text: model.value.description ?? "");
+    final amountController =
+        useTextEditingController(text: "${model.value.amount}" "");
+    final noteController =
+        useTextEditingController(text: model.value.description ?? "");
     final formKey = GlobalKey<FormState>();
 
     return AlertDialog(
@@ -64,7 +66,9 @@ class TransactionPopup extends HookConsumerWidget {
               CustomTextField(
                 selectAllOnFocus: true,
                 controller: amountController,
-                inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                inputFormatters: [
+                  DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)
+                ],
                 hintText: "Enter amount",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -80,7 +84,9 @@ class TransactionPopup extends HookConsumerWidget {
               CustomTextField(
                 controller: noteController,
                 hintText: "Enter note",
-                inputFormatters: [CapitalizeEachWordFormatter(onlyFirstLetter: true)],
+                inputFormatters: [
+                  CapitalizeEachWordFormatter(onlyFirstLetter: true)
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

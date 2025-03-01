@@ -14,7 +14,10 @@ class ItemTableHeaders extends StatelessWidget {
         child: Center(
           child: Text(
             value,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: ColorCode.colorList(context).primary),
           ),
         ));
   }

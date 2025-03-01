@@ -1,17 +1,12 @@
-enum RouteEnum {
-  home,
-  sales,
-  salesReport,
-  stock,
-  customers,
-  supplier,
-  settings,
-  excel,
-}
+enum RouteEnum { login, scaffold, home, sales, salesReport, stock, customers, supplier, settings, excel, profile }
 
 extension RouteEnumExtension on RouteEnum {
   String get asString {
     switch (this) {
+      case RouteEnum.login:
+        return 'Login';
+      case RouteEnum.scaffold:
+        return 'Scaffold';
       case RouteEnum.home:
         return 'Dashboard';
       case RouteEnum.sales:
@@ -28,6 +23,8 @@ extension RouteEnumExtension on RouteEnum {
         return 'Settings';
       case RouteEnum.excel:
         return 'Excel';
+      case RouteEnum.profile:
+        return 'Profile';
     }
   }
 }

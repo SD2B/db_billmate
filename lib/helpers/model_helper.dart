@@ -16,10 +16,12 @@ class FunctionConverter implements JsonConverter<Function?, String?> {
   @override
   String? toJson(Function? object) {
     return functionMap.entries
-        .firstWhere((entry) => entry.value == object, orElse: () => MapEntry('', () => {}))
+        .firstWhere((entry) => entry.value == object,
+            orElse: () => MapEntry('', () => {}))
         .key;
   }
 }
+
 class BoolConverter implements JsonConverter<bool, int> {
   const BoolConverter(); // Ensure this is a const constructor.
 
