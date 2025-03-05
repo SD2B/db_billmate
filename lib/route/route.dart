@@ -73,118 +73,171 @@ List<GoRoute> _staticRoutes() {
       ),
     ),
     GoRoute(
-      path: RouteEnum.scaffold.name,
-      name: RouteEnum.scaffold.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Home()),
-      ),
-      routes: []
-    ),
-    GoRoute(
-      path: RouteEnum.profile.name,
-      name: RouteEnum.profile.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Profile()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.home.name,
-      name: RouteEnum.home.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Home()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.customers.name,
-      name: RouteEnum.customers.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Customers()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.supplier.name,
-      name: RouteEnum.supplier.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Suppliers()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.sales.name,
-      name: RouteEnum.sales.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Sales()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.salesReport.name,
-      name: RouteEnum.salesReport.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: SalesReport()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.stock.name,
-      name: RouteEnum.stock.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Stock()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.settings.name,
-      name: RouteEnum.settings.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const CustomScaffold(child: Settings()),
-      ),
-    ),
-    GoRoute(
-      path: RouteEnum.excel.name,
-      name: RouteEnum.excel.name,
-      pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-        key: state.pageKey,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-        },
-        child: const ExcelScreen(),
-      ),
-    ),
+        path: RouteEnum.scaffold.name,
+        name: RouteEnum.scaffold.name,
+        pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+              key: state.pageKey,
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+              },
+              child: const CustomScaffold(child: Home()),
+            ),
+        routes: [...scaffoldRoutes]),
+    // GoRoute(
+    //   path: RouteEnum.profile.name,
+    //   name: RouteEnum.profile.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const CustomScaffold(child: Profile()),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: RouteEnum.home.name,
+    //   name: RouteEnum.home.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const CustomScaffold(child: Home()),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: RouteEnum.customers.name,
+    //   name: RouteEnum.customers.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const CustomScaffold(child: Customers()),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: RouteEnum.supplier.name,
+    //   name: RouteEnum.supplier.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const CustomScaffold(child: Suppliers()),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: RouteEnum.sales.name,
+    //   name: RouteEnum.sales.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const CustomScaffold(child: Sales()),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: RouteEnum.salesReport.name,
+    //   name: RouteEnum.salesReport.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const CustomScaffold(child: SalesReport()),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: RouteEnum.stock.name,
+    //   name: RouteEnum.stock.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const CustomScaffold(child: Stock()),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: RouteEnum.settings.name,
+    //   name: RouteEnum.settings.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const CustomScaffold(child: Settings()),
+    //   ),
+    // ),
+    // GoRoute(
+    //   path: RouteEnum.excel.name,
+    //   name: RouteEnum.excel.name,
+    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
+    //     key: state.pageKey,
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
+    //     },
+    //     child: const ExcelScreen(),
+    //   ),
+    // ),
   ];
 }
 
-
-
+List<GoRoute> scaffoldRoutes = [
+  GoRoute(
+    path: RouteEnum.profile.name,
+    name: RouteEnum.profile.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Profile())),
+  ),
+  GoRoute(
+    path: RouteEnum.home.name,
+    name: RouteEnum.home.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Home())),
+  ),
+  GoRoute(
+    path: RouteEnum.customers.name,
+    name: RouteEnum.customers.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Customers())),
+  ),
+  GoRoute(
+    path: RouteEnum.supplier.name,
+    name: RouteEnum.supplier.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Suppliers())),
+  ),
+  GoRoute(
+    path: RouteEnum.sales.name,
+    name: RouteEnum.sales.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Sales())),
+  ),
+  GoRoute(
+    path: RouteEnum.salesReport.name,
+    name: RouteEnum.salesReport.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const SalesReport())),
+  ),
+  GoRoute(
+    path: RouteEnum.stock.name,
+    name: RouteEnum.stock.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Stock())),
+  ),
+  GoRoute(
+    path: RouteEnum.settings.name,
+    name: RouteEnum.settings.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Settings())),
+  ),
+  GoRoute(
+    path: RouteEnum.excel.name,
+    name: RouteEnum.excel.name,
+    parentNavigatorKey: ConstantData.navigatorKey,
+    pageBuilder: (context, state) => NoTransitionPage(child: const ExcelScreen()),
+  ),
+];

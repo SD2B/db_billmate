@@ -47,7 +47,7 @@ class CustomSidebar extends StatelessWidget {
             spacing: 20,
             children: [
               ...sidebarButtons.map(
-                (e) => SidebarButton(e: e),
+                (e) => Tooltip(message: e.title, child: SidebarButton(e: e)),
               ),
             ],
           ),

@@ -2,9 +2,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:image/image.dart' as img;
 
 qp(dynamic data, [String? tag]) {
   final String ttag = tag != null ? tag.toString() : '';
@@ -25,14 +28,10 @@ extension StringExtension on String {
   String toTitleCase() {
     return trim() // Remove leading/trailing spaces
         .split(RegExp(r'\s+')) // Split on multiple spaces
-        .map((word) => word.isNotEmpty && word[0].contains(RegExp(r'[a-zA-Z]'))
-            ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
-            : word) // Keep numbers/special chars unchanged
+        .map((word) => word.isNotEmpty && word[0].contains(RegExp(r'[a-zA-Z]')) ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}' : word) // Keep numbers/special chars unchanged
         .join(' '); // Rejoin words with a single space
   }
-}
 
-extension NameInitials on String {
   String get initials {
     final trimmed = trim();
     final parts = trimmed.split(' ');
@@ -42,6 +41,14 @@ extension NameInitials on String {
       return '${parts[0][0]}${parts[0].characters.last}'.toUpperCase();
     }
     return '';
+  }
+
+  String routeToTitleCase() {
+    return splitMapJoin(RegExp(r'([a-z])([A-Z])'), onMatch: (m) => '${m[1]} ${m[2]}', onNonMatch: (n) => n.replaceAllMapped(RegExp(r'([a-z])([A-Z])'), (match) => '${match.group(1)} ${match.group(2)}'))
+        .replaceAll('_', ' ') // Replace underscores with spaces
+        .split(' ') // Split words
+        .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
+        .join(' '); // Capitalize first letter of each word
   }
 }
 
@@ -84,26 +91,23 @@ class UniqueIdGenerator {
 
   static int generateId() {
     int timestamp = DateTime.now().millisecondsSinceEpoch;
-    int randomNumber = _random.nextInt(10000000);
+    int randomNumber = _random.nextInt(100000);
     return int.parse('$timestamp$randomNumber');
   }
 }
 
-Future<void> shareDatabase() async {
-  try {
-    // Get the database path
-    final dbPath = await getDatabasesPath();
-    final dbFile = File(join(dbPath, 'local_storage.db'));
+Future<File> bytesToImageFile(Uint8List bytes) async {
+  // Get the temporary directory
+  String fileName = "Reminder${UniqueIdGenerator.generateId()}";
+  Directory tempDir = await getTemporaryDirectory();
+  String filePath = '${tempDir.path}/$fileName.jpg';
 
-    // Check if the database file exists
-    if (await dbFile.exists()) {
-      // Share the database file via WhatsApp
-      await Share.shareXFiles([XFile(dbFile.path)],
-          text: 'Here is the database file.');
-    } else {
-      qp("Database file does not exist.");
-    }
-  } catch (e) {
-    qp('Error sharing database: $e');
-  }
+  // Create the file
+  File file = File(filePath);
+
+  // Write bytes to the file
+  await file.writeAsBytes(bytes);
+
+  return file;
 }
+

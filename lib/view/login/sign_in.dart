@@ -2,6 +2,8 @@ import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/constants/colors.dart';
+import 'package:db_billmate/helpers/common_enums.dart';
+import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/login_model.dart';
 import 'package:db_billmate/view/login/login.dart';
 import 'package:db_billmate/vm/repositories/login_repo.dart';
@@ -85,7 +87,7 @@ class SignIn extends HookConsumerWidget {
                     model = model.copyWith(isLoggedIn: true);
                     final res = await LoginRepo.update(model);
                     if (res) {
-                      context.go("/");
+                      context.goNamed(RouteEnum.scaffold.name);
                     }
                   } else {
                     SDToast.showToast(context, description: "Incorrect Username or Password", type: ToastificationType.error);
@@ -105,19 +107,14 @@ class SignIn extends HookConsumerWidget {
                         fontSize: 14,
                       ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    ref.read(isChangePasswordProvider.notifier).state = true;
-                  },
-                  child: Text(
-                    "Change Password",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: appPrimary,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                  ),
-                ),
+                Text(
+                  "Change Password",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: appPrimary,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                ).onTap(() => ref.read(isChangePasswordProvider.notifier).state = true),
               ],
             )
           ],

@@ -2,6 +2,7 @@ import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/common_widgets/loading_widget.dart';
 import 'package:db_billmate/constants/colors.dart';
+import 'package:db_billmate/helpers/print_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/sales/sales_report/sales_report_table_header.dart';
 import 'package:db_billmate/view/stock/item_table_values.dart';
@@ -16,6 +17,7 @@ class SalesReport extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
+
     return Column(
       spacing: 10,
       children: [
@@ -26,8 +28,7 @@ class SalesReport extends HookConsumerWidget {
               height: 100,
               width: 200,
               decoration: BoxDecoration(
-                border: Border.all(
-                    color: ColorCode.colorList(context).borderColor!),
+                border: Border.all(color: ColorCode.colorList(context).borderColor!),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -42,11 +43,7 @@ class SalesReport extends HookConsumerWidget {
         Row(
           spacing: 10,
           children: [
-            CustomTextField(
-                width: 300,
-                height: 45,
-                controller: searchController,
-                hintText: "Search..."),
+            CustomTextField(width: 300, height: 45, controller: searchController, hintText: "Search..."),
             CustomIconButton(
               buttonSize: 45,
               icon: Icons.tune_rounded,
@@ -57,17 +54,16 @@ class SalesReport extends HookConsumerWidget {
               buttonSize: 45,
               icon: Icons.refresh_rounded,
               shape: BoxShape.rectangle,
-              onTap: () async =>
-                  await ref.read(invoiceVMProvider.notifier).get(),
+              onTap: () async => await ref.read(invoiceVMProvider.notifier).get(),
             ),
           ],
         ),
+       
         SalesReportTableHeader(),
         ref.watch(invoiceVMProvider).when(
               data: (rawData) {
                 final data = rawData.reversed.toList();
-                return Container(
-                  // color: redColor,
+                return SizedBox(
                   height: context.height() - 380,
                   width: context.width() - 150,
                   child: ListView.builder(
@@ -77,14 +73,15 @@ class SalesReport extends HookConsumerWidget {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: InkWell(
+                            onLongPress: () {
+                              PrintHelper.printInvoice(context, ref, invoice);
+                            },
                             onTap: () {},
                             child: Container(
                               height: 50,
                               width: 300,
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: ColorCode.colorList(context)
-                                        .borderColor!),
+                                border: Border.all(color: ColorCode.colorList(context).borderColor!),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -94,55 +91,26 @@ class SalesReport extends HookConsumerWidget {
                                     width: 40,
                                     child: Text(
                                       "${index + 1}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              color:
-                                                  ColorCode.colorList(context)
-                                                      .primary),
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
                                     ),
                                   ),
                                   10.width,
-                                  VerticalDivider(
-                                      color: ColorCode.colorList(context)
-                                          .borderColor),
-                                  ItemTableValues(
-                                      flex: 2,
-                                      value: "${invoice.customerName}"),
-                                  VerticalDivider(
-                                      color: ColorCode.colorList(context)
-                                          .borderColor),
-                                  ItemTableValues(
-                                      value: "${invoice.invoiceNumber}"),
-                                  VerticalDivider(
-                                      color: ColorCode.colorList(context)
-                                          .borderColor),
+                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                                  ItemTableValues(flex: 2, value: "${invoice.customerName}"),
+                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                                  ItemTableValues(value: "${invoice.invoiceNumber}"),
+                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
                                   ItemTableValues(value: "${invoice.total}"),
-                                  VerticalDivider(
-                                      color: ColorCode.colorList(context)
-                                          .borderColor),
+                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
                                   ItemTableValues(value: "${invoice.ob}"),
-                                  VerticalDivider(
-                                      color: ColorCode.colorList(context)
-                                          .borderColor),
-                                  ItemTableValues(
-                                      value: "${invoice.grandTotal}"),
-                                  VerticalDivider(
-                                      color: ColorCode.colorList(context)
-                                          .borderColor),
+                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                                  ItemTableValues(value: "${invoice.grandTotal}"),
+                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
                                   ItemTableValues(value: invoice.discount),
-                                  VerticalDivider(
-                                      color: ColorCode.colorList(context)
-                                          .borderColor),
+                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
                                   ItemTableValues(value: invoice.received),
-                                  VerticalDivider(
-                                      color: ColorCode.colorList(context)
-                                          .borderColor),
-                                  ItemTableValues(
-                                      value: "${invoice.currentBalance}"),
+                                  VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                                  ItemTableValues(value: "${invoice.currentBalance}"),
                                 ],
                               ),
                             ),

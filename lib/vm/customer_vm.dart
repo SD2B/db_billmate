@@ -42,7 +42,7 @@ class CustomerVM extends AsyncNotifier<List<CustomerModel>> {
             ascending: ascending,
             search: search);
       }
-      if (!noWait) await Future.delayed(Duration(seconds: 2));
+      // if (!noWait) await Future.delayed(Duration(seconds: 2));
       state = AsyncValue.data(customers);
       return customers;
     } catch (e, stackTrace) {

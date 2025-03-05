@@ -3,6 +3,7 @@ import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/customers/add_customer_popup.dart';
 import 'package:db_billmate/view/customers/elements/account_close_popup.dart';
+import 'package:db_billmate/view/customers/elements/reminder_pop.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/transaction_vm.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +32,7 @@ class CustomerTransactionHeader extends HookConsumerWidget {
             backgroundColor: whiteColor,
             child: Text(
               "${tempCustomer.state.name?.initials}",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: black87Color),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: black87Color),
             ),
           ),
           VerticalDivider(),
@@ -48,17 +46,11 @@ class CustomerTransactionHeader extends HookConsumerWidget {
           ),
           VerticalDivider(),
           Text(
-            double.parse(tempCustomer.state.balanceAmount)
-                .toStringAsFixed(2)
-                .split("-")
-                .join(),
+            double.parse(tempCustomer.state.balanceAmount).toStringAsFixed(2).split("-").join(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: (tempCustomer.state.balanceAmount.contains("-") ||
-                          double.parse(tempCustomer.state.balanceAmount) == 0)
-                      ? greenColor
-                      : redColor,
+                  color: (tempCustomer.state.balanceAmount.contains("-") || double.parse(tempCustomer.state.balanceAmount) == 0) ? greenColor : redColor,
                 ),
           ),
           Spacer(),
@@ -84,11 +76,20 @@ class CustomerTransactionHeader extends HookConsumerWidget {
               textColor: whiteColor,
               text: "Close Account",
               onTap: () {
-                if (ref.read(transactionVMProvider).value?.isNotEmpty == true)
-                  showDialog(
-                      context: context,
-                      builder: (context) => AccountClosePopup());
-              })
+                if (ref.read(transactionVMProvider).value?.isNotEmpty == true) showDialog(context: context, builder: (context) => AccountClosePopup());
+              }),
+          VerticalDivider(),
+          CustomButton(
+              width: 100,
+              height: 45,
+              buttonColor: black87Color,
+              textColor: whiteColor,
+              text: "Reminder",
+              onTap: () {
+                if (ref.read(transactionVMProvider).value?.isNotEmpty == true) {
+                  showDialog(context: context, builder: (context) => ReminderPop(model: tempCustomer.state));
+                }
+              }),
         ],
       ),
     );

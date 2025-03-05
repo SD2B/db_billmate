@@ -12,11 +12,9 @@ class CustomAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentRoute =
-        GoRouter.of(context).routeInformationProvider.value.uri;
-    String routeName = currentRoute.toString() == "/"
-        ? RouteEnum.home.asString
-        : nameFromRoute(currentRoute.toString().split("/").join());
+    final currentRoute = GoRouter.of(context).routeInformationProvider.value.uri;
+    final routeName = currentRoute.toString() == "/" ? RouteEnum.home.name : currentRoute.toString().split("/").last;
+
     return Row(
       children: [
         Expanded(
@@ -28,7 +26,7 @@ class CustomAppbar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  routeName.toTitleCase(),
+                  routeName.toString().routeToTitleCase(),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         fontSize: 20,
