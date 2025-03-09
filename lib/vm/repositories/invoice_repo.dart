@@ -5,9 +5,9 @@ import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/vm/repositories/transaction_repo.dart';
 
 class InvoiceRepo {
-  static Future<List<BillModel>> get({Map<String, dynamic>? where}) async {
+  static Future<List<BillModel>> get({Map<String, dynamic>? where, Map<String, dynamic>? search, int? pageIndex}) async {
     try {
-      final rawData = await LocalStorage.get(DBTable.invoice, where: where);
+      final rawData = await LocalStorage.get(DBTable.invoice, where: where, search: search, limit: 30);
       final data = rawData.map((e) => BillModel.fromJson(e)).toList();
       return data;
     } catch (e) {

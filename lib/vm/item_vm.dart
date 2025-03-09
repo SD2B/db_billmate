@@ -2,6 +2,7 @@ import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/vm/repositories/item_repo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+
 final tempItemProvider = StateProvider<ItemModel>((ref) => ItemModel());
 final tempItemListProvider = StateProvider<List<ItemModel>>((ref) => []);
 
@@ -11,10 +12,7 @@ class ItemVM extends AsyncNotifier<List<ItemModel>> {
     return await get(noLoad: true);
   }
 
-  Future<List<ItemModel>> get(
-      {bool noLoad = false,
-      Map<String, dynamic>? search,
-      Map<String, dynamic>? where}) async {
+  Future<List<ItemModel>> get({bool noLoad = false, Map<String, dynamic>? search, Map<String, dynamic>? where}) async {
     if (!noLoad) state = AsyncValue.loading();
     final itemList = await ItemRepo.get(search: search, where: where);
     state = AsyncValue.data(itemList);
@@ -40,5 +38,4 @@ class ItemVM extends AsyncNotifier<List<ItemModel>> {
   }
 }
 
-final itemVMProvider =
-    AsyncNotifierProvider<ItemVM, List<ItemModel>>(ItemVM.new);
+final itemVMProvider = AsyncNotifierProvider<ItemVM, List<ItemModel>>(ItemVM.new);

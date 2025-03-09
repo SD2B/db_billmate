@@ -4,9 +4,8 @@ import 'package:db_billmate/view/stock/item_table_headers.dart';
 import 'package:flutter/material.dart';
 
 class BillItemsHeader extends StatelessWidget {
-  const BillItemsHeader({
-    super.key,
-  });
+  final bool isView;
+  const BillItemsHeader({super.key, this.isView = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +24,7 @@ class BillItemsHeader extends StatelessWidget {
             width: 40,
             child: Text(
               "Sl.No.",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: ColorCode.colorList(context).primary),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
             ),
           ),
           10.width,
@@ -42,10 +38,7 @@ class BillItemsHeader extends StatelessWidget {
             width: 30,
             child: Text(
               "Unit",
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: ColorCode.colorList(context).primary),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
             ),
           ),
 
@@ -53,18 +46,17 @@ class BillItemsHeader extends StatelessWidget {
           ItemTableHeaders(value: "Unit Price"),
           VerticalDivider(color: ColorCode.colorList(context).secondary),
           ItemTableHeaders(value: "Total Price"),
-          VerticalDivider(color: ColorCode.colorList(context).secondary),
-          SizedBox(
-              width: 100,
-              child: Center(
-                child: Text(
-                  "Actions",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: ColorCode.colorList(context).primary),
-                ),
-              )),
+          if (!isView) ...[
+            VerticalDivider(color: ColorCode.colorList(context).secondary),
+            SizedBox(
+                width: 100,
+                child: Center(
+                  child: Text(
+                    "Actions",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+                  ),
+                )),
+          ],
         ],
       ),
     );

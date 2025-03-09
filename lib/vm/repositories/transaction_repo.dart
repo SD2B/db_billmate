@@ -3,11 +3,9 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/customer_model.dart';
 
 class TransactionRepo {
-  static Future<List<TransactionModel>> get(
-      {Map<String, dynamic>? where}) async {
+  static Future<List<TransactionModel>> get({Map<String, dynamic>? where}) async {
     try {
-      final rawData =
-          await LocalStorage.get(DBTable.transactions, where: where);
+      final rawData = await LocalStorage.get(DBTable.transactions, where: where);
       final data = rawData.map((e) => TransactionModel.fromJson(e)).toList();
 
       return data;
@@ -26,15 +24,14 @@ class TransactionRepo {
           LocalStorage.save(DBTable.transactions, model.toJson()),
           LocalStorage.rawQuery('''
                               UPDATE customers 
-                              SET balance_amount = (CAST(balance_amount AS REAL) ${model.toGet ? '+' : '-'} CAST($amount AS REAL)) 
+                              SET balance_amount = (CAST(balance_amount AS REAL) ${model.toGet ? '+' : '-'} CAST($amount AS REAL)),
+                              modified = strftime('%Y-%m-%dT%H:%M:%f', 'now') 
                               WHERE id = $id
                               ''')
         ]);
         qp(results, "TransactionRepoSave");
       } else {
-        final res = await LocalStorage.update(
-            DBTable.transactions, model.toJson(),
-            where: {"id": model.id});
+        final res = await LocalStorage.update(DBTable.transactions, model.toJson(), where: {"id": model.id});
         qp(res);
       }
 

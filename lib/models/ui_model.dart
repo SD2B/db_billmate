@@ -5,7 +5,7 @@ part '../gen/ui_model.g.dart';
 
 @freezed
 class UiModel with _$UiModel {
-  const factory UiModel({
+  const factory UiModel({ 
     int? id,
     String? title,
     String? subTitle,

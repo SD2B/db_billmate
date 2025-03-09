@@ -41,7 +41,7 @@ class PrintHelper {
         pageFormat: PdfPageFormat.roll80, // 80mm thermal printer format
         build: (pw.Context context) {
           return pw.SizedBox(
-              width: 190,
+              width: 200,
               child: pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
@@ -93,25 +93,24 @@ class PrintHelper {
                       children: [
                         pw.Text("${i + 1}", style: valueText),
                         pw.SizedBox(width: 5),
-                        pw.Container(
-                          // color: pw.,
-                          width: 50,
+                        pw.SizedBox(
+                          width: 70,
                           child: pw.Text(model.items![i].name.toString(), style: amountText),
                         ),
-                        pw.SizedBox(width: 5),
+                        pw.Spacer(),
+                        // pw.SizedBox(width: 5),
                         pw.SizedBox(
                           width: 30,
-                          child: pw.Text(model.items![i].salePrice.toString(), style: amountText),
+                          child: pw.Text(model.items![i].salePrice.toString(), textAlign: pw.TextAlign.end, style: amountText),
                         ),
                         pw.SizedBox(width: 5),
                         pw.SizedBox(
-                          width: 50,
-                          child: pw.Text("${model.items![i].quantity} ${model.items![i].unit}", style: amountText),
+                          width: 40,
+                          child: pw.Text("${model.items![i].quantity} ${model.items![i].unit}", textAlign: pw.TextAlign.end, style: amountText),
                         ),
-                        pw.Spacer(),
                         pw.SizedBox(
                           width: 50,
-                          child: pw.Text(model.items![i].billPrice.toString(), style: amountText),
+                          child: pw.Text((double.parse(model.items![i].billPrice ?? "0.00").toStringAsFixed(2)).toString(), textAlign: pw.TextAlign.end, style: amountText),
                         ),
                       ],
                     ),
@@ -198,6 +197,7 @@ class PrintHelper {
                 width: 200,
                 child: SearchableDropdown<Printer>(
                   height: 50,
+                  width: 180,
                   hint: "Select printer",
                   initialValue: ref.read(printerProvider.notifier).state != const Printer(url: "") ? ref.read(printerProvider.notifier).state : null,
                   itemAsString: (p0) => p0.name,

@@ -70,6 +70,42 @@ class LocalStorage {
     }
   }
 
+  ///get length
+  /// Get the number of records in a table with optional conditions
+  static Future<int> getLength(
+    String tableName, {
+    Map<String, dynamic>? where,
+    Map<String, dynamic>? notWhere,
+  }) async {
+    final db = await _getDatabase();
+
+    // Building the WHERE clause
+    final whereClauses = <String>[];
+    final whereArgs = <dynamic>[];
+
+    if (where != null) {
+      where.forEach((key, value) {
+        whereClauses.add('$key = ?');
+        whereArgs.add(value);
+      });
+    }
+
+    if (notWhere != null) {
+      notWhere.forEach((key, value) {
+        whereClauses.add('$key != ?');
+        whereArgs.add(value);
+      });
+    }
+
+    // Combine conditions
+    final whereString = whereClauses.isNotEmpty ? 'WHERE ${whereClauses.join(' AND ')}' : '';
+
+    // Execute the query
+    final result = await db.rawQuery('SELECT COUNT(*) AS count FROM $tableName $whereString', whereArgs);
+
+    return result.isNotEmpty ? result.first['count'] as int : 0;
+  }
+
   /// Get (Query) data from a table
   static Future<List<Map<String, dynamic>>> get(
     String tableName, {
@@ -401,7 +437,7 @@ class LocalStorage {
     )
     ''';
       await db.execute(createTableQuery);
-      LoginModel model = LoginModel(name: "Admin",isLoggedIn: false, userName: "admin", password: "admin", address: "N/A", modified: DateTime.now());
+      LoginModel model = LoginModel(name: "Admin", isLoggedIn: false, userName: "admin", password: "admin", address: "N/A", modified: DateTime.now());
       await db.insert(tableName, model.toJson());
     }
   }

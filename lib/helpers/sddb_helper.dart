@@ -3,11 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:image/image.dart' as img;
 
 qp(dynamic data, [String? tag]) {
   final String ttag = tag != null ? tag.toString() : '';
@@ -23,6 +19,26 @@ extension ContextExtensions on BuildContext {
   double width() => MediaQuery.of(this).size.width;
   double height() => MediaQuery.of(this).size.height;
 }
+
+extension ShortNumberFormat on double {
+  String toShortForm({int minDigits = 4}) {
+    String valueStr = toStringAsFixed(0); // Convert to string without decimals
+    if (valueStr.length < minDigits) {
+      return valueStr; // Return original value if it doesn't exceed minDigits
+    }
+
+    if (this >= 1e9) {
+      return '${(this / 1e9).toStringAsFixed(1)}B'; // Billion
+    } else if (this >= 1e6) {
+      return '${(this / 1e6).toStringAsFixed(1)}M'; // Million
+    } else if (this >= 1e3) {
+      return '${(this / 1e3).toStringAsFixed(1)}K'; // Thousand
+    } else {
+      return valueStr;
+    }
+  }
+}
+
 
 extension StringExtension on String {
   String toTitleCase() {

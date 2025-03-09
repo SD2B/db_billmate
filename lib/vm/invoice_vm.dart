@@ -1,11 +1,11 @@
+import 'package:db_billmate/helpers/local_storage.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
 import 'package:db_billmate/models/item_model.dart';
-import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/repositories/invoice_repo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final tempBillModelProvider = StateProvider<BillModel>((ref) => BillModel());
+final invNoProvider = StateProvider<int>((ref) => 1);
 
 class InvoiceVM extends AsyncNotifier<List<BillModel>> {
   @override
@@ -13,20 +13,14 @@ class InvoiceVM extends AsyncNotifier<List<BillModel>> {
     return await get(noLoad: true);
   }
 
-  Future<List<BillModel>> get(
-      {bool noLoad = false,
-      Map<String, dynamic>? where,
-      String? orderBy,
-      bool? isDouble,
-      bool ascending = false,
-      Map<String, dynamic>? search,
-      int? pageIndex}) async {
+  Future<List<BillModel>> get({bool noLoad = false, Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = false, Map<String, dynamic>? search, int? pageIndex}) async {
     try {
+      qp("111111111111");
       if (!noLoad) state = AsyncValue.loading();
       List<BillModel> invoiceList = state.value ?? [];
-      invoiceList = await InvoiceRepo.get(where: where);
+      invoiceList = await InvoiceRepo.get(where: where, search: search, pageIndex: pageIndex);
       state = AsyncValue.data(invoiceList);
-      qp(invoiceList);
+      qp(invoiceList, "ssssssssss");
       return invoiceList;
     } catch (e, stackTrace) {
       qp('Error: $e\nStackTrace: $stackTrace');
@@ -39,6 +33,7 @@ class InvoiceVM extends AsyncNotifier<List<BillModel>> {
     state = AsyncValue.loading();
     try {
       bool res = await InvoiceRepo.save(model);
+      state = AsyncValue.data(state.value ?? []);
       return res;
     } catch (e) {
       qp(e, "invoiceSaveError");
@@ -63,7 +58,11 @@ class InvoiceVM extends AsyncNotifier<List<BillModel>> {
     final res = await InvoiceRepo.delete(model.id ?? 0);
     return res;
   }
+
+  Future<int> getInvNo() async {
+    ref.read(invNoProvider.notifier).state = await LocalStorage.getLength(DBTable.invoice);
+    return ref.read(invNoProvider.notifier).state;
+  }
 }
 
-final invoiceVMProvider =
-    AsyncNotifierProvider<InvoiceVM, List<BillModel>>(InvoiceVM.new);
+final invoiceVMProvider = AsyncNotifierProvider<InvoiceVM, List<BillModel>>(InvoiceVM.new);
