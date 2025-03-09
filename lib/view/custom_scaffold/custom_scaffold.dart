@@ -24,10 +24,16 @@ class CustomScaffold extends HookWidget {
         bool alt = HardwareKeyboard.instance.isAltPressed;
         bool s = HardwareKeyboard.instance
             .isLogicalKeyPressed(LogicalKeyboardKey.keyS);
+        bool a = HardwareKeyboard.instance
+            .isLogicalKeyPressed(LogicalKeyboardKey.keyA);
 
         if (alt && s) {
           qp("Alt + S Pressed!");
           context.goNamed(RouteEnum.sales.name);
+        }
+        if (alt && a) {
+          qp("Alt + A Pressed!");
+          context.goNamed(RouteEnum.customers.name);
         }
       },
       child: Scaffold(

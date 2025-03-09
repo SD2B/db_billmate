@@ -29,7 +29,7 @@ class Sales extends HookConsumerWidget {
     ItemModel billItem = ref.watch(tempItemProvider);
     List<ItemModel> billItemList = ref.watch(tempItemListProvider);
     CustomerModel billCustomer = ref.watch(billCustomerProvider);
-    int invNo = ref.watch(invNoProvider) ?? 0;
+    int invNo = (updateBillModel?.invoiceNumber != null ? int.parse(updateBillModel?.invoiceNumber ?? "0") : ref.watch(invNoProvider)) ?? 0;
     FocusNode customerFocus = useFocusNode();
     FocusNode itemFocus = useFocusNode();
     final customerNameController = useTextEditingController(text: "");
@@ -38,9 +38,9 @@ class Sales extends HookConsumerWidget {
     final unitPriceController = useTextEditingController(text: billItem.salePrice ?? "0");
     double itemPrice = (double.tryParse(quantityController.text) ?? 1) * double.parse(billItem.salePrice ?? '0');
     final priceController = useTextEditingController(text: itemPrice.toString());
-    final receivedController = useTextEditingController(text: "0.00");
-    final discountController = useTextEditingController(text: "0.00");
-    final noteController = useTextEditingController(text: "");
+    final receivedController = useTextEditingController(text: double.parse(updateBillModel?.received ?? "0.00") != 0 ? updateBillModel?.received : "0.00");
+    final discountController = useTextEditingController(text: double.parse(updateBillModel?.discount ?? "0.00") != 0 ? updateBillModel?.discount : "0.00");
+    final noteController = useTextEditingController(text: updateBillModel?.note ?? "");
     final currentBalance = useState(0.00);
     void reset() {
       ref.read(billCustomerProvider.notifier).state = CustomerModel();
@@ -353,7 +353,7 @@ class Sales extends HookConsumerWidget {
         BillItemsHeader(),
         10.height,
         SizedBox(
-          height: context.height() - 550,
+          height: updateBillModel?.id != null ? context.height() - 500 : context.height() - 550,
           width: context.width() - 150,
           child: ListView.builder(
               itemCount: billItemList.length,
@@ -447,27 +447,27 @@ class Sales extends HookConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           LabelText(
-                            label: "Total:",
+                            label: "Total",
                             text: getTotal().toStringAsFixed(2),
                           ),
                           LabelText(
-                            label: "Old Balance:",
+                            label: "Old Balance",
                             text: (double.tryParse(billCustomer.balanceAmount) ?? 0.00).toStringAsFixed(2),
                           ),
                           LabelText(
-                            label: "Grand Total:",
+                            label: "Grand Total",
                             text: getGrandTotal().toStringAsFixed(2),
                           ),
                           LabelText(
-                            label: "Discount:",
+                            label: "Discount",
                             text: getDiscount().toStringAsFixed(2),
                           ),
                           LabelText(
-                            label: "Recieved:",
+                            label: "Recieved",
                             text: (double.tryParse(receivedController.text) ?? 0.00).toStringAsFixed(2),
                           ),
                           LabelText(
-                            label: "Current Balance:",
+                            label: "Current Balance",
                             text: (getcurrentBalance()).toStringAsFixed(2),
                           ),
                         ],
@@ -517,10 +517,10 @@ class Sales extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               CustomButton(
-                  width: 100,
+                  width: 110,
                   buttonColor: blackColor,
                   textColor: whiteColor,
-                  text: "Save",
+                  text: updateBillModel?.id != null ? "Update" : "Save",
                   isLoading: ref.watch(invoiceVMProvider).isLoading,
                   onTap: () async {
                     if (billCustomer == CustomerModel()) {
@@ -538,7 +538,7 @@ class Sales extends HookConsumerWidget {
                       SDToast.showToast(context, description: "Contact support immediately", type: ToastificationType.error);
                     }
                   }),
-              CustomButton(width: 100, buttonColor: blackColor, textColor: whiteColor, text: "Save & Print", onTap: () {}),
+              CustomButton(width: 110, buttonColor: blackColor, textColor: whiteColor, text: updateBillModel?.id != null ? "Update & Print" : "Save & Print", onTap: () {}),
               CustomButton(width: 100, buttonColor: ColorCode.colorList(context).borderColor, textColor: blackColor, text: "Clear", onTap: () {}),
             ],
           )

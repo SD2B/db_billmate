@@ -15,6 +15,8 @@ class PrintHelper {
 // Define common text styles
   static final headerText = pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10);
   static final labelText = pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 7);
+  static final itemHeader = pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10);
+  static final itemText = pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9);
   static final amountText = pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 10);
   static final impAmountText = pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 11);
   static final impAmountTextBold = pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 11);
@@ -72,48 +74,90 @@ class PrintHelper {
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.center,
                       children: [
-                        pw.Container(
-                          width: 5, // Set width
-                          height: 5, // Set height
-                          margin: const pw.EdgeInsets.only(right: 5),
-                          decoration: const pw.BoxDecoration(
-                            shape: pw.BoxShape.circle,
-                            color: PdfColors.black, // Set background color to black
-                          ),
-                        ),
-                        pw.Text('Customer name: ', style: amountText),
-                        pw.Text('${model.customerName}', style: amountText),
+                        // pw.Container(
+                        //   width: 5, // Set width
+                        //   height: 5, // Set height
+                        //   margin: const pw.EdgeInsets.only(right: 5),
+                        //   decoration: const pw.BoxDecoration(
+                        //     shape: pw.BoxShape.circle,
+                        //     color: PdfColors.black, // Set background color to black
+                        //   ),
+                        // ),
+                        pw.Text('Invoice Number: ', style: impAmountTextBold),
+                        pw.Text('${model.invoiceNumber}', style: impAmountTextBold),
+                      ],
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        // pw.Container(
+                        //   width: 5, // Set width
+                        //   height: 5, // Set height
+                        //   margin: const pw.EdgeInsets.only(right: 5),
+                        //   decoration: const pw.BoxDecoration(
+                        //     shape: pw.BoxShape.circle,
+                        //     color: PdfColors.black, // Set background color to black
+                        //   ),
+                        // ),
+                        pw.Text('Customer: ', style: amountText),
+                        pw.Text('${model.customerName}', style: impAmountTextBold),
                       ],
                     ),
                   ],
                   pw.Divider(thickness: .5),
                   // pw.SizedBox(height: 10),
-                  for (int i = 0; i < (model.items?.length ?? 0); i++)
-                    pw.Row(
-                      children: [
-                        pw.Text("${i + 1}", style: valueText),
-                        pw.SizedBox(width: 5),
-                        pw.SizedBox(
-                          width: 70,
-                          child: pw.Text(model.items![i].name.toString(), style: amountText),
-                        ),
-                        pw.Spacer(),
-                        // pw.SizedBox(width: 5),
-                        pw.SizedBox(
-                          width: 30,
-                          child: pw.Text(model.items![i].salePrice.toString(), textAlign: pw.TextAlign.end, style: amountText),
-                        ),
-                        pw.SizedBox(width: 5),
-                        pw.SizedBox(
-                          width: 40,
-                          child: pw.Text("${model.items![i].quantity} ${model.items![i].unit}", textAlign: pw.TextAlign.end, style: amountText),
-                        ),
-                        pw.SizedBox(
-                          width: 50,
-                          child: pw.Text((double.parse(model.items![i].billPrice ?? "0.00").toStringAsFixed(2)).toString(), textAlign: pw.TextAlign.end, style: amountText),
-                        ),
-                      ],
-                    ),
+                  pw.Row(
+                    children: [
+                      pw.SizedBox(
+                        width: 100,
+                        child: pw.Text("Item", style: itemHeader),
+                      ),
+                      pw.SizedBox(
+                        width: 20,
+                        child: pw.Text("Qty", textAlign: pw.TextAlign.end, style: itemHeader),
+                      ),
+                      pw.SizedBox(width: 15),
+                      pw.SizedBox(
+                        width: 25,
+                        child: pw.Text("Rate", textAlign: pw.TextAlign.end, style: itemHeader),
+                      ),
+                      pw.SizedBox(
+                        width: 40,
+                        child: pw.Text("Total", textAlign: pw.TextAlign.end, style: itemHeader),
+                      ),
+                    ],
+                  ),
+                  pw.Divider(thickness: .5),
+                  for (int i = 0; i < 2; i++)
+                    for (int i = 0; i < (model.items?.length ?? 0); i++)
+                      pw.Row(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.SizedBox(
+                            width: 10,
+                            child: pw.Text("${i + 1}", style: valueText),
+                            // child: pw.Text("00", style: valueText),
+                          ),
+                          pw.SizedBox(width: 1),
+                          pw.SizedBox(
+                            width: 70,
+                            child: pw.Text(model.items![i].name.toString(), style: itemText),
+                          ),
+                          pw.SizedBox(
+                            width: 40,
+                            child: pw.Text("${model.items![i].quantity} ${model.items![i].unit}", textAlign: pw.TextAlign.end, style: itemText),
+                          ),
+                          pw.SizedBox(width: 3),
+                          pw.SizedBox(
+                            width: 30,
+                            child: pw.Text(model.items![i].salePrice.toString(), textAlign: pw.TextAlign.end, style: itemText),
+                          ),
+                          pw.SizedBox(
+                            width: 50,
+                            child: pw.Text((double.parse(model.items![i].billPrice ?? "0.00").toStringAsFixed(2)).toString(), textAlign: pw.TextAlign.end, style: itemText),
+                          ),
+                        ],
+                      ),
 
                   pw.Divider(thickness: .5),
 
@@ -194,10 +238,10 @@ class PrintHelper {
               title: Text("Select a printer"),
               content: SizedBox(
                 height: 70,
-                width: 200,
+                width: 300,
                 child: SearchableDropdown<Printer>(
                   height: 50,
-                  width: 180,
+                  width: 300,
                   hint: "Select printer",
                   initialValue: ref.read(printerProvider.notifier).state != const Printer(url: "") ? ref.read(printerProvider.notifier).state : null,
                   itemAsString: (p0) => p0.name,

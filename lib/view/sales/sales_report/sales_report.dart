@@ -10,6 +10,7 @@ import 'package:db_billmate/models/customer_model.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/view/sales/bill_items_header.dart';
 import 'package:db_billmate/view/sales/label_text.dart';
+import 'package:db_billmate/view/sales/sales.dart';
 import 'package:db_billmate/view/sales/sales_report/sales_report_table_header.dart';
 import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
@@ -335,7 +336,14 @@ class InvoiceViewPop extends HookConsumerWidget {
                         text: "Edit",
                         onTap: () {
                           ref.read(tempItemListProvider.notifier).state = model.items ?? [];
-                          ref.read(billCustomerProvider.notifier).state = CustomerModel(id: model.customerId, name: model.customerName);
+                          ref.read(billCustomerProvider.notifier).state = CustomerModel(id: model.customerId, name: model.customerName, balanceAmount: model.ob ?? "0.00");
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    backgroundColor: whiteColor,
+                                    contentPadding: EdgeInsets.all(30),
+                                    content: Sales(updateBillModel: model),
+                                  ));
                         },
                         buttonColor: appPrimary,
                         textColor: whiteColor,
