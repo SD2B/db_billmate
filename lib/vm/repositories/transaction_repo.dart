@@ -1,11 +1,12 @@
 import 'package:db_billmate/helpers/local_storage.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/customer_model.dart';
+import 'package:flutter/material.dart';
 
 class TransactionRepo {
-  static Future<List<TransactionModel>> get({Map<String, dynamic>? where}) async {
+  static Future<List<TransactionModel>> get({Map<String, dynamic>? where, MapEntry<String, DateTimeRange>? dateRange}) async {
     try {
-      final rawData = await LocalStorage.get(DBTable.transactions, where: where);
+      final rawData = await LocalStorage.get(DBTable.transactions, where: where, limit: 30, pageIndex: 1, dateRange: dateRange, orderBy: "date_time");
       final data = rawData.map((e) => TransactionModel.fromJson(e)).toList();
 
       return data;

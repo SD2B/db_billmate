@@ -28,6 +28,9 @@ class CustomerTransactionList extends HookConsumerWidget {
                       padding: EdgeInsets.only(bottom: 10),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          qp(transaction);
+                        },
                         onDoubleTap: () {
                           showDialog(
                               context: context,

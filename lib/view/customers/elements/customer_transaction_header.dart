@@ -1,4 +1,5 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
+import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/customers/add_customer_popup.dart';
@@ -7,6 +8,7 @@ import 'package:db_billmate/view/customers/elements/reminder_pop.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/transaction_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CustomerTransactionHeader extends HookConsumerWidget {
@@ -17,6 +19,8 @@ class CustomerTransactionHeader extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tempCustomer = ref.read(tempCustomerProvider.notifier);
+    final startDate = useState(DateTime.now().subtract(Duration(days: 30)));
+    final endDate = useState(DateTime.now());
     return Container(
       width: context.width() - 610,
       height: 50,
@@ -79,17 +83,44 @@ class CustomerTransactionHeader extends HookConsumerWidget {
                 if (ref.read(transactionVMProvider).value?.isNotEmpty == true) showDialog(context: context, builder: (context) => AccountClosePopup());
               }),
           VerticalDivider(),
-          CustomButton(
-              width: 100,
-              height: 45,
-              buttonColor: black87Color,
-              textColor: whiteColor,
-              text: "Reminder",
-              onTap: () {
-                if (ref.read(transactionVMProvider).value?.isNotEmpty == true) {
-                  showDialog(context: context, builder: (context) => ReminderPop(model: tempCustomer.state));
-                }
-              }),
+          CustomIconButton(
+            tooltipMsg: "Reminder",
+            shape: BoxShape.rectangle,
+            icon: Icons.alarm_outlined,
+            buttonSize: 45,
+            buttonColor: black87Color,
+            iconColor: whiteColor,
+            iconSize: 20,
+            onTap: () {
+              if (ref.read(transactionVMProvider).value?.isNotEmpty == true) {
+                showDialog(context: context, builder: (context) => ReminderPop(model: tempCustomer.state));
+              }
+            },
+          ),
+          VerticalDivider(),
+          CustomIconButton(
+            tooltipMsg: "Date Filter",
+            shape: BoxShape.rectangle,
+            icon: Icons.calendar_month_rounded,
+            buttonSize: 45,
+            buttonColor: black87Color,
+            iconColor: whiteColor,
+            iconSize: 20,
+            onTap: () async {
+              DateTimeRange? range = await showDateRangePicker(
+                context: context,
+                initialDateRange: DateTimeRange(start: startDate.value, end: endDate.value),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+              );
+              if (range != null) {
+                qp(range);
+                startDate.value = range.start;
+                endDate.value = range.end;
+                ref.read(transactionVMProvider.notifier).get(where: {"customer_id": tempCustomer.state.id}, dateRange: range);
+              }
+            },
+          ),
         ],
       ),
     );

@@ -6,7 +6,6 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SendHelper {
   static Future<void> shareDatabase() async {
@@ -26,6 +25,8 @@ class SendHelper {
       qp('Error sharing database: $e');
     }
   }
+
+
 
   static Future<void> shareImage(Uint8List imageBytes) async {
     try {
@@ -54,45 +55,13 @@ class SendHelper {
         ['/c', 'start', 'whatsapp.exe', '--send-to', '$phoneNumber', '--attach', filePath],
       ).then((result) {
         if (result.exitCode != 0) {
-          print('Error sharing image: ${result.stderr}');
+          qp('Error sharing image: ${result.stderr}');
         }
       });
     } catch (e) {
-      print('Error: $e');
+      qp('Error: $e');
     }
   }
-
-  // static Future<void> openWhatsAppDesktop(String phoneNumber) async {
-  //   try {
-  //     String url = 'whatsapp://send?phone=$phoneNumber';
-  //     Process.run('cmd', ['/c', 'start', url]).then((result) {
-  //       if (result.exitCode != 0) {
-  //         print('Error opening WhatsApp: ${result.stderr}');
-  //       }
-  //     });
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  // }
-  // static Future<void> openWhatsAppAndSendImage(String phoneNumber, String imagePath) async {
-  //   qp(imagePath, "iiiiiiiiiiiiiiiii");
-  //   try {
-  //     // Open WhatsApp Chat
-  //     String url = 'whatsapp://send?phone=$phoneNumber';
-  //     Process.run('cmd', ['/c', 'start', url]);
-
-  //     // Copy Image to Clipboard (Requires PowerShell)
-  //     Process.run('powershell', ['-Command', "\$img = Get-Item '$imagePath'; Set-Clipboard -Path \$img.FullName"]);
-
-  //     // Delay to ensure WhatsApp opens
-  //     await Future.delayed(Duration(seconds: 2));
-
-  //     // Simulate CTRL + V and ENTER keypress
-  //     Process.run('cmd', ['/c', 'powershell', '-Command', "\$wshell = New-Object -ComObject WScript.Shell; " + "\$wshell.SendKeys('^v'); Start-Sleep -Seconds 1; " + "\$wshell.SendKeys('{ENTER}')"]);
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  // }
 
   static Future<void> openWhatsAppAndSendImage(String phoneNumber, String imagePath) async {
     try {
@@ -116,7 +85,7 @@ class SendHelper {
             "\$wshell.SendKeys('{ENTER}');"
       ]);
     } catch (e) {
-      print('Error: $e');
+      qp('Error: $e');
     }
   }
 }

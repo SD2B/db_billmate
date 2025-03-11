@@ -28,16 +28,20 @@ class Customers extends HookConsumerWidget {
         20.height,
         ref.watch(customerVMProvider).when(
             data: (dataList) {
-              customerList.value = dataList;
+              if (searchController.text.isEmpty) {
+                customerList.value = [
+                  ...customerList.value,
+                  ...dataList.where((newCustomer) => !customerList.value.any((existingCustomer) => existingCustomer.id == newCustomer.id)),
+                ];
+              } else {
+                customerList.value = [...dataList];
+              }
               return Expanded(
                 child: Row(
                   spacing: 20,
                   children: [
-                    CustomerList(
-                        customerList: customerList.value,
-                        customerModel: customerModel),
-                    VerticalDivider(
-                        color: ColorCode.colorList(context).borderColor),
+                    CustomerList(customerList: customerList.value, customerModel: customerModel),
+                    VerticalDivider(color: ColorCode.colorList(context).borderColor),
                     if (customerModel.value == CustomerModel())
                       Expanded(
                           child: Center(
@@ -48,18 +52,13 @@ class Customers extends HookConsumerWidget {
                           Text("Select a customer"),
                         ],
                       ))),
-                    if (customerModel.value != CustomerModel())
-                      CustomerTransactions(
-                          customerModel2: customerModel, selected: selected),
+                    if (customerModel.value != CustomerModel()) CustomerTransactions(customerModel2: customerModel, selected: selected),
                   ],
                 ),
               );
             },
             error: (error, stackTrace) => Text(error.toString()),
-            loading: () => SizedBox(
-                height: context.height() - 300,
-                width: context.width() - 200,
-                child: LoadingWidget()))
+            loading: () => SizedBox(height: context.height() - 300, width: context.width() - 200, child: LoadingWidget()))
       ],
     );
   }

@@ -1,6 +1,8 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
+import 'package:db_billmate/common_widgets/delete_popup.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
+import 'package:db_billmate/helpers/send_helper.dart';
 import 'package:db_billmate/models/login_model.dart';
 import 'package:db_billmate/vm/repositories/login_repo.dart';
 import 'package:flutter/material.dart';
@@ -25,20 +27,41 @@ class Profile extends StatelessWidget {
           child: Column(
             children: [
               Spacer(),
-              CustomButton(
-                width: 100,
-                height: 50,
-                text: "Logout",
-                buttonColor: appPrimary,
-                textColor: whiteColor,
-                onTap: () async {
-                  LoginModel model = await LoginRepo.get();
-                  model = model.copyWith(isLoggedIn: false);
-                  final res = await LoginRepo.update(model);
-                  if (res) {
-                    context.goNamed(RouteEnum.login.name);
-                  }
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomButton(
+                    width: 200,
+                    height: 50,
+                    text: "Backup",
+                    buttonColor: appPrimary,
+                    textColor: whiteColor,
+                    onTap: () async {
+                      await SendHelper.shareDatabase();
+                    },
+                  ),
+                  CustomButton(
+                    width: 200,
+                    height: 50,
+                    text: "Logout",
+                    buttonColor: appSecondary,
+                    textColor: blackColor,
+                    onTap: () async {
+                      showDialog(
+                          context: context,
+                          builder: (context) => DeletePopup(
+                              title: "Are you sure about logging out?",
+                              onYes: () async {
+                                LoginModel model = await LoginRepo.get();
+                                model = model.copyWith(isLoggedIn: false);
+                                final res = await LoginRepo.update(model);
+                                if (res) {
+                                  context.goNamed(RouteEnum.login.name);
+                                }
+                              }));
+                    },
+                  ),
+                ],
               )
             ],
           ),

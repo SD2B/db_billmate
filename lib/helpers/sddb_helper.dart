@@ -39,7 +39,6 @@ extension ShortNumberFormat on double {
   }
 }
 
-
 extension StringExtension on String {
   String toTitleCase() {
     return trim() // Remove leading/trailing spaces
@@ -102,6 +101,26 @@ extension GestureWidgetExtension on Widget {
   }
 }
 
+DateTime updateDateTimeWithDate(DateTime originalDateTime, DateTime newDate) {
+  return DateTime(newDate.year, newDate.month, newDate.day, originalDateTime.hour, originalDateTime.minute, originalDateTime.second, originalDateTime.millisecond, originalDateTime.microsecond);
+}
+
+DateTime updateDateTimeWithTime(DateTime date, TimeOfDay time) {
+  return DateTime(date.year, date.month, date.day, time.hour, time.minute);
+}
+
+TimeOfDay extractTimeFromDateTime(DateTime dateTime) {
+  return TimeOfDay(hour: dateTime.hour, minute: dateTime.minute);
+}
+
+bool checkIfTimeEmpty(DateTime? dateTime) {
+  if (dateTime != null) {
+    return dateTime.hour == 0 && dateTime.minute == 0 && dateTime.second == 0;
+  } else {
+    return true;
+  }
+}
+
 class UniqueIdGenerator {
   static final Random _random = Random();
 
@@ -126,4 +145,3 @@ Future<File> bytesToImageFile(Uint8List bytes) async {
 
   return file;
 }
-

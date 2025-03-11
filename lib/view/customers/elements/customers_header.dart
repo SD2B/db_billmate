@@ -12,8 +12,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class CustomersHeader extends HookConsumerWidget {
   final TextEditingController searchController;
   final ValueNotifier<int> selected;
-  const CustomersHeader(
-      {super.key, required this.searchController, required this.selected});
+  const CustomersHeader({super.key, required this.searchController, required this.selected});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +26,9 @@ class CustomersHeader extends HookConsumerWidget {
           controller: searchController,
           hintText: "Search...",
           suffix: Icon(Icons.search),
+          onChanged: (p0) {
+            p0.isEmpty ? ref.read(customerVMProvider.notifier).get() : ref.read(customerVMProvider.notifier).get(search: {"name": p0});
+          },
         ),
         // ElevatedButton(
         //   onPressed: () async {
@@ -44,60 +46,32 @@ class CustomersHeader extends HookConsumerWidget {
             onSelected: (value) async {
               if (value == 1) {
                 selected.value = 1;
-                await ref
-                    .read(customerVMProvider.notifier)
-                    .get(orderBy: "modified");
+                await ref.read(customerVMProvider.notifier).get(orderBy: "modified");
               } else if (value == 2) {
                 selected.value = 2;
-                await ref
-                    .read(customerVMProvider.notifier)
-                    .get(orderBy: "modified", ascending: true);
+                await ref.read(customerVMProvider.notifier).get(orderBy: "modified", ascending: true);
               } else if (value == 3) {
                 selected.value = 3;
-                await ref
-                    .read(customerVMProvider.notifier)
-                    .get(orderBy: "name", ascending: true);
+                await ref.read(customerVMProvider.notifier).get(orderBy: "name", ascending: true);
               } else if (value == 4) {
                 selected.value = 4;
-                await ref.read(customerVMProvider.notifier).get(
-                    orderBy: "balance_amount", isDouble: true, ascending: true);
+                await ref.read(customerVMProvider.notifier).get(orderBy: "balance_amount", isDouble: true, ascending: true);
               } else {
                 selected.value = 5;
-                await ref
-                    .read(customerVMProvider.notifier)
-                    .get(orderBy: "balance_amount", isDouble: true);
+                await ref.read(customerVMProvider.notifier).get(orderBy: "balance_amount", isDouble: true);
               }
             },
             itemBuilder: (context) {
               return [
-                PopupMenuItem(
-                    enabled: false,
-                    child: Text("Sort by,",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontSize: 14, fontWeight: FontWeight.w600))),
-                MenuTile(
-                    value: 1, title: "Latest", selected: selected.value == 1),
-                MenuTile(
-                    value: 2, title: "Oldest", selected: selected.value == 2),
-                MenuTile(
-                    value: 3,
-                    title: "Name (A-Z)",
-                    selected: selected.value == 3),
-                MenuTile(
-                    value: 4,
-                    title: "Lowest Amount",
-                    selected: selected.value == 4),
-                MenuTile(
-                    value: 5,
-                    title: "Highest Amount",
-                    selected: selected.value == 5),
+                PopupMenuItem(enabled: false, child: Text("Sort by,", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w600))),
+                MenuTile(value: 1, title: "Latest", selected: selected.value == 1),
+                MenuTile(value: 2, title: "Oldest", selected: selected.value == 2),
+                MenuTile(value: 3, title: "Name (A-Z)", selected: selected.value == 3),
+                MenuTile(value: 4, title: "Lowest Amount", selected: selected.value == 4),
+                MenuTile(value: 5, title: "Highest Amount", selected: selected.value == 5),
               ];
             },
-            child: CustomIconButton(
-                buttonSize: 45,
-                shape: BoxShape.rectangle,
-                icon: Icons.tune_rounded,
-                noTap: true)),
+            child: CustomIconButton(buttonSize: 45, shape: BoxShape.rectangle, icon: Icons.tune_rounded, noTap: true)),
         CustomIconButton(
           buttonSize: 45,
           shape: BoxShape.rectangle,
@@ -111,8 +85,18 @@ class CustomersHeader extends HookConsumerWidget {
           width: 80,
           height: 45,
           text: "+ Add",
-          onTap: () => showDialog(
-              context: context, builder: (context) => AddCustomerPopup()),
+          onTap: () => showDialog(context: context, builder: (context) => AddCustomerPopup()),
+          buttonColor: ColorCode.colorList(context).primary,
+          textColor: whiteColor,
+        ),
+        CustomButton(
+          width: 80,
+          height: 45,
+          text: "Test",
+          onTap: () {
+            // ref.read(customerVMProvider.notifier).testSave();
+            // ref.read(transactionVMProvider.notifier).test();
+          },
           buttonColor: ColorCode.colorList(context).primary,
           textColor: whiteColor,
         ),

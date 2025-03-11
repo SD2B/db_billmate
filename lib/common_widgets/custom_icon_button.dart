@@ -10,41 +10,34 @@ class CustomIconButton extends StatelessWidget {
   final double? iconSize;
   final BoxShape? shape;
   final bool noTap;
-  const CustomIconButton(
-      {super.key,
-      required this.icon,
-      this.onTap,
-      this.buttonColor,
-      this.iconColor,
-      this.buttonSize,
-      this.iconSize,
-      this.shape,
-      this.noTap = false});
+  final String? tooltipMsg;
+  const CustomIconButton({
+    super.key,
+    required this.icon,
+    this.onTap,
+    this.buttonColor,
+    this.iconColor,
+    this.buttonSize,
+    this.iconSize,
+    this.shape,
+    this.noTap = false,
+    this.tooltipMsg,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return noTap
-        ? CustomIconButtonCard(
-            buttonSize: buttonSize,
-            shape: shape,
-            buttonColor: buttonColor,
-            icon: icon,
-            iconColor: iconColor,
-            iconSize: iconSize)
-        : InkWell(
-            onTap: () {
-              onTap?.call();
-            },
-            splashColor: Colors.transparent,
-            borderRadius: BorderRadius.circular(500),
-            child: CustomIconButtonCard(
-                buttonSize: buttonSize,
-                shape: shape,
-                buttonColor: buttonColor,
-                icon: icon,
-                iconColor: iconColor,
-                iconSize: iconSize),
-          );
+    return Tooltip(
+        message: tooltipMsg??"",
+        child: noTap
+            ? CustomIconButtonCard(buttonSize: buttonSize, shape: shape, buttonColor: buttonColor, icon: icon, iconColor: iconColor, iconSize: iconSize)
+            : InkWell(
+                onTap: () {
+                  onTap?.call();
+                },
+                splashColor: Colors.transparent,
+                borderRadius: BorderRadius.circular(500),
+                child: CustomIconButtonCard(buttonSize: buttonSize, shape: shape, buttonColor: buttonColor, icon: icon, iconColor: iconColor, iconSize: iconSize),
+              ));
   }
 }
 

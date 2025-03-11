@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:db_billmate/models/customer_model.dart';
 import 'package:db_billmate/models/login_model.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -117,6 +118,7 @@ class LocalStorage {
     String? orderBy, // Column to sort by
     bool ascending = true, // Sort order: true for ASC, false for DESC
     bool isDouble = false, // Indicates if the orderBy column is stored as a string but represents numeric values
+    MapEntry<String, DateTimeRange>? dateRange, // New parameter for date filtering
   }) async {
     final db = await _getDatabase();
 
@@ -146,6 +148,16 @@ class LocalStorage {
         whereClauses.add('$key LIKE ?');
         whereArgs.add('%$value%');
       });
+    }
+
+    // Add DATE RANGE condition
+    if (dateRange != null) {
+      String column = dateRange.key;
+      DateTimeRange range = DateTimeRange(start: dateRange.value.start, end: dateRange.value.end.add(Duration(days: 1)));
+
+      whereClauses.add("$column BETWEEN ? AND ?");
+      whereArgs.add(range.start.toIso8601String()); // Start date
+      whereArgs.add(range.end.toIso8601String()); // End date
     }
 
     // Combine all conditions
