@@ -52,7 +52,7 @@ class SendHelper {
       // Run WhatsApp command
       Process.run(
         'cmd',
-        ['/c', 'start', 'whatsapp.exe', '--send-to', '$phoneNumber', '--attach', filePath],
+        ['/c', 'start', 'whatsapp.exe', '--send-to', phoneNumber, '--attach', filePath],
       ).then((result) {
         if (result.exitCode != 0) {
           qp('Error sharing image: ${result.stderr}');

@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../models/customer_model.dart';
+part of '../models/end_user_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CustomerModelImpl _$$CustomerModelImplFromJson(Map<String, dynamic> json) =>
-    _$CustomerModelImpl(
+_$EndUserModelImpl _$$EndUserModelImplFromJson(Map<String, dynamic> json) =>
+    _$EndUserModelImpl(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
       phone: json['phone'] as String?,
@@ -17,9 +17,10 @@ _$CustomerModelImpl _$$CustomerModelImplFromJson(Map<String, dynamic> json) =>
       modified: json['modified'] == null
           ? null
           : DateTime.parse(json['modified'] as String),
+      endUsertype: json['end_user_type'] as String? ?? EndUsertype.customer,
     );
 
-Map<String, dynamic> _$$CustomerModelImplToJson(_$CustomerModelImpl instance) =>
+Map<String, dynamic> _$$EndUserModelImplToJson(_$EndUserModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
@@ -28,6 +29,7 @@ Map<String, dynamic> _$$CustomerModelImplToJson(_$CustomerModelImpl instance) =>
       'group_name': instance.group,
       'balance_amount': instance.balanceAmount,
       'modified': instance.modified?.toIso8601String(),
+      'end_user_type': instance.endUsertype,
     };
 
 _$TransactionModelImpl _$$TransactionModelImplFromJson(

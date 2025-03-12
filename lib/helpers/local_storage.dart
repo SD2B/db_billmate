@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -398,7 +398,8 @@ class LocalStorage {
         address TEXT, 
         group_name TEXT, 
         balance_amount TEXT, 
-        modified TEXT
+        modified TEXT,
+        end_user_type TEXT
       )
     ''';
       await db.execute(createTableQuery);
@@ -455,9 +456,15 @@ class LocalStorage {
   }
 
 // Execute raw SQL query
-  static Future<int> rawQuery(String query, [List<Object?>? arguments]) async {
+  static Future<int> rawQueryInt(String query, [List<Object?>? arguments]) async {
     final db = await _getDatabase();
     return await db.rawUpdate(query, arguments);
+  }
+
+  // Execute raw SQL query and return appropriate results
+  static Future<List<Map<String, dynamic>>> rawQuery(String query, [List<Object?>? arguments]) async {
+    final db = await _getDatabase();
+    return await db.rawQuery(query, arguments);
   }
 }
 

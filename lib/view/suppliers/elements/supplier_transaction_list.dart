@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class CustomerTransactionList extends HookConsumerWidget {
-  const CustomerTransactionList({super.key});
+class SupplierTransactionList extends HookConsumerWidget {
+  const SupplierTransactionList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

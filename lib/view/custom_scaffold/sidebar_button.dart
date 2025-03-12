@@ -20,8 +20,8 @@ class SidebarButton extends HookConsumerWidget {
 
     return InkWell(
         onTap: () {
-          context.goNamed(e.value!);
           e.onTap?.call(ref);
+          context.goNamed(e.value!);
         },
         onHover: (value) => isHovered.value = value,
         child: Column(

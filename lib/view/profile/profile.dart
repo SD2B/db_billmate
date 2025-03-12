@@ -40,6 +40,7 @@ class Profile extends StatelessWidget {
                       await SendHelper.shareDatabase();
                     },
                   ),
+                  
                   CustomButton(
                     width: 200,
                     height: 50,

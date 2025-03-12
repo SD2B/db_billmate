@@ -1,28 +1,23 @@
-import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/constants/colors.dart';
-import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/customers/elements/menu_tile.dart';
-import 'package:db_billmate/view/stock/excel.dart';
-import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/dashboard_vm.dart';
+import 'package:db_billmate/vm/supplier_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CustomersHeader extends HookConsumerWidget {
+class SuppliersHeader extends HookConsumerWidget {
   final TextEditingController searchController;
   final ValueNotifier<int> selected;
-  const CustomersHeader({super.key, required this.searchController, required this.selected});
+  const SuppliersHeader({super.key, required this.searchController, required this.selected});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selected = useState(1);
     final getAndGive = ref.watch(toGetAndGive);
-    
     return Row(
       spacing: 10,
       children: [
@@ -33,7 +28,7 @@ class CustomersHeader extends HookConsumerWidget {
           hintText: "Search...",
           suffix: Icon(Icons.search),
           onChanged: (p0) {
-            p0.isEmpty ? ref.read(customerVMProvider.notifier).get() : ref.read(customerVMProvider.notifier).get(search: {"name": p0});
+            p0.isEmpty ? ref.read(supplierVMProvider.notifier).get() : ref.read(supplierVMProvider.notifier).get(search: {"name": p0});
           },
         ),
         PopupMenuButton(
@@ -43,19 +38,19 @@ class CustomersHeader extends HookConsumerWidget {
             onSelected: (value) async {
               if (value == 1) {
                 selected.value = 1;
-                await ref.read(customerVMProvider.notifier).get(orderBy: "modified");
+                await ref.read(supplierVMProvider.notifier).get(orderBy: "modified");
               } else if (value == 2) {
                 selected.value = 2;
-                await ref.read(customerVMProvider.notifier).get(orderBy: "modified", ascending: true);
+                await ref.read(supplierVMProvider.notifier).get(orderBy: "modified", ascending: true);
               } else if (value == 3) {
                 selected.value = 3;
-                await ref.read(customerVMProvider.notifier).get(orderBy: "name", ascending: true);
+                await ref.read(supplierVMProvider.notifier).get(orderBy: "name", ascending: true);
               } else if (value == 4) {
                 selected.value = 4;
-                await ref.read(customerVMProvider.notifier).get(orderBy: "balance_amount", isDouble: true, ascending: true);
+                await ref.read(supplierVMProvider.notifier).get(orderBy: "balance_amount", isDouble: true, ascending: true);
               } else {
                 selected.value = 5;
-                await ref.read(customerVMProvider.notifier).get(orderBy: "balance_amount", isDouble: true);
+                await ref.read(supplierVMProvider.notifier).get(orderBy: "balance_amount", isDouble: true);
               }
             },
             itemBuilder: (context) {
@@ -76,16 +71,8 @@ class CustomersHeader extends HookConsumerWidget {
           icon: Icons.refresh,
           onTap: () async {
             selected.value = 1;
-            await ref.read(customerVMProvider.notifier).get();
+            await ref.read(supplierVMProvider.notifier).get();
           },
-        ),
-        CustomButton(
-          width: 150,
-          height: 45,
-          text: "⬇️ Import From Excel",
-          onTap: () => context.pushNamed(RouteEnum.excel.name, extra: ExcelType.customers),
-          buttonColor: ColorCode.colorList(context).primary,
-          textColor: whiteColor,
         ),
         Expanded(
           child: Row(

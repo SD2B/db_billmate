@@ -3,13 +3,13 @@ import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/view/customers/elements/transaction_popup.dart';
-import 'package:db_billmate/vm/customer_vm.dart';
+import 'package:db_billmate/vm/supplier_vm.dart';
 import 'package:db_billmate/vm/transaction_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AddCustomerTransactions extends HookConsumerWidget {
-  const AddCustomerTransactions({
+class AddSupplierTransactions extends HookConsumerWidget {
+  const AddSupplierTransactions({
     super.key,
     required this.selected,
   });
@@ -18,7 +18,7 @@ class AddCustomerTransactions extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tempCustomer = ref.read(tempCustomerProvider.notifier);
+    final tempSupplier = ref.read(tempSupplierProvider.notifier);
     return Row(
       spacing: 10,
       children: [
@@ -32,7 +32,7 @@ class AddCustomerTransactions extends HookConsumerWidget {
                       youGot: false,
                       onSave: (p0) async {
                         TransactionModel model =
-                            p0.copyWith(customerId: tempCustomer.state.id);
+                            p0.copyWith(customerId: tempSupplier.state.id);
                         qp(model);
                         await ref
                             .read(transactionVMProvider.notifier)
@@ -62,7 +62,7 @@ class AddCustomerTransactions extends HookConsumerWidget {
                       youGot: true,
                       onSave: (p0) async {
                         TransactionModel model =
-                            p0.copyWith(customerId: tempCustomer.state.id);
+                            p0.copyWith(customerId: tempSupplier.state.id);
                         qp(model);
                         await ref
                             .read(transactionVMProvider.notifier)

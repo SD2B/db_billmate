@@ -8,16 +8,16 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/view/stock/add_category_popup.dart';
-import 'package:db_billmate/vm/customer_vm.dart';
+import 'package:db_billmate/vm/supplier_vm.dart';
 import 'package:db_billmate/vm/group_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AddCustomerPopup extends HookConsumerWidget {
+class AddSupplierPopup extends HookConsumerWidget {
   final EndUserModel updateModel;
-  const AddCustomerPopup({super.key, this.updateModel = const EndUserModel()});
+  const AddSupplierPopup({super.key, this.updateModel = const EndUserModel()});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +27,7 @@ class AddCustomerPopup extends HookConsumerWidget {
     final phoneController = useTextEditingController(text: model.value.phone);
     final addressController = useTextEditingController(text: model.value.address);
     final openingBalanceController = useTextEditingController(text: "0.00");
-    final toGet = useState(true);
+    final toGet = useState(false);
     void resetFields() {
       nameController.clear();
       phoneController.clear();
@@ -37,7 +37,7 @@ class AddCustomerPopup extends HookConsumerWidget {
       model.value = EndUserModel();
     }
 
-    void saveCustomer() {
+    void saveSupplier() {
       if (formKey.currentState?.validate() ?? false) {
         model.value = model.value.copyWith(
           name: nameController.text,
@@ -49,7 +49,6 @@ class AddCustomerPopup extends HookConsumerWidget {
                   ? "${double.tryParse(openingBalanceController.text)}"
                   : "-${double.tryParse(openingBalanceController.text)}",
         );
-        
       }
     }
 
@@ -60,7 +59,7 @@ class AddCustomerPopup extends HookConsumerWidget {
       title: Row(
         children: [
           Text(
-            model.value.id != null ? "Update Customer" : "Add Customer",
+            model.value.id != null ? "Update Supplier" : "Add Supplier",
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
@@ -143,7 +142,7 @@ class AddCustomerPopup extends HookConsumerWidget {
                     const SizedBox(width: 10),
                     Checkbox(
                       value: toGet.value,
-                      onChanged: (value) => toGet.value = value ?? true,
+                      onChanged: (value) => toGet.value = value ?? false,
                     ),
                     const Expanded(child: Text('To get', style: TextStyle(fontSize: 16.0))),
                   ],
@@ -157,7 +156,7 @@ class AddCustomerPopup extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomButton(
-              isLoading: ref.watch(customerVMProvider).isLoading,
+              isLoading: ref.watch(supplierVMProvider).isLoading,
               width: 140,
               height: 45,
               text: model.value.id != null ? "Update" : "Save",
@@ -165,8 +164,8 @@ class AddCustomerPopup extends HookConsumerWidget {
               buttonColor: model.value.id != null ? black87Color : black54Color,
               onTap: () async {
                 if (formKey.currentState?.validate() ?? false) {
-                  saveCustomer();
-                  await ref.read(customerVMProvider.notifier).save(model.value);
+                  saveSupplier();
+                  await ref.read(supplierVMProvider.notifier).save(model.value);
                   formKey.currentState?.reset();
                   context.pop();
                 }
@@ -174,7 +173,7 @@ class AddCustomerPopup extends HookConsumerWidget {
             ),
             if (model.value.id == null)
               CustomButton(
-                isLoading: ref.watch(customerVMProvider).isLoading,
+                isLoading: ref.watch(supplierVMProvider).isLoading,
                 width: 140,
                 height: 45,
                 text: "Save & New",
@@ -182,8 +181,8 @@ class AddCustomerPopup extends HookConsumerWidget {
                 buttonColor: ColorCode.colorList(context).primary,
                 onTap: () async {
                   if (formKey.currentState?.validate() ?? false) {
-                    saveCustomer();
-                    await ref.read(customerVMProvider.notifier).save(model.value);
+                    saveSupplier();
+                    await ref.read(supplierVMProvider.notifier).save(model.value);
                     formKey.currentState?.reset();
                     resetFields();
                   }

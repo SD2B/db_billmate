@@ -82,105 +82,6 @@ List<GoRoute> _staticRoutes() {
               child: const CustomScaffold(child: Home()),
             ),
         routes: [...scaffoldRoutes]),
-    // GoRoute(
-    //   path: RouteEnum.profile.name,
-    //   name: RouteEnum.profile.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const CustomScaffold(child: Profile()),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: RouteEnum.home.name,
-    //   name: RouteEnum.home.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const CustomScaffold(child: Home()),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: RouteEnum.customers.name,
-    //   name: RouteEnum.customers.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const CustomScaffold(child: Customers()),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: RouteEnum.supplier.name,
-    //   name: RouteEnum.supplier.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const CustomScaffold(child: Suppliers()),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: RouteEnum.sales.name,
-    //   name: RouteEnum.sales.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const CustomScaffold(child: Sales()),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: RouteEnum.salesReport.name,
-    //   name: RouteEnum.salesReport.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const CustomScaffold(child: SalesReport()),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: RouteEnum.stock.name,
-    //   name: RouteEnum.stock.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const CustomScaffold(child: Stock()),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: RouteEnum.settings.name,
-    //   name: RouteEnum.settings.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const CustomScaffold(child: Settings()),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: RouteEnum.excel.name,
-    //   name: RouteEnum.excel.name,
-    //   pageBuilder: (BuildContext context, GoRouterState state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutSine).animate(animation), child: child);
-    //     },
-    //     child: const ExcelScreen(),
-    //   ),
-    // ),
   ];
 }
 
@@ -207,6 +108,7 @@ List<GoRoute> scaffoldRoutes = [
     path: RouteEnum.supplier.name,
     name: RouteEnum.supplier.name,
     parentNavigatorKey: ConstantData.navigatorKey,
+    // pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Customers())),
     pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Suppliers())),
   ),
   GoRoute(
@@ -237,6 +139,9 @@ List<GoRoute> scaffoldRoutes = [
     path: RouteEnum.excel.name,
     name: RouteEnum.excel.name,
     parentNavigatorKey: ConstantData.navigatorKey,
-    pageBuilder: (context, state) => NoTransitionPage(child: const ExcelScreen()),
+    pageBuilder: (context, state) {
+      final data = state.extra.toString();
+      return NoTransitionPage(child: ExcelScreen(excelType: data));
+    },
   ),
 ];

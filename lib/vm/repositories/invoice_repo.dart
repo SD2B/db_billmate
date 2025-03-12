@@ -1,6 +1,6 @@
 import 'package:db_billmate/helpers/local_storage.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/vm/repositories/transaction_repo.dart';
 
@@ -55,7 +55,7 @@ class InvoiceRepo {
 
   static Future<bool> closeAccount(int customerId) async {
     try {
-      await LocalStorage.rawQuery('''
+      await LocalStorage.rawQueryInt('''
       DELETE FROM transactions WHERE customer_id = $customerId
     ''');
       return true;

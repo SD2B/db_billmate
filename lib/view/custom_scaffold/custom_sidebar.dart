@@ -1,8 +1,11 @@
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/view/custom_scaffold/sidebar_button.dart';
+import 'package:db_billmate/vm/customer_vm.dart';
+import 'package:db_billmate/vm/supplier_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -58,41 +61,25 @@ class CustomSidebar extends StatelessWidget {
 }
 
 List<UiModel> sidebarButtons = [
+  UiModel(title: "Dashboard", svg: "assets/svg/home.svg", value: RouteEnum.home.name),
   UiModel(
-    title: "Dashboard",
-    svg: "assets/svg/home.svg",
-    value: RouteEnum.home.name,
-  ),
-  UiModel(
-    title: "Customers",
-    svg: "assets/svg/customer.svg",
-    value: RouteEnum.customers.name,
-  ),
-  UiModel(
-    title: "Sales",
-    svg: "assets/svg/sale.svg",
-    value: RouteEnum.sales.name,
-  ),
-  UiModel(
-      title: "Sales Report",
-      svg: "assets/svg/inv_report.svg",
-      value: RouteEnum.salesReport.name,
+      title: "Customers",
+      svg: "assets/svg/customer.svg",
+      value: RouteEnum.customers.name,
       onTap: (WidgetRef ref) {
-        // ref.read(invoiceVMProvider.notifier).get();
+        ref.read(tempCustomerProvider.notifier).state = EndUserModel();
+        ref.read(tempSupplierProvider.notifier).state = EndUserModel();
       }),
+  UiModel(title: "Sales", svg: "assets/svg/sale.svg", value: RouteEnum.sales.name),
+  UiModel(title: "Sales Report", svg: "assets/svg/inv_report.svg", value: RouteEnum.salesReport.name, onTap: (WidgetRef ref) {}),
+  UiModel(title: "Stock", svg: "assets/svg/stock.svg", value: RouteEnum.stock.name),
   UiModel(
-    title: "Stock",
-    svg: "assets/svg/stock.svg",
-    value: RouteEnum.stock.name,
-  ),
-  UiModel(
-    title: "Suppliers",
-    svg: "assets/svg/supplier.svg",
-    value: RouteEnum.supplier.name,
-  ),
-  UiModel(
-    title: "Settings",
-    svg: "assets/svg/settings.svg",
-    value: RouteEnum.settings.name,
-  ),
+      title: "Suppliers",
+      svg: "assets/svg/supplier.svg",
+      value: RouteEnum.supplier.name,
+      onTap: (WidgetRef ref) {
+        ref.read(tempCustomerProvider.notifier).state = EndUserModel();
+        ref.read(tempSupplierProvider.notifier).state = EndUserModel();
+      }),
+  UiModel(title: "Settings", svg: "assets/svg/settings.svg", value: RouteEnum.settings.name),
 ];

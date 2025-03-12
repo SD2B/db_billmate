@@ -67,7 +67,7 @@ class CustomIconButtonCard extends StatelessWidget {
       decoration: BoxDecoration(
         shape: shape ?? BoxShape.circle,
         color: buttonColor ?? ColorCode.colorList(context).primary,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius:shape ==BoxShape.rectangle?  BorderRadius.circular(8):null,
       ),
       child: Icon(icon, color: iconColor ?? Colors.white, size: iconSize),
     );

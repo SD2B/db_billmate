@@ -4,7 +4,7 @@ import 'package:db_billmate/common_widgets/pickers.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/form_helpers.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';

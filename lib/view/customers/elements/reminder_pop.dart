@@ -4,7 +4,7 @@ import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/helpers/send_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 
 class ReminderPop extends HookWidget {
-  final CustomerModel model;
+  final EndUserModel model;
   const ReminderPop({super.key, required this.model});
 
   @override
@@ -91,7 +91,7 @@ class ReminderPop extends HookWidget {
           onTap: () async {
             Uint8List? bytes = await controller.capture();
             File file = await bytesToImageFile(bytes!);
-            await SendHelper.openWhatsAppAndSendImage(model.phone??"9656595353", file.path);
+            await SendHelper.openWhatsAppAndSendImage(model.phone ?? "9656595353", file.path);
           },
         ),
         CustomButton(

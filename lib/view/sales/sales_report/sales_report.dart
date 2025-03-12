@@ -6,7 +6,7 @@ import 'package:db_billmate/common_widgets/loading_widget.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/print_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/view/sales/bill_items_header.dart';
 import 'package:db_billmate/view/sales/label_text.dart';
@@ -185,7 +185,7 @@ class InvoiceViewPop extends HookConsumerWidget {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               // color: redAccentColor,
               height: 80,
               child: Row(
@@ -336,7 +336,7 @@ class InvoiceViewPop extends HookConsumerWidget {
                         text: "Edit",
                         onTap: () {
                           ref.read(tempItemListProvider.notifier).state = model.items ?? [];
-                          ref.read(billCustomerProvider.notifier).state = CustomerModel(id: model.customerId, name: model.customerName, balanceAmount: model.ob ?? "0.00");
+                          ref.read(billCustomerProvider.notifier).state = EndUserModel(id: model.customerId, name: model.customerName, balanceAmount: model.ob ?? "0.00");
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(

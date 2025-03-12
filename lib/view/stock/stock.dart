@@ -5,6 +5,7 @@ import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/stock/add_item_popup.dart';
+import 'package:db_billmate/view/stock/excel.dart';
 import 'package:db_billmate/view/stock/item_list.dart';
 import 'package:db_billmate/view/stock/item_table_headers.dart';
 import 'package:db_billmate/vm/item_vm.dart';
@@ -27,11 +28,7 @@ class Stock extends HookConsumerWidget {
         Row(
           spacing: 10,
           children: [
-            CustomTextField(
-                width: 300,
-                height: 45,
-                controller: searchController,
-                hintText: "Search..."),
+            CustomTextField(width: 300, height: 45, controller: searchController, hintText: "Search..."),
             CustomIconButton(
               buttonSize: 45,
               icon: Icons.tune_rounded,
@@ -48,8 +45,7 @@ class Stock extends HookConsumerWidget {
               width: 80,
               height: 45,
               text: "+ Add",
-              onTap: () => showDialog(
-                  context: context, builder: (context) => AddItemPopup()),
+              onTap: () => showDialog(context: context, builder: (context) => AddItemPopup()),
               buttonColor: ColorCode.colorList(context).primary,
               textColor: whiteColor,
             ),
@@ -57,7 +53,7 @@ class Stock extends HookConsumerWidget {
               width: 150,
               height: 45,
               text: "⬇️ Import from excel",
-              onTap: () => context.pushNamed(RouteEnum.excel.name),
+              onTap: () => context.pushNamed(RouteEnum.excel.name, extra: ExcelType.items),
               buttonColor: ColorCode.colorList(context).primary,
               textColor: whiteColor,
             ),
@@ -68,8 +64,7 @@ class Stock extends HookConsumerWidget {
           height: 40,
           width: context.width() - 150,
           decoration: BoxDecoration(
-            border:
-                Border.all(color: ColorCode.colorList(context).borderColor!),
+            border: Border.all(color: ColorCode.colorList(context).borderColor!),
             borderRadius: BorderRadius.circular(10),
             color: ColorCode.colorList(context).borderColor!,
           ),
@@ -80,10 +75,7 @@ class Stock extends HookConsumerWidget {
                 width: 40,
                 child: Text(
                   "Sl.No.",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: ColorCode.colorList(context).primary),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
                 ),
               ),
               10.width,
@@ -97,10 +89,7 @@ class Stock extends HookConsumerWidget {
                 width: 30,
                 child: Text(
                   "Unit",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: ColorCode.colorList(context).primary),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
                 ),
               ),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
@@ -113,10 +102,7 @@ class Stock extends HookConsumerWidget {
                   child: Center(
                     child: Text(
                       "Actions",
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: ColorCode.colorList(context).primary),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
                     ),
                   )),
             ],

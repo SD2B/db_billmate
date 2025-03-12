@@ -1,4 +1,3 @@
-import 'package:db_billmate/common_widgets/header_label.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {

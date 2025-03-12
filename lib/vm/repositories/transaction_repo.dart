@@ -1,6 +1,6 @@
 import 'package:db_billmate/helpers/local_storage.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:flutter/material.dart';
 
 class TransactionRepo {
@@ -23,7 +23,7 @@ class TransactionRepo {
       if (model.id == null) {
         final List<int> results = await Future.wait([
           LocalStorage.save(DBTable.transactions, model.toJson()),
-          LocalStorage.rawQuery('''
+          LocalStorage.rawQueryInt('''
                               UPDATE customers 
                               SET balance_amount = (CAST(balance_amount AS REAL) ${model.toGet ? '+' : '-'} CAST($amount AS REAL)),
                               modified = strftime('%Y-%m-%dT%H:%M:%f', 'now') 
@@ -53,7 +53,7 @@ class TransactionRepo {
 
   static Future<bool> closeAccount(int customerId) async {
     try {
-      await LocalStorage.rawQuery('''
+      await LocalStorage.rawQueryInt('''
       DELETE FROM transactions WHERE customer_id = $customerId
     ''');
       return true;

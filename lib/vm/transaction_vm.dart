@@ -1,5 +1,5 @@
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/repositories/transaction_repo.dart';
 import 'package:flutter/material.dart';
@@ -34,41 +34,6 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
     }
   }
 
-  Future<void> test() async {
-    try {
-      for (int j = 1; j < 1005; j++) {
-        for (int i = 1; i < 500; i++) {
-          await testSave(TransactionModel(
-            amount: 200,
-            customerId: j,
-            dateTime: DateTime.now(),
-            description: "test transaction - ##$i",
-            toGet: i.isOdd ? true : false,
-            transactionType: TransactionType.normal,
-          ));
-        }
-      }
-    } catch (e) {
-      qp(e);
-    }
-  }
-
-  Future<bool> testSave(TransactionModel model) async {
-    state = AsyncValue.loading();
-    try {
-      bool res = await TransactionRepo.save(model);
-      if (res) {
-        final newCustomer = (await ref.read(customerVMProvider.notifier).singleGet(model.customerId ?? 0));
-        ref.read(tempCustomerProvider.notifier).state = newCustomer;
-      }
-      return res;
-    } catch (e) {
-      qp(e, "transactionSaveError");
-      state = AsyncValue.data(state.value ?? []);
-      return false;
-    }
-  }
-
   Future<bool> save(TransactionModel model) async {
     state = AsyncValue.loading();
     try {
@@ -91,7 +56,7 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
     state = AsyncValue.loading();
     try {
       bool res = await TransactionRepo.save(model);
-      CustomerModel customer = ref.read(tempCustomerProvider.notifier).state;
+      EndUserModel customer = ref.read(tempCustomerProvider.notifier).state;
       double prevTransactionAmount = (state.value?.where((e) => e.id == model.id).toList())?.first.amount ?? 0;
       customer = customer.copyWith(balanceAmount: "${(double.parse(customer.balanceAmount) - prevTransactionAmount) + model.amount}");
       await ref.read(customerVMProvider.notifier).save(customer);
@@ -116,7 +81,7 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
   Future<bool> delete(TransactionModel model) async {
     final res = await TransactionRepo.delete(model.id ?? 0);
     if (res) {
-      CustomerModel customerModel = ref.read(tempCustomerProvider.notifier).state;
+      EndUserModel customerModel = ref.read(tempCustomerProvider.notifier).state;
       qp(customerModel, "ddddddddddddddddddd");
       qp(model, "ddddddddddddddddddd");
       final minusAmount = model.toGet ? model.amount : double.parse("-${model.amount}");

@@ -155,6 +155,7 @@ class SearchableDropdown<T> extends HookWidget {
                   children: [
                     Text(
                       selectedValue.value != null
+                          // ignore: null_check_on_nullable_type_parameter
                           ? itemAsString!(selectedValue.value!)
                           : hint ?? "Select an item",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(

@@ -1,7 +1,7 @@
 import 'package:db_billmate/common_widgets/loading_widget.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/view/customers/elements/customer_list.dart';
 import 'package:db_billmate/view/customers/elements/customer_transactions.dart';
 import 'package:db_billmate/view/customers/elements/customers_header.dart';
@@ -17,8 +17,8 @@ class Customers extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
-    final customerModel = useState<CustomerModel>(CustomerModel());
-    final customerList = useState<List<CustomerModel>>([]);
+    final customerModel = useState<EndUserModel>(EndUserModel());
+    final customerList = useState<List<EndUserModel>>([]);
     final selected = useState(1);
 
     return Column(
@@ -27,38 +27,39 @@ class Customers extends HookConsumerWidget {
         CustomersHeader(searchController: searchController, selected: selected),
         20.height,
         ref.watch(customerVMProvider).when(
-            data: (dataList) {
-              if (searchController.text.isEmpty) {
-                customerList.value = [
-                  ...customerList.value,
-                  ...dataList.where((newCustomer) => !customerList.value.any((existingCustomer) => existingCustomer.id == newCustomer.id)),
-                ];
-              } else {
-                customerList.value = [...dataList];
-              }
-              return Expanded(
-                child: Row(
-                  spacing: 20,
-                  children: [
-                    CustomerList(customerList: customerList.value, customerModel: customerModel),
-                    VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                    if (customerModel.value == CustomerModel())
-                      Expanded(
-                          child: Center(
-                              child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          LottieBuilder.asset("assets/lottie/click.json"),
-                          Text("Select a customer"),
-                        ],
-                      ))),
-                    if (customerModel.value != CustomerModel()) CustomerTransactions(customerModel2: customerModel, selected: selected),
-                  ],
-                ),
-              );
-            },
-            error: (error, stackTrace) => Text(error.toString()),
-            loading: () => SizedBox(height: context.height() - 300, width: context.width() - 200, child: LoadingWidget()))
+              data: (dataList) {
+                if (searchController.text.isEmpty) {
+                  customerList.value = [
+                    ...customerList.value,
+                    ...dataList.where((newCustomer) => !customerList.value.any((existingCustomer) => existingCustomer.id == newCustomer.id)),
+                  ];
+                } else {
+                  customerList.value = [...dataList];
+                }
+                return Expanded(
+                  child: Row(
+                    spacing: 20,
+                    children: [
+                      CustomerList(customerList: customerList.value, customerModel: customerModel),
+                      VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                      if (customerModel.value == EndUserModel())
+                        Expanded(
+                            child: Center(
+                                child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            LottieBuilder.asset("assets/lottie/click.json"),
+                            Text("Select a customer"),
+                          ],
+                        ))),
+                      if (customerModel.value != EndUserModel()) CustomerTransactions( selected: selected),
+                    ],
+                  ),
+                );
+              },
+              error: (error, stackTrace) => Text(error.toString()),
+              loading: () => SizedBox(height: context.height() - 300, width: context.width() - 200, child: LoadingWidget()),
+            )
       ],
     );
   }

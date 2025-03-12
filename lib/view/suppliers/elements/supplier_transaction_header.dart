@@ -2,23 +2,23 @@ import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/view/customers/add_customer_popup.dart';
-import 'package:db_billmate/view/customers/elements/customer_account_close_popup.dart';
 import 'package:db_billmate/view/customers/elements/reminder_pop.dart';
-import 'package:db_billmate/vm/customer_vm.dart';
+import 'package:db_billmate/view/suppliers/add_supplier_popup.dart';
+import 'package:db_billmate/view/suppliers/elements/supplier_account_close_popup.dart';
+import 'package:db_billmate/vm/supplier_vm.dart';
 import 'package:db_billmate/vm/transaction_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CustomerTransactionHeader extends HookConsumerWidget {
-  const CustomerTransactionHeader({
+class SupplierTransactionHeader extends HookConsumerWidget {
+  const SupplierTransactionHeader({
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tempCustomer = ref.read(tempCustomerProvider.notifier);
+    final tempSupplier = ref.read(tempSupplierProvider.notifier);
     final startDate = useState(DateTime.now().subtract(Duration(days: 30)));
     final endDate = useState(DateTime.now());
     return Container(
@@ -35,13 +35,13 @@ class CustomerTransactionHeader extends HookConsumerWidget {
           CircleAvatar(
             backgroundColor: whiteColor,
             child: Text(
-              "${tempCustomer.state.name?.initials}",
+              "${tempSupplier.state.name?.initials}",
               style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: black87Color),
             ),
           ),
           VerticalDivider(),
           Text(
-            "${tempCustomer.state.name}",
+            "${tempSupplier.state.name}",
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -50,11 +50,11 @@ class CustomerTransactionHeader extends HookConsumerWidget {
           ),
           VerticalDivider(),
           Text(
-            double.parse(tempCustomer.state.balanceAmount).toStringAsFixed(2).split("-").join(),
+            double.parse(tempSupplier.state.balanceAmount).toStringAsFixed(2).split("-").join(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: (tempCustomer.state.balanceAmount.contains("-") || double.parse(tempCustomer.state.balanceAmount) == 0) ? greenColor : redColor,
+                  color: (tempSupplier.state.balanceAmount.contains("-") || double.parse(tempSupplier.state.balanceAmount) == 0) ? greenColor : redColor,
                 ),
           ),
           Spacer(),
@@ -68,8 +68,8 @@ class CustomerTransactionHeader extends HookConsumerWidget {
               onTap: () {
                 showDialog(
                     context: context,
-                    builder: (context) => AddCustomerPopup(
-                          updateModel: tempCustomer.state,
+                    builder: (context) => AddSupplierPopup(
+                          updateModel: tempSupplier.state,
                         ));
               }),
           VerticalDivider(),
@@ -80,7 +80,7 @@ class CustomerTransactionHeader extends HookConsumerWidget {
               textColor: whiteColor,
               text: "Close Account",
               onTap: () {
-                if (ref.read(transactionVMProvider).value?.isNotEmpty == true) showDialog(context: context, builder: (context) => CustomerAccountClosePopup());
+                if (ref.read(transactionVMProvider).value?.isNotEmpty == true) showDialog(context: context, builder: (context) => SupplierAccountClosePopup());
               }),
           VerticalDivider(),
           CustomIconButton(
@@ -93,7 +93,7 @@ class CustomerTransactionHeader extends HookConsumerWidget {
             iconSize: 20,
             onTap: () {
               if (ref.read(transactionVMProvider).value?.isNotEmpty == true) {
-                showDialog(context: context, builder: (context) => ReminderPop(model: tempCustomer.state));
+                showDialog(context: context, builder: (context) => ReminderPop(model: tempSupplier.state));
               }
             },
           ),
@@ -117,7 +117,7 @@ class CustomerTransactionHeader extends HookConsumerWidget {
                 qp(range);
                 startDate.value = range.start;
                 endDate.value = range.end;
-                ref.read(transactionVMProvider.notifier).get(where: {"customer_id": tempCustomer.state.id}, dateRange: range);
+                ref.read(transactionVMProvider.notifier).get(where: {"customer_id": tempSupplier.state.id}, dateRange: range);
               }
             },
           ),

@@ -5,7 +5,7 @@ import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/form_helpers.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/view/sales/bill_items_header.dart';
 import 'package:db_billmate/view/sales/label_text.dart';
@@ -28,7 +28,7 @@ class Sales extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ItemModel billItem = ref.watch(tempItemProvider);
     List<ItemModel> billItemList = ref.watch(tempItemListProvider);
-    CustomerModel billCustomer = ref.watch(billCustomerProvider);
+    EndUserModel billCustomer = ref.watch(billCustomerProvider);
     int invNo = (updateBillModel?.invoiceNumber != null ? int.parse(updateBillModel?.invoiceNumber ?? "0") : ref.watch(invNoProvider)) ?? 0;
     FocusNode customerFocus = useFocusNode();
     FocusNode itemFocus = useFocusNode();
@@ -43,7 +43,7 @@ class Sales extends HookConsumerWidget {
     final noteController = useTextEditingController(text: updateBillModel?.note ?? "");
     final currentBalance = useState(0.00);
     void reset() {
-      ref.read(billCustomerProvider.notifier).state = CustomerModel();
+      ref.read(billCustomerProvider.notifier).state = EndUserModel();
       ref.read(tempItemListProvider.notifier).state = [];
       ref.read(tempItemProvider.notifier).state = ItemModel();
       customerNameController.text = "";
@@ -179,10 +179,10 @@ class Sales extends HookConsumerWidget {
         Row(
           spacing: 10,
           children: [
-            TypeAheadField<CustomerModel>(
+            TypeAheadField<EndUserModel>(
               suggestionsCallback: (search) async {
                 qp(search, "hiiiiii");
-                List<CustomerModel> customers = await ref.read(customerVMProvider.notifier).get(search: {"name": search}, noWait: true);
+                List<EndUserModel> customers = await ref.read(customerVMProvider.notifier).get(search: {"name": search}, noWait: true);
                 return customers;
               },
               builder: (context, controller, focusNode) {
@@ -216,7 +216,7 @@ class Sales extends HookConsumerWidget {
                 ref.read(billCustomerProvider.notifier).state = customer;
               },
             ),
-            if (billCustomer != CustomerModel())
+            if (billCustomer != EndUserModel())
               CustomButtonCard(
                 width: 200,
                 height: 45,
@@ -523,7 +523,7 @@ class Sales extends HookConsumerWidget {
                   text: updateBillModel?.id != null ? "Update" : "Save",
                   isLoading: ref.watch(invoiceVMProvider).isLoading,
                   onTap: () async {
-                    if (billCustomer == CustomerModel()) {
+                    if (billCustomer == EndUserModel()) {
                       SDToast.showToast(context, description: "Select a customer", type: ToastificationType.warning);
                       return;
                     }

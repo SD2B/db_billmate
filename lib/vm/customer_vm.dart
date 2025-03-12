@@ -1,23 +1,25 @@
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/models/customer_model.dart';
+import 'package:db_billmate/models/end_user_model.dart';
+import 'package:db_billmate/vm/dashboard_vm.dart';
 import 'package:db_billmate/vm/repositories/customer_repo.dart';
-import 'package:db_billmate/vm/repositories/transaction_repo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final customerPageIndex = StateProvider<int>((ref) => 1);
-final tempCustomerProvider = StateProvider<CustomerModel>((ref) => CustomerModel());
-final billCustomerProvider = StateProvider<CustomerModel>((ref) => CustomerModel());
+final tempCustomerProvider = StateProvider<EndUserModel>((ref) => EndUserModel());
+final billCustomerProvider = StateProvider<EndUserModel>((ref) => EndUserModel());
 
-class CustomerVM extends AsyncNotifier<List<CustomerModel>> {
+class CustomerVM extends AsyncNotifier<List<EndUserModel>> {
   @override
-  Future<List<CustomerModel>> build() async {
+  Future<List<EndUserModel>> build() async {
     return await get(noLoad: true);
   }
 
-  Future<List<CustomerModel>> get({bool noLoad = false, int? id, Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = false, Map<String, dynamic>? search, int? pageIndex, bool noWait = false}) async {
+  Future<List<EndUserModel>> get({bool noLoad = false, int? id, Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = false, Map<String, dynamic>? search, int? pageIndex, bool noWait = false}) async {
+    qp("prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeevvvvvvvvvvvvvmmmmmmmmmmmmmgggggggggeeeeet");
     try {
       if (!noLoad) state = AsyncValue.loading();
-      List<CustomerModel> customers = state.value ?? [];
+      List<EndUserModel> customers = state.value ?? [];
+      qp(customers.length, "prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeevvvvvvvvvvvvvmmmmmmmmmmmmmgggggggggeeeeet");
 
       if (id != null) {
         final customer = (await CustomerRepo.fetchCustomers(where: {"id": id})).first;
@@ -34,6 +36,8 @@ class CustomerVM extends AsyncNotifier<List<CustomerModel>> {
           pageIndex: pageIndex,
         );
       }
+      qp(customers.length, "prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeevvvvvvvvvvvvvmmmmmmmmmmmmmgggggggggeeeeet");
+      ref.read(dashboardVMProvider.notifier).getTotalGetAndGive();
       state = AsyncValue.data(customers);
       return customers;
     } catch (e, stackTrace) {
@@ -43,42 +47,40 @@ class CustomerVM extends AsyncNotifier<List<CustomerModel>> {
     }
   }
 
-  Future<CustomerModel> singleGet(int id) async {
+  Future<EndUserModel> singleGet(int id) async {
     try {
-      List<CustomerModel> customers = state.value ?? [];
+      List<EndUserModel> customers = state.value ?? [];
       final customer = (await CustomerRepo.fetchCustomers(where: {"id": id})).first;
       customers.removeWhere((c) => c.id == customer.id);
       customers = [customer, ...customers];
       state = AsyncValue.data(customers);
+      ref.read(dashboardVMProvider.notifier).getTotalGetAndGive();
       return customer;
     } catch (e) {
-      return CustomerModel();
+      return EndUserModel();
     }
   }
 
-  Future<void> testSave() async {
-    try {
-      for (int i = 0; i < 1000; i++) {
-        await save(CustomerModel(name: "Customer - $i", phone: "0000000000", balanceAmount: "100", modified: DateTime.now()), transactionModel: TransactionModel(amount: 100, toGet: true, customerId: (state.value?.length ?? 0) + 1, dateTime: DateTime.now(), description: "Test transaction $i", transactionType: TransactionType.normal));
-      }
-    } catch (e) {
-      qp(e);
-    }
-  }
-
-  Future<bool> save(CustomerModel model, {TransactionModel transactionModel = const TransactionModel()}) async {
+  Future<bool> save(EndUserModel model) async {
     state = AsyncValue.loading();
-    List<dynamic> results = await Future.wait([CustomerRepo.addCustomer(model), if (transactionModel != TransactionModel()) TransactionRepo.save(transactionModel.copyWith(customerId: model.id ?? (state.value?.length ?? 0) + 1))]);
+
+    List<dynamic> results = await Future.wait([CustomerRepo.addCustomer(model)]);
     final res = results[0];
     if (res != 0) {
       await singleGet(res);
       if (model.id != null) {
         final tempCustomer = ref.read(tempCustomerProvider.notifier);
-        tempCustomer.state = state.value?.where((e) => e.id == tempCustomer.state.id).first ?? CustomerModel();
+        tempCustomer.state = state.value?.where((e) => e.id == tempCustomer.state.id).first ?? EndUserModel();
       }
     }
     return res != 0;
   }
+
+  Future<bool> multiSave(List<EndUserModel> customerList) async {
+    final res = await CustomerRepo.multiSave(customerList);
+    if (res) await get();
+    return res;
+  }
 }
 
-final customerVMProvider = AsyncNotifierProvider<CustomerVM, List<CustomerModel>>(CustomerVM.new);
+final customerVMProvider = AsyncNotifierProvider<CustomerVM, List<EndUserModel>>(CustomerVM.new);

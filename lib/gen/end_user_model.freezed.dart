@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of '../models/customer_model.dart';
+part of '../models/end_user_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,12 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) {
-  return _CustomerModel.fromJson(json);
+EndUserModel _$EndUserModelFromJson(Map<String, dynamic> json) {
+  return _EndUserModel.fromJson(json);
 }
 
 /// @nodoc
-mixin _$CustomerModel {
+mixin _$EndUserModel {
   int? get id => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
@@ -30,22 +30,24 @@ mixin _$CustomerModel {
   String get balanceAmount => throw _privateConstructorUsedError;
   @JsonKey(name: "modified")
   DateTime? get modified => throw _privateConstructorUsedError;
+  @JsonKey(name: "end_user_type")
+  String get endUsertype => throw _privateConstructorUsedError;
 
-  /// Serializes this CustomerModel to a JSON map.
+  /// Serializes this EndUserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of CustomerModel
+  /// Create a copy of EndUserModel
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CustomerModelCopyWith<CustomerModel> get copyWith =>
+  $EndUserModelCopyWith<EndUserModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CustomerModelCopyWith<$Res> {
-  factory $CustomerModelCopyWith(
-          CustomerModel value, $Res Function(CustomerModel) then) =
-      _$CustomerModelCopyWithImpl<$Res, CustomerModel>;
+abstract class $EndUserModelCopyWith<$Res> {
+  factory $EndUserModelCopyWith(
+          EndUserModel value, $Res Function(EndUserModel) then) =
+      _$EndUserModelCopyWithImpl<$Res, EndUserModel>;
   @useResult
   $Res call(
       {int? id,
@@ -54,20 +56,21 @@ abstract class $CustomerModelCopyWith<$Res> {
       String? address,
       @JsonKey(name: "group_name") String? group,
       @JsonKey(name: "balance_amount") String balanceAmount,
-      @JsonKey(name: "modified") DateTime? modified});
+      @JsonKey(name: "modified") DateTime? modified,
+      @JsonKey(name: "end_user_type") String endUsertype});
 }
 
 /// @nodoc
-class _$CustomerModelCopyWithImpl<$Res, $Val extends CustomerModel>
-    implements $CustomerModelCopyWith<$Res> {
-  _$CustomerModelCopyWithImpl(this._value, this._then);
+class _$EndUserModelCopyWithImpl<$Res, $Val extends EndUserModel>
+    implements $EndUserModelCopyWith<$Res> {
+  _$EndUserModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CustomerModel
+  /// Create a copy of EndUserModel
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -79,6 +82,7 @@ class _$CustomerModelCopyWithImpl<$Res, $Val extends CustomerModel>
     Object? group = freezed,
     Object? balanceAmount = null,
     Object? modified = freezed,
+    Object? endUsertype = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -109,16 +113,20 @@ class _$CustomerModelCopyWithImpl<$Res, $Val extends CustomerModel>
           ? _value.modified
           : modified // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      endUsertype: null == endUsertype
+          ? _value.endUsertype
+          : endUsertype // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$CustomerModelImplCopyWith<$Res>
-    implements $CustomerModelCopyWith<$Res> {
-  factory _$$CustomerModelImplCopyWith(
-          _$CustomerModelImpl value, $Res Function(_$CustomerModelImpl) then) =
-      __$$CustomerModelImplCopyWithImpl<$Res>;
+abstract class _$$EndUserModelImplCopyWith<$Res>
+    implements $EndUserModelCopyWith<$Res> {
+  factory _$$EndUserModelImplCopyWith(
+          _$EndUserModelImpl value, $Res Function(_$EndUserModelImpl) then) =
+      __$$EndUserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -128,18 +136,19 @@ abstract class _$$CustomerModelImplCopyWith<$Res>
       String? address,
       @JsonKey(name: "group_name") String? group,
       @JsonKey(name: "balance_amount") String balanceAmount,
-      @JsonKey(name: "modified") DateTime? modified});
+      @JsonKey(name: "modified") DateTime? modified,
+      @JsonKey(name: "end_user_type") String endUsertype});
 }
 
 /// @nodoc
-class __$$CustomerModelImplCopyWithImpl<$Res>
-    extends _$CustomerModelCopyWithImpl<$Res, _$CustomerModelImpl>
-    implements _$$CustomerModelImplCopyWith<$Res> {
-  __$$CustomerModelImplCopyWithImpl(
-      _$CustomerModelImpl _value, $Res Function(_$CustomerModelImpl) _then)
+class __$$EndUserModelImplCopyWithImpl<$Res>
+    extends _$EndUserModelCopyWithImpl<$Res, _$EndUserModelImpl>
+    implements _$$EndUserModelImplCopyWith<$Res> {
+  __$$EndUserModelImplCopyWithImpl(
+      _$EndUserModelImpl _value, $Res Function(_$EndUserModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CustomerModel
+  /// Create a copy of EndUserModel
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -151,8 +160,9 @@ class __$$CustomerModelImplCopyWithImpl<$Res>
     Object? group = freezed,
     Object? balanceAmount = null,
     Object? modified = freezed,
+    Object? endUsertype = null,
   }) {
-    return _then(_$CustomerModelImpl(
+    return _then(_$EndUserModelImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -181,24 +191,29 @@ class __$$CustomerModelImplCopyWithImpl<$Res>
           ? _value.modified
           : modified // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      endUsertype: null == endUsertype
+          ? _value.endUsertype
+          : endUsertype // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$CustomerModelImpl implements _CustomerModel {
-  const _$CustomerModelImpl(
+class _$EndUserModelImpl implements _EndUserModel {
+  const _$EndUserModelImpl(
       {this.id,
       this.name,
       this.phone,
       this.address,
       @JsonKey(name: "group_name") this.group,
       @JsonKey(name: "balance_amount") this.balanceAmount = "0.0",
-      @JsonKey(name: "modified") this.modified});
+      @JsonKey(name: "modified") this.modified,
+      @JsonKey(name: "end_user_type") this.endUsertype = EndUsertype.customer});
 
-  factory _$CustomerModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CustomerModelImplFromJson(json);
+  factory _$EndUserModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EndUserModelImplFromJson(json);
 
   @override
   final int? id;
@@ -217,17 +232,20 @@ class _$CustomerModelImpl implements _CustomerModel {
   @override
   @JsonKey(name: "modified")
   final DateTime? modified;
+  @override
+  @JsonKey(name: "end_user_type")
+  final String endUsertype;
 
   @override
   String toString() {
-    return 'CustomerModel(id: $id, name: $name, phone: $phone, address: $address, group: $group, balanceAmount: $balanceAmount, modified: $modified)';
+    return 'EndUserModel(id: $id, name: $name, phone: $phone, address: $address, group: $group, balanceAmount: $balanceAmount, modified: $modified, endUsertype: $endUsertype)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CustomerModelImpl &&
+            other is _$EndUserModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.phone, phone) || other.phone == phone) &&
@@ -236,43 +254,46 @@ class _$CustomerModelImpl implements _CustomerModel {
             (identical(other.balanceAmount, balanceAmount) ||
                 other.balanceAmount == balanceAmount) &&
             (identical(other.modified, modified) ||
-                other.modified == modified));
+                other.modified == modified) &&
+            (identical(other.endUsertype, endUsertype) ||
+                other.endUsertype == endUsertype));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, name, phone, address, group, balanceAmount, modified);
+  int get hashCode => Object.hash(runtimeType, id, name, phone, address, group,
+      balanceAmount, modified, endUsertype);
 
-  /// Create a copy of CustomerModel
+  /// Create a copy of EndUserModel
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CustomerModelImplCopyWith<_$CustomerModelImpl> get copyWith =>
-      __$$CustomerModelImplCopyWithImpl<_$CustomerModelImpl>(this, _$identity);
+  _$$EndUserModelImplCopyWith<_$EndUserModelImpl> get copyWith =>
+      __$$EndUserModelImplCopyWithImpl<_$EndUserModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CustomerModelImplToJson(
+    return _$$EndUserModelImplToJson(
       this,
     );
   }
 }
 
-abstract class _CustomerModel implements CustomerModel {
-  const factory _CustomerModel(
+abstract class _EndUserModel implements EndUserModel {
+  const factory _EndUserModel(
           {final int? id,
           final String? name,
           final String? phone,
           final String? address,
           @JsonKey(name: "group_name") final String? group,
           @JsonKey(name: "balance_amount") final String balanceAmount,
-          @JsonKey(name: "modified") final DateTime? modified}) =
-      _$CustomerModelImpl;
+          @JsonKey(name: "modified") final DateTime? modified,
+          @JsonKey(name: "end_user_type") final String endUsertype}) =
+      _$EndUserModelImpl;
 
-  factory _CustomerModel.fromJson(Map<String, dynamic> json) =
-      _$CustomerModelImpl.fromJson;
+  factory _EndUserModel.fromJson(Map<String, dynamic> json) =
+      _$EndUserModelImpl.fromJson;
 
   @override
   int? get id;
@@ -291,12 +312,15 @@ abstract class _CustomerModel implements CustomerModel {
   @override
   @JsonKey(name: "modified")
   DateTime? get modified;
+  @override
+  @JsonKey(name: "end_user_type")
+  String get endUsertype;
 
-  /// Create a copy of CustomerModel
+  /// Create a copy of EndUserModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CustomerModelImplCopyWith<_$CustomerModelImpl> get copyWith =>
+  _$$EndUserModelImplCopyWith<_$EndUserModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
