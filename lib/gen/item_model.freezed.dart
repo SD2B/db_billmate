@@ -23,6 +23,7 @@ mixin _$ItemModel {
   int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: "bill_id")
   int? get billId => throw _privateConstructorUsedError;
+  String? get barcode => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get category => throw _privateConstructorUsedError;
   @JsonKey(name: "sale_price")
@@ -33,6 +34,12 @@ mixin _$ItemModel {
   String? get quantity => throw _privateConstructorUsedError;
   @JsonKey(name: "bill_price")
   String? get billPrice => throw _privateConstructorUsedError;
+  @DateTimeConverter()
+  DateTime? get modified => throw _privateConstructorUsedError;
+  @JsonKey(name: "stock_count")
+  String? get stockCount => throw _privateConstructorUsedError;
+  @JsonKey(name: "stock_alert")
+  String? get stockAlert => throw _privateConstructorUsedError;
 
   /// Serializes this ItemModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,13 +59,17 @@ abstract class $ItemModelCopyWith<$Res> {
   $Res call(
       {int? id,
       @JsonKey(name: "bill_id") int? billId,
+      String? barcode,
       String? name,
       String? category,
       @JsonKey(name: "sale_price") String? salePrice,
       @JsonKey(name: "purchase_price") String? purchasePrice,
       String? unit,
       String? quantity,
-      @JsonKey(name: "bill_price") String? billPrice});
+      @JsonKey(name: "bill_price") String? billPrice,
+      @DateTimeConverter() DateTime? modified,
+      @JsonKey(name: "stock_count") String? stockCount,
+      @JsonKey(name: "stock_alert") String? stockAlert});
 }
 
 /// @nodoc
@@ -78,6 +89,7 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
   $Res call({
     Object? id = freezed,
     Object? billId = freezed,
+    Object? barcode = freezed,
     Object? name = freezed,
     Object? category = freezed,
     Object? salePrice = freezed,
@@ -85,6 +97,9 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
     Object? unit = freezed,
     Object? quantity = freezed,
     Object? billPrice = freezed,
+    Object? modified = freezed,
+    Object? stockCount = freezed,
+    Object? stockAlert = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -95,6 +110,10 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
           ? _value.billId
           : billId // ignore: cast_nullable_to_non_nullable
               as int?,
+      barcode: freezed == barcode
+          ? _value.barcode
+          : barcode // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -123,6 +142,18 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
           ? _value.billPrice
           : billPrice // ignore: cast_nullable_to_non_nullable
               as String?,
+      modified: freezed == modified
+          ? _value.modified
+          : modified // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      stockCount: freezed == stockCount
+          ? _value.stockCount
+          : stockCount // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stockAlert: freezed == stockAlert
+          ? _value.stockAlert
+          : stockAlert // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -138,13 +169,17 @@ abstract class _$$ItemModelImplCopyWith<$Res>
   $Res call(
       {int? id,
       @JsonKey(name: "bill_id") int? billId,
+      String? barcode,
       String? name,
       String? category,
       @JsonKey(name: "sale_price") String? salePrice,
       @JsonKey(name: "purchase_price") String? purchasePrice,
       String? unit,
       String? quantity,
-      @JsonKey(name: "bill_price") String? billPrice});
+      @JsonKey(name: "bill_price") String? billPrice,
+      @DateTimeConverter() DateTime? modified,
+      @JsonKey(name: "stock_count") String? stockCount,
+      @JsonKey(name: "stock_alert") String? stockAlert});
 }
 
 /// @nodoc
@@ -162,6 +197,7 @@ class __$$ItemModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? billId = freezed,
+    Object? barcode = freezed,
     Object? name = freezed,
     Object? category = freezed,
     Object? salePrice = freezed,
@@ -169,6 +205,9 @@ class __$$ItemModelImplCopyWithImpl<$Res>
     Object? unit = freezed,
     Object? quantity = freezed,
     Object? billPrice = freezed,
+    Object? modified = freezed,
+    Object? stockCount = freezed,
+    Object? stockAlert = freezed,
   }) {
     return _then(_$ItemModelImpl(
       id: freezed == id
@@ -179,6 +218,10 @@ class __$$ItemModelImplCopyWithImpl<$Res>
           ? _value.billId
           : billId // ignore: cast_nullable_to_non_nullable
               as int?,
+      barcode: freezed == barcode
+          ? _value.barcode
+          : barcode // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -207,6 +250,18 @@ class __$$ItemModelImplCopyWithImpl<$Res>
           ? _value.billPrice
           : billPrice // ignore: cast_nullable_to_non_nullable
               as String?,
+      modified: freezed == modified
+          ? _value.modified
+          : modified // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      stockCount: freezed == stockCount
+          ? _value.stockCount
+          : stockCount // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stockAlert: freezed == stockAlert
+          ? _value.stockAlert
+          : stockAlert // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -217,13 +272,17 @@ class _$ItemModelImpl implements _ItemModel {
   const _$ItemModelImpl(
       {this.id,
       @JsonKey(name: "bill_id") this.billId,
+      this.barcode,
       this.name,
       this.category,
       @JsonKey(name: "sale_price") this.salePrice,
       @JsonKey(name: "purchase_price") this.purchasePrice,
       this.unit,
       this.quantity,
-      @JsonKey(name: "bill_price") this.billPrice});
+      @JsonKey(name: "bill_price") this.billPrice,
+      @DateTimeConverter() this.modified,
+      @JsonKey(name: "stock_count") this.stockCount = "0.00",
+      @JsonKey(name: "stock_alert") this.stockAlert = "0.00"});
 
   factory _$ItemModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ItemModelImplFromJson(json);
@@ -233,6 +292,8 @@ class _$ItemModelImpl implements _ItemModel {
   @override
   @JsonKey(name: "bill_id")
   final int? billId;
+  @override
+  final String? barcode;
   @override
   final String? name;
   @override
@@ -250,10 +311,19 @@ class _$ItemModelImpl implements _ItemModel {
   @override
   @JsonKey(name: "bill_price")
   final String? billPrice;
+  @override
+  @DateTimeConverter()
+  final DateTime? modified;
+  @override
+  @JsonKey(name: "stock_count")
+  final String? stockCount;
+  @override
+  @JsonKey(name: "stock_alert")
+  final String? stockAlert;
 
   @override
   String toString() {
-    return 'ItemModel(id: $id, billId: $billId, name: $name, category: $category, salePrice: $salePrice, purchasePrice: $purchasePrice, unit: $unit, quantity: $quantity, billPrice: $billPrice)';
+    return 'ItemModel(id: $id, billId: $billId, barcode: $barcode, name: $name, category: $category, salePrice: $salePrice, purchasePrice: $purchasePrice, unit: $unit, quantity: $quantity, billPrice: $billPrice, modified: $modified, stockCount: $stockCount, stockAlert: $stockAlert)';
   }
 
   @override
@@ -263,6 +333,7 @@ class _$ItemModelImpl implements _ItemModel {
             other is _$ItemModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.billId, billId) || other.billId == billId) &&
+            (identical(other.barcode, barcode) || other.barcode == barcode) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.category, category) ||
                 other.category == category) &&
@@ -274,13 +345,32 @@ class _$ItemModelImpl implements _ItemModel {
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity) &&
             (identical(other.billPrice, billPrice) ||
-                other.billPrice == billPrice));
+                other.billPrice == billPrice) &&
+            (identical(other.modified, modified) ||
+                other.modified == modified) &&
+            (identical(other.stockCount, stockCount) ||
+                other.stockCount == stockCount) &&
+            (identical(other.stockAlert, stockAlert) ||
+                other.stockAlert == stockAlert));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, billId, name, category,
-      salePrice, purchasePrice, unit, quantity, billPrice);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      billId,
+      barcode,
+      name,
+      category,
+      salePrice,
+      purchasePrice,
+      unit,
+      quantity,
+      billPrice,
+      modified,
+      stockCount,
+      stockAlert);
 
   /// Create a copy of ItemModel
   /// with the given fields replaced by the non-null parameter values.
@@ -300,15 +390,20 @@ class _$ItemModelImpl implements _ItemModel {
 
 abstract class _ItemModel implements ItemModel {
   const factory _ItemModel(
-      {final int? id,
-      @JsonKey(name: "bill_id") final int? billId,
-      final String? name,
-      final String? category,
-      @JsonKey(name: "sale_price") final String? salePrice,
-      @JsonKey(name: "purchase_price") final String? purchasePrice,
-      final String? unit,
-      final String? quantity,
-      @JsonKey(name: "bill_price") final String? billPrice}) = _$ItemModelImpl;
+          {final int? id,
+          @JsonKey(name: "bill_id") final int? billId,
+          final String? barcode,
+          final String? name,
+          final String? category,
+          @JsonKey(name: "sale_price") final String? salePrice,
+          @JsonKey(name: "purchase_price") final String? purchasePrice,
+          final String? unit,
+          final String? quantity,
+          @JsonKey(name: "bill_price") final String? billPrice,
+          @DateTimeConverter() final DateTime? modified,
+          @JsonKey(name: "stock_count") final String? stockCount,
+          @JsonKey(name: "stock_alert") final String? stockAlert}) =
+      _$ItemModelImpl;
 
   factory _ItemModel.fromJson(Map<String, dynamic> json) =
       _$ItemModelImpl.fromJson;
@@ -318,6 +413,8 @@ abstract class _ItemModel implements ItemModel {
   @override
   @JsonKey(name: "bill_id")
   int? get billId;
+  @override
+  String? get barcode;
   @override
   String? get name;
   @override
@@ -335,6 +432,15 @@ abstract class _ItemModel implements ItemModel {
   @override
   @JsonKey(name: "bill_price")
   String? get billPrice;
+  @override
+  @DateTimeConverter()
+  DateTime? get modified;
+  @override
+  @JsonKey(name: "stock_count")
+  String? get stockCount;
+  @override
+  @JsonKey(name: "stock_alert")
+  String? get stockAlert;
 
   /// Create a copy of ItemModel
   /// with the given fields replaced by the non-null parameter values.

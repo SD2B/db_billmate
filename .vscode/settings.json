@@ -1,3 +1,7 @@
 {
-    "cmake.sourceDirectory": "D:/db_billmate/linux"
+    "cmake.sourceDirectory": "D:/db_billmate/linux",
+    "cSpell.words": [
+        "billmate",
+        "sddb"
+    ]
 }

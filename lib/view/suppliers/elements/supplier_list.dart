@@ -29,7 +29,7 @@ class SupplierList extends HookConsumerWidget {
                   onVisibilityChanged: (isVisible) async {
                     if (isVisible) {
                       final index = supplierList.indexOf(model);
-                      if (index == (supplierList.length - 5)) {
+                      if (supplierList.length >= 30 && index == (supplierList.length - 5)) {
                         ref.read(supplierPageIndex.notifier).state = pageIndex + 1;
                         await ref.read(supplierVMProvider.notifier).get(pageIndex: pageIndex, noLoad: true);
                       }

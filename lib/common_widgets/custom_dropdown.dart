@@ -14,6 +14,7 @@ class SearchableDropdown<T> extends HookWidget {
   final String? hint; // Hint text for dropdown
   final String? Function(T?)? validator;
   final String Function(T)? itemAsString;
+  final Widget? customChild;
 
   const SearchableDropdown({
     super.key,
@@ -27,6 +28,7 @@ class SearchableDropdown<T> extends HookWidget {
     this.hint,
     this.validator,
     required this.itemAsString,
+    this.customChild,
   });
 
   @override
@@ -137,7 +139,7 @@ class SearchableDropdown<T> extends HookWidget {
                   },
                 );
               },
-              child: Container(
+              child:customChild?? Container(
                 height: height ?? 45,
                 width: width,
                 padding: const EdgeInsets.symmetric(horizontal: 12),

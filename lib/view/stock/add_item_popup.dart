@@ -25,13 +25,27 @@ class AddItemPopup extends HookConsumerWidget {
     final formKey = GlobalKey<FormState>(); // Form key for validation
     final itemModel = useState(updateModel ?? ItemModel());
     final nameController = useTextEditingController(text: itemModel.value.name);
-    final purchasePriceController =
-        useTextEditingController(text: itemModel.value.purchasePrice);
-    final salePriceController =
-        useTextEditingController(text: itemModel.value.salePrice);
+    final barcodeController = useTextEditingController(text: itemModel.value.barcode);
+    final purchasePriceController = useTextEditingController(text: itemModel.value.purchasePrice);
+    final salePriceController = useTextEditingController(text: itemModel.value.salePrice);
+    final stockCountController = useTextEditingController(text: itemModel.value.stockCount);
+    final stockAlertController = useTextEditingController(text: itemModel.value.stockAlert);
+    void setToModel() {
+      itemModel.value = itemModel.value.copyWith(
+        name: nameController.text,
+        barcode: barcodeController.text,
+        purchasePrice: purchasePriceController.text,
+        salePrice: salePriceController.text,
+        stockCount: stockCountController.text,
+        stockAlert: stockAlertController.text,
+        modified: DateTime.now(),
+      );
+    }
+
     void resetFields() {
       itemModel.value = ItemModel();
       nameController.clear();
+      barcodeController.clear();
       purchasePriceController.clear();
       salePriceController.clear();
     }
@@ -49,9 +63,7 @@ class AddItemPopup extends HookConsumerWidget {
                 ),
           ),
           const Spacer(),
-          IconButton(
-              onPressed: () => context.pop(),
-              icon: const Icon(Icons.close_rounded)),
+          IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.close_rounded)),
         ],
       ),
       content: SizedBox(
@@ -63,8 +75,13 @@ class AddItemPopup extends HookConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               CustomTextField(
+                controller: barcodeController,
+                label: "Enter barcode",
+                selectAllOnFocus: true,
+              ),
+              CustomTextField(
                 controller: nameController,
-                hintText: "Enter name",
+                label: "Enter name",
                 inputFormatters: [CapitalizeEachWordFormatter()],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -78,15 +95,11 @@ class AddItemPopup extends HookConsumerWidget {
                   SearchableDropdown<UiModel>(
                     width: 250,
                     hint: "Select category",
-                    initialValue: itemModel.value.category == null
-                        ? null
-                        : UiModel(value: itemModel.value.category),
-                    asyncValues: () async =>
-                        await ref.read(categoryVMProvider.notifier).get(),
+                    initialValue: itemModel.value.category == null ? null : UiModel(value: itemModel.value.category),
+                    asyncValues: () async => await ref.read(categoryVMProvider.notifier).get(),
                     itemAsString: (p0) => p0.value ?? "",
                     onChanged: (value) {
-                      itemModel.value =
-                          itemModel.value.copyWith(category: value?.value);
+                      itemModel.value = itemModel.value.copyWith(category: value?.value);
                     },
                   ),
                   5.width,
@@ -99,9 +112,7 @@ class AddItemPopup extends HookConsumerWidget {
                           context: context,
                           builder: (context) => AddAttributePopup(
                                 title: "Category",
-                                onSave: (p0) async => await ref
-                                    .read(categoryVMProvider.notifier)
-                                    .save(p0),
+                                onSave: (p0) async => await ref.read(categoryVMProvider.notifier).save(p0),
                               ));
                     },
                   )
@@ -112,19 +123,14 @@ class AddItemPopup extends HookConsumerWidget {
                   SearchableDropdown<UiModel>(
                     width: 250,
                     hint: "Select unit",
-                    initialValue: itemModel.value.unit == null
-                        ? null
-                        : UiModel(value: itemModel.value.unit),
-                    asyncValues: () async =>
-                        await ref.read(unitVMProvider.notifier).get(),
+                    initialValue: itemModel.value.unit == null ? null : UiModel(value: itemModel.value.unit),
+                    asyncValues: () async => await ref.read(unitVMProvider.notifier).get(),
                     itemAsString: (p0) => p0.value ?? "",
                     onChanged: (value) {
-                      itemModel.value =
-                          itemModel.value.copyWith(unit: value?.value);
+                      itemModel.value = itemModel.value.copyWith(unit: value?.value);
                     },
                     validator: (model) {
-                      if (itemModel.value.unit == null ||
-                          itemModel.value.unit?.isEmpty == true) {
+                      if (itemModel.value.unit == null || itemModel.value.unit?.isEmpty == true) {
                         return "Unit is required.";
                       }
 
@@ -141,9 +147,8 @@ class AddItemPopup extends HookConsumerWidget {
                           context: context,
                           builder: (context) => AddAttributePopup(
                                 title: "Unit",
-                                onSave: (p0) async => await ref
-                                    .read(unitVMProvider.notifier)
-                                    .save(p0),
+                                disableCapitalize: true,
+                                onSave: (p0) async => await ref.read(unitVMProvider.notifier).save(p0),
                               ));
                     },
                   )
@@ -151,13 +156,17 @@ class AddItemPopup extends HookConsumerWidget {
               ),
               CustomTextField(
                 controller: purchasePriceController,
-                hintText: "Enter purchase price",
+                label: "Enter purchase price",
                 selectAllOnFocus: true,
+                inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                isAmount: true,
               ),
               CustomTextField(
                 controller: salePriceController,
-                hintText: "Enter sale price",
+                label: "Enter sale price",
                 selectAllOnFocus: true,
+                inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                isAmount: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Sale price is required.";
@@ -169,6 +178,31 @@ class AddItemPopup extends HookConsumerWidget {
                   return null;
                 },
               ),
+              if (itemModel.value.unit == null) Text("⚠️ Select unit to enable stock count and stock alert", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11, fontWeight: FontWeight.w900)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomTextField(
+                    width: 145,
+                    readOnly: itemModel.value.unit == null,
+                    controller: stockCountController,
+                    label: "Enter stock count",
+                    selectAllOnFocus: true,
+                    isAmount: true,
+                    inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                  ),
+                  CustomTextField(
+                    width: 145,
+                    readOnly: itemModel.value.unit == null,
+                    controller: stockAlertController,
+                    label: "Enter stock alert",
+                    selectAllOnFocus: true,
+                    isAmount: true,
+                    inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                  ),
+                ],
+              ),
+              if (itemModel.value.unit != null) Text("⚠️ Set a value greater than 0 to get stock alerts", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 11, fontWeight: FontWeight.w500)),
             ],
           ),
         ),
@@ -181,15 +215,10 @@ class AddItemPopup extends HookConsumerWidget {
               width: 145,
               text: itemModel.value.id != null ? "Update" : "Save",
               textColor: whiteColor,
-              buttonColor:
-                  itemModel.value.id != null ? black87Color : black54Color,
+              buttonColor: itemModel.value.id != null ? black87Color : black54Color,
               onTap: () async {
                 if (formKey.currentState!.validate()) {
-                  itemModel.value = itemModel.value.copyWith(
-                    name: nameController.text,
-                    purchasePrice: purchasePriceController.text,
-                    salePrice: salePriceController.text,
-                  );
+                  setToModel();
                   await ref.read(itemVMProvider.notifier).save(itemModel.value);
                   context.pop();
                 }
@@ -203,14 +232,8 @@ class AddItemPopup extends HookConsumerWidget {
                 buttonColor: ColorCode.colorList(context).primary,
                 onTap: () async {
                   if (formKey.currentState!.validate()) {
-                    itemModel.value = itemModel.value.copyWith(
-                      name: nameController.text,
-                      purchasePrice: purchasePriceController.text,
-                      salePrice: salePriceController.text,
-                    );
-                    await ref
-                        .read(itemVMProvider.notifier)
-                        .save(itemModel.value);
+                    setToModel();
+                    await ref.read(itemVMProvider.notifier).save(itemModel.value);
                     resetFields();
                   }
                 },

@@ -29,9 +29,10 @@ class CustomerList extends HookConsumerWidget {
                   onVisibilityChanged: (isVisible) async {
                     if (isVisible) {
                       final index = customerList.indexOf(model);
-                      if (index == (customerList.length - 5)) {
+
+                      if (customerList.length>=30 && index == (customerList.length - 5)) {
                         ref.read(customerPageIndex.notifier).state = pageIndex + 1;
-                        await ref.read(customerVMProvider.notifier).get(pageIndex: pageIndex, noLoad: true);
+                       await ref.read(customerVMProvider.notifier).get(pageIndex: pageIndex, noLoad: true);
                       }
                     }
                   },

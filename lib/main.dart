@@ -1,13 +1,18 @@
 import 'package:db_billmate/constants/theme.dart';
 import 'package:db_billmate/helpers/local_storage.dart';
+import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/route/route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await LocalStorage.init(); // Initialize the database
+  try {
+    await LocalStorage.init(); // Initialize the database
+  } catch (e) {
+    qp(e);
+  }
+  // debugRepaintRainbowEnabled = true;
 
   runApp(ProviderScope(child: const MyApp()));
 }

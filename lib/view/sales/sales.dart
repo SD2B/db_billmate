@@ -1,4 +1,5 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
+import 'package:db_billmate/common_widgets/custom_dropdown.dart';
 import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/common_widgets/sd_toast.dart';
@@ -7,6 +8,7 @@ import 'package:db_billmate/helpers/form_helpers.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/item_model.dart';
+import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/view/sales/bill_items_header.dart';
 import 'package:db_billmate/view/sales/label_text.dart';
 import 'package:db_billmate/view/stock/add_item_popup.dart';
@@ -14,6 +16,7 @@ import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/invoice_vm.dart';
 import 'package:db_billmate/vm/item_vm.dart';
+import 'package:db_billmate/vm/unit_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -26,6 +29,7 @@ class Sales extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ItemModel setToBillItemModel = ref.read(tempItemProvider.notifier).state;
     ItemModel billItem = ref.watch(tempItemProvider);
     List<ItemModel> billItemList = ref.watch(tempItemListProvider);
     EndUserModel billCustomer = ref.watch(billCustomerProvider);
@@ -260,8 +264,8 @@ class Sales extends HookConsumerWidget {
                   onSubmitted: (p0) {
                     addToItemLst();
                   },
-                  suffix: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
+                  prefix: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 5, 10, 5),
                     child: CustomIconButton(
                       buttonSize: 50,
                       icon: Icons.add,
@@ -286,16 +290,28 @@ class Sales extends HookConsumerWidget {
                   subtitle: Text(pricePer),
                 );
               },
+              emptyBuilder: (context) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    onTap: () => ref.read(tempItemProvider.notifier).state = ItemModel(name: itemNameController.text),
+                    tileColor: whiteColor,
+                    title: Text("Add item"),
+                    subtitle: Text(""),
+                  )
+                ],
+              ),
               onSelected: (item) {
                 ref.read(tempItemProvider.notifier).state = item;
               },
             ),
             CustomTextField(
-              width: 100,
+              width: 150,
               controller: quantityController,
               selectAllOnFocus: true,
               hintText: "",
               label: "QTY",
+              isAmount: true,
               inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 3)],
               onChanged: (value) {
                 getItemTotalPrice();
@@ -303,13 +319,19 @@ class Sales extends HookConsumerWidget {
               onSubmitted: (p0) {
                 addToItemLst();
               },
-              suffix: SizedBox(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(billItem.unit ?? "", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700)),
-                ],
-              )),
+              suffix: billItem.id != null
+                  ? QuantitySuffix(billItem: billItem)
+                  : SearchableDropdown<UiModel>(
+                      width: 250,
+                      hint: "Select unit",
+                      initialValue: billItem.unit == null ? null : UiModel(value: billItem.unit),
+                      asyncValues: () async => await ref.read(unitVMProvider.notifier).get(),
+                      itemAsString: (p0) => p0.value ?? "",
+                      customChild: SizedBox(height: 50, width: 40, child: Center(child: QuantitySuffix(billItem: billItem))),
+                      onChanged: (value) {
+                        ref.read(tempItemProvider.notifier).state = billItem.copyWith(unit: value?.value);
+                      },
+                    ),
             ),
             CustomTextField(
               width: 150,
@@ -317,6 +339,7 @@ class Sales extends HookConsumerWidget {
               selectAllOnFocus: true,
               hintText: "",
               label: "Unit price",
+              isAmount: true,
               inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
               onChanged: (value) {
                 getItemTotalPrice();
@@ -332,6 +355,7 @@ class Sales extends HookConsumerWidget {
               selectAllOnFocus: true,
               hintText: "",
               label: "Total price",
+              isAmount: true,
               onChanged: (value) {},
               onSubmitted: (p0) {
                 addToItemLst();
@@ -531,6 +555,12 @@ class Sales extends HookConsumerWidget {
                     qp(data.toJson());
                     bool res = await ref.read(invoiceVMProvider.notifier).save(data);
                     if (res) {
+                      for (ItemModel newItem in billItemList) {
+                        if (newItem.id == null) {
+                          ItemModel item = ItemModel(name: newItem.name, salePrice: newItem.salePrice, unit: newItem.unit, modified: DateTime.now());
+                          ref.read(itemVMProvider.notifier).save(item);
+                        }
+                      }
                       reset();
                       ref.read(invoiceVMProvider.notifier).getInvNo();
                       SDToast.showToast(context, description: "Invoice Generated Successfully", type: ToastificationType.success);
@@ -545,5 +575,27 @@ class Sales extends HookConsumerWidget {
         ]
       ],
     );
+  }
+}
+
+class QuantitySuffix extends StatelessWidget {
+  const QuantitySuffix({
+    super.key,
+    required this.billItem,
+  });
+
+  final ItemModel billItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: 50,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (billItem.id != null) Text(billItem.unit ?? "", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w900)),
+            if (billItem.id == null) Text(billItem.unit ?? "Unit🔽", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w900)),
+          ],
+        ));
   }
 }

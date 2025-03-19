@@ -8,6 +8,7 @@ class ItemModel with _$ItemModel {
   const factory ItemModel({
     int? id,
     @JsonKey(name: "bill_id") int? billId,
+    String? barcode,
     String? name,
     String? category,
     @JsonKey(name: "sale_price") String? salePrice,
@@ -15,10 +16,12 @@ class ItemModel with _$ItemModel {
     String? unit,
     String? quantity,
     @JsonKey(name: "bill_price") String? billPrice,
+    @DateTimeConverter() DateTime? modified,
+    @Default("0.00") @JsonKey(name: "stock_count") String? stockCount,
+    @Default("0.00") @JsonKey(name: "stock_alert") String? stockAlert,
   }) = _ItemModel;
 
-  factory ItemModel.fromJson(Map<String, dynamic> json) =>
-      _$ItemModelFromJson(json);
+  factory ItemModel.fromJson(Map<String, dynamic> json) => _$ItemModelFromJson(json);
 }
 
 @freezed
@@ -39,6 +42,5 @@ class BillModel with _$BillModel {
     String? note,
   }) = _BillModel;
 
-  factory BillModel.fromJson(Map<String, dynamic> json) =>
-      _$BillModelFromJson(json);
+  factory BillModel.fromJson(Map<String, dynamic> json) => _$BillModelFromJson(json);
 }

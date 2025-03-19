@@ -3,6 +3,7 @@ import 'package:db_billmate/vm/repositories/item_repo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 
+final salePriceEditNotifier = StateProvider<bool>((ref) =>false);
 final tempItemProvider = StateProvider<ItemModel>((ref) => ItemModel());
 final tempItemListProvider = StateProvider<List<ItemModel>>((ref) => []);
 

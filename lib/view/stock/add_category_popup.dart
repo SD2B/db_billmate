@@ -10,8 +10,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class AddAttributePopup extends HookConsumerWidget {
   final String title;
   final Function(String) onSave;
-  const AddAttributePopup(
-      {super.key, required this.title, required this.onSave});
+  final bool disableCapitalize;
+  const AddAttributePopup({super.key, required this.title, required this.onSave, this.disableCapitalize = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,9 +31,7 @@ class AddAttributePopup extends HookConsumerWidget {
                 ),
           ),
           const Spacer(),
-          IconButton(
-              onPressed: () => context.pop(),
-              icon: const Icon(Icons.close_rounded)),
+          IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.close_rounded)),
         ],
       ),
       content: CustomTextField(
@@ -41,7 +39,7 @@ class AddAttributePopup extends HookConsumerWidget {
         controller: nameController,
         focusNode: nameFocus,
         hintText: "Enter name",
-        inputFormatters: [CapitalizeEachWordFormatter()],
+        inputFormatters: [if (!disableCapitalize) CapitalizeEachWordFormatter()],
       ),
       actions: [
         Row(

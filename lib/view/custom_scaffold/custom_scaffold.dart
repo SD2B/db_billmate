@@ -5,7 +5,6 @@ import 'package:db_billmate/view/custom_scaffold/custom_appbar.dart';
 import 'package:db_billmate/view/custom_scaffold/custom_sidebar.dart';
 import 'package:db_billmate/view/custom_scaffold/scaffold_body.dart';
 import 'package:db_billmate/view/custom_scaffold/scaffold_footer.dart';
-import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -18,10 +17,6 @@ class CustomScaffold extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(customerVMProvider, (pre, next) {
-      qp(pre?.value?.length, "prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-      qp(next.value?.length, "prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeneeeeeeeexxxxxxxxxxxtttttttttttttttt");
-    });
     return KeyboardListener(
       focusNode: useMemoized(() => FocusNode(), []),
       autofocus: true,

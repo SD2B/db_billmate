@@ -15,11 +15,9 @@ class CustomerVM extends AsyncNotifier<List<EndUserModel>> {
   }
 
   Future<List<EndUserModel>> get({bool noLoad = false, int? id, Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = false, Map<String, dynamic>? search, int? pageIndex, bool noWait = false}) async {
-    qp("prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeevvvvvvvvvvvvvmmmmmmmmmmmmmgggggggggeeeeet");
     try {
       if (!noLoad) state = AsyncValue.loading();
       List<EndUserModel> customers = state.value ?? [];
-      qp(customers.length, "prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeevvvvvvvvvvvvvmmmmmmmmmmmmmgggggggggeeeeet");
 
       if (id != null) {
         final customer = (await CustomerRepo.fetchCustomers(where: {"id": id})).first;
@@ -36,7 +34,6 @@ class CustomerVM extends AsyncNotifier<List<EndUserModel>> {
           pageIndex: pageIndex,
         );
       }
-      qp(customers.length, "prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeevvvvvvvvvvvvvmmmmmmmmmmmmmgggggggggeeeeet");
       ref.read(dashboardVMProvider.notifier).getTotalGetAndGive();
       state = AsyncValue.data(customers);
       return customers;

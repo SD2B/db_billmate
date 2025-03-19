@@ -67,6 +67,7 @@ List<UiModel> sidebarButtons = [
       svg: "assets/svg/customer.svg",
       value: RouteEnum.customers.name,
       onTap: (WidgetRef ref) {
+        ref.read(customerPageIndex.notifier).state = 1;
         ref.read(tempCustomerProvider.notifier).state = EndUserModel();
         ref.read(tempSupplierProvider.notifier).state = EndUserModel();
       }),
@@ -78,6 +79,7 @@ List<UiModel> sidebarButtons = [
       svg: "assets/svg/supplier.svg",
       value: RouteEnum.supplier.name,
       onTap: (WidgetRef ref) {
+        ref.read(supplierPageIndex.notifier).state = 1;
         ref.read(tempCustomerProvider.notifier).state = EndUserModel();
         ref.read(tempSupplierProvider.notifier).state = EndUserModel();
       }),

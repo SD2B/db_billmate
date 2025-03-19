@@ -369,12 +369,12 @@ class LocalStorage {
         {
           "id": 2,
           "mode": "units",
-          "data": jsonEncode(["kg", "g", "litre", "ml", "no", "pac"])
+          "data": jsonEncode(["kg", "g", "litre", "ml", "no", "pac", "box", "bag", "jar", "sheet"])
         },
         {
           "id": 3,
           "mode": "groupList",
-          "data": jsonEncode(["South"])
+          "data": jsonEncode(["VIP", "Regular", "Blacklist"])
         }
       ];
 

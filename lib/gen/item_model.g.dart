@@ -10,6 +10,7 @@ _$ItemModelImpl _$$ItemModelImplFromJson(Map<String, dynamic> json) =>
     _$ItemModelImpl(
       id: (json['id'] as num?)?.toInt(),
       billId: (json['bill_id'] as num?)?.toInt(),
+      barcode: json['barcode'] as String?,
       name: json['name'] as String?,
       category: json['category'] as String?,
       salePrice: json['sale_price'] as String?,
@@ -17,12 +18,17 @@ _$ItemModelImpl _$$ItemModelImplFromJson(Map<String, dynamic> json) =>
       unit: json['unit'] as String?,
       quantity: json['quantity'] as String?,
       billPrice: json['bill_price'] as String?,
+      modified: _$JsonConverterFromJson<String, DateTime>(
+          json['modified'], const DateTimeConverter().fromJson),
+      stockCount: json['stock_count'] as String? ?? "0.00",
+      stockAlert: json['stock_alert'] as String? ?? "0.00",
     );
 
 Map<String, dynamic> _$$ItemModelImplToJson(_$ItemModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'bill_id': instance.billId,
+      'barcode': instance.barcode,
       'name': instance.name,
       'category': instance.category,
       'sale_price': instance.salePrice,
@@ -30,7 +36,23 @@ Map<String, dynamic> _$$ItemModelImplToJson(_$ItemModelImpl instance) =>
       'unit': instance.unit,
       'quantity': instance.quantity,
       'bill_price': instance.billPrice,
+      'modified': _$JsonConverterToJson<String, DateTime>(
+          instance.modified, const DateTimeConverter().toJson),
+      'stock_count': instance.stockCount,
+      'stock_alert': instance.stockAlert,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 _$BillModelImpl _$$BillModelImplFromJson(Map<String, dynamic> json) =>
     _$BillModelImpl(
@@ -69,15 +91,3 @@ Map<String, dynamic> _$$BillModelImplToJson(_$BillModelImpl instance) =>
           instance.dateTime, const DateTimeConverter().toJson),
       'note': instance.note,
     };
-
-Value? _$JsonConverterFromJson<Json, Value>(
-  Object? json,
-  Value? Function(Json json) fromJson,
-) =>
-    json == null ? null : fromJson(json as Json);
-
-Json? _$JsonConverterToJson<Json, Value>(
-  Value? value,
-  Json? Function(Value value) toJson,
-) =>
-    value == null ? null : toJson(value);

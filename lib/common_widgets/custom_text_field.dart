@@ -33,7 +33,7 @@ class CustomTextField extends HookWidget {
     this.width,
     this.height,
     required this.controller,
-    required this.hintText,
+    this.hintText = "",
     this.hintTextStyle,
     this.label,
     this.focusNode,

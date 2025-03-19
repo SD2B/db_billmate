@@ -28,7 +28,7 @@ class Stock extends HookConsumerWidget {
         Row(
           spacing: 10,
           children: [
-            CustomTextField(width: 300, height: 45, controller: searchController, hintText: "Search..."),
+            CustomTextField(width: 300, height: 45, controller: searchController, label: "Search...", hintText: "Search..."),
             CustomIconButton(
               buttonSize: 45,
               icon: Icons.tune_rounded,
@@ -57,6 +57,15 @@ class Stock extends HookConsumerWidget {
               buttonColor: ColorCode.colorList(context).primary,
               textColor: whiteColor,
             ),
+            CustomButton(
+              width: 150,
+              height: 45,
+              text: "⬆️ Export to excel",
+              onTap: () => context.pushNamed(RouteEnum.excel.name, extra: ExcelType.items),
+              buttonColor: ColorCode.colorList(context).primary,
+              textColor: whiteColor,
+            ),
+            if (ref.watch(salePriceEditNotifier)) Text("Press Enter to save after editing sale price", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary)),
           ],
         ),
         10.height,
@@ -86,16 +95,22 @@ class Stock extends HookConsumerWidget {
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               // ItemTableHeaders(flex: 0, value: "Unit"),
               SizedBox(
-                width: 30,
+                width: 50,
                 child: Text(
                   "Unit",
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
                 ),
               ),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               ItemTableHeaders(value: "Purchse Price"),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
-              ItemTableHeaders(value: "Sale Price"),
+              ItemTableHeaders(
+                  value: "Sale Price",
+                  onTap: (value) {
+                    qp(value);
+                    ref.read(salePriceEditNotifier.notifier).state = value;
+                  }),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               SizedBox(
                   width: 50,

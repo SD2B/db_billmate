@@ -10,7 +10,6 @@ class CustomerRepo {
   static Future<List<EndUserModel>> fetchCustomers({Map<String, dynamic>? where, String? orderBy, bool? isDouble, bool ascending = true, Map<String, dynamic>? search, int? limit, int? pageIndex}) async {
     try {
       final data = await LocalStorage.get(DBTable.customers, where: {...?where, "end_user_type": EndUsertype.customer}, orderBy: orderBy, isDouble: isDouble ?? false, ascending: ascending, search: search, limit: limit, pageIndex: pageIndex ?? 1);
-      qp(data.length, "prrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrreeeeeeeeeeeppooo");
       final List<EndUserModel> outData = (data as List<dynamic>).map((e) {
         return EndUserModel.fromJson(e);
       }).toList();
