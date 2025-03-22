@@ -37,3 +37,21 @@ Map<String, dynamic> _$$UiModelImplToJson(_$UiModelImpl instance) =>
       'labelList': instance.labelList,
       'onTap': const FunctionConverter().toJson(instance.onTap),
     };
+
+_$ResponseModelImpl _$$ResponseModelImplFromJson(Map<String, dynamic> json) =>
+    _$ResponseModelImpl(
+      id: (json['id'] as num?)?.toInt(),
+      isSuccess: json['isSuccess'] as bool? ?? false,
+      statusCode: json['statusCode'] as String?,
+      data: json['data'],
+      message: json['message'] as String?,
+    );
+
+Map<String, dynamic> _$$ResponseModelImplToJson(_$ResponseModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'isSuccess': instance.isSuccess,
+      'statusCode': instance.statusCode,
+      'data': instance.data,
+      'message': instance.message,
+    };

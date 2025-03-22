@@ -49,7 +49,7 @@ class SupplierTransactionList extends HookConsumerWidget {
                                       youGot: !transaction.toGet,
                                       amountModel: transaction,
                                       onSave: (p0) async {
-                                        await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0);
+                                        await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0, isSupplier: true);
                                       },
                                     ));
                           }

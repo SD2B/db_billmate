@@ -11,6 +11,7 @@ import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/view/sales/bill_items_header.dart';
 import 'package:db_billmate/view/sales/label_text.dart';
+import 'package:db_billmate/view/sales/quantity_suffix.dart';
 import 'package:db_billmate/view/stock/add_item_popup.dart';
 import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
@@ -20,16 +21,19 @@ import 'package:db_billmate/vm/unit_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:toastification/toastification.dart';
 
 class Sales extends HookConsumerWidget {
   final BillModel? updateBillModel;
-  const Sales({super.key, this.updateBillModel});
+  final bool isUpdate;
+  const Sales({super.key, this.updateBillModel, this.isUpdate = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ItemModel setToBillItemModel = ref.read(tempItemProvider.notifier).state;
+    final quantityFocus = useFocusNode();
+    final unitPriceFocus = useFocusNode();
     ItemModel billItem = ref.watch(tempItemProvider);
     List<ItemModel> billItemList = ref.watch(tempItemListProvider);
     EndUserModel billCustomer = ref.watch(billCustomerProvider);
@@ -40,7 +44,7 @@ class Sales extends HookConsumerWidget {
     final itemNameController = useTextEditingController();
     final quantityController = useTextEditingController(text: billItem.quantity ?? "0");
     final unitPriceController = useTextEditingController(text: billItem.salePrice ?? "0");
-    double itemPrice = (double.tryParse(quantityController.text) ?? 1) * double.parse(billItem.salePrice ?? '0');
+    double itemPrice = (double.tryParse(quantityController.text) ?? 1) * (double.tryParse(billItem.salePrice ?? "0") ?? 0);
     final priceController = useTextEditingController(text: itemPrice.toString());
     final receivedController = useTextEditingController(text: double.parse(updateBillModel?.received ?? "0.00") != 0 ? updateBillModel?.received : "0.00");
     final discountController = useTextEditingController(text: double.parse(updateBillModel?.discount ?? "0.00") != 0 ? updateBillModel?.discount : "0.00");
@@ -136,6 +140,7 @@ class Sales extends HookConsumerWidget {
 
     BillModel saveToBillModel() {
       BillModel model = BillModel(
+        id: updateBillModel?.id,
         invoiceNumber: "$invNo",
         customerId: billCustomer.id,
         customerName: billCustomer.name,
@@ -166,15 +171,6 @@ class Sales extends HookConsumerWidget {
       ref.read(invoiceVMProvider.notifier).getInvNo();
       return null;
     }, [billItem]);
-
-    // useEffect(() {
-    //   customerFocus.addListener(() {
-    //     if (customerFocus.hasFocus) {
-    //       qp("Focused on the field");
-    //     }
-    //   });
-    //   return null;
-    // }, [customerFocus]);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -258,6 +254,7 @@ class Sales extends HookConsumerWidget {
                   selectAllOnFocus: true,
                   hintText: "",
                   label: "Item name",
+                  inputFormatters: [CapitalizeEachWordFormatter()],
                   onChanged: (value) {
                     controller.text = value;
                   },
@@ -294,7 +291,10 @@ class Sales extends HookConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ListTile(
-                    onTap: () => ref.read(tempItemProvider.notifier).state = ItemModel(name: itemNameController.text),
+                    onTap: () {
+                      ref.read(tempItemProvider.notifier).state = ItemModel(name: itemNameController.text);
+                      quantityFocus.requestFocus();
+                    },
                     tileColor: whiteColor,
                     title: Text("Add item"),
                     subtitle: Text(""),
@@ -306,6 +306,7 @@ class Sales extends HookConsumerWidget {
               },
             ),
             CustomTextField(
+              focusNode: quantityFocus,
               width: 150,
               controller: quantityController,
               selectAllOnFocus: true,
@@ -329,11 +330,13 @@ class Sales extends HookConsumerWidget {
                       itemAsString: (p0) => p0.value ?? "",
                       customChild: SizedBox(height: 50, width: 40, child: Center(child: QuantitySuffix(billItem: billItem))),
                       onChanged: (value) {
-                        ref.read(tempItemProvider.notifier).state = billItem.copyWith(unit: value?.value);
+                        ref.read(tempItemProvider.notifier).state = billItem.copyWith(unit: value?.value, quantity: quantityController.text, billPrice: priceController.text, salePrice: unitPriceController.text);
+                        unitPriceFocus.requestFocus();
                       },
                     ),
             ),
             CustomTextField(
+              focusNode: unitPriceFocus,
               width: 150,
               controller: unitPriceController,
               selectAllOnFocus: true,
@@ -541,33 +544,54 @@ class Sales extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               CustomButton(
-                  width: 110,
-                  buttonColor: blackColor,
-                  textColor: whiteColor,
-                  text: updateBillModel?.id != null ? "Update" : "Save",
-                  isLoading: ref.watch(invoiceVMProvider).isLoading,
-                  onTap: () async {
-                    if (billCustomer == EndUserModel()) {
-                      SDToast.showToast(context, description: "Select a customer", type: ToastificationType.warning);
-                      return;
+                width: 110,
+                buttonColor: blackColor,
+                textColor: whiteColor,
+                text: updateBillModel?.id != null ? "Update" : "Save",
+                isLoading: ref.watch(invoiceVMProvider).isLoading,
+                onTap: () async {
+                  if (billCustomer.id == null) {
+                    SDToast.showToast(description: "Select a customer", type: ToastificationType.warning);
+                    return;
+                  }
+
+                  // Process and save items first
+                  List<Future<void>> itemSaveTasks = [];
+
+                  for (int i = 0; i < billItemList.length; i++) {
+                    if (billItemList[i].id == null) {
+                      ItemModel item = ItemModel(
+                        name: billItemList[i].name,
+                        salePrice: billItemList[i].salePrice,
+                        unit: billItemList[i].unit,
+                        modified: DateTime.now(),
+                      );
+                      itemSaveTasks.add(ref.read(itemVMProvider.notifier).save(item).then((res) {
+                        billItemList[i] = billItemList[i].copyWith(id: res.id);
+                      }));
                     }
-                    final data = saveToBillModel();
-                    qp(data.toJson());
-                    bool res = await ref.read(invoiceVMProvider.notifier).save(data);
-                    if (res) {
-                      for (ItemModel newItem in billItemList) {
-                        if (newItem.id == null) {
-                          ItemModel item = ItemModel(name: newItem.name, salePrice: newItem.salePrice, unit: newItem.unit, modified: DateTime.now());
-                          ref.read(itemVMProvider.notifier).save(item);
-                        }
-                      }
-                      reset();
-                      ref.read(invoiceVMProvider.notifier).getInvNo();
-                      SDToast.showToast(context, description: "Invoice Generated Successfully", type: ToastificationType.success);
-                    } else {
-                      SDToast.showToast(context, description: "Contact support immediately", type: ToastificationType.error);
+                  }
+
+                  await Future.wait(itemSaveTasks); // Ensure all items are processed before moving forward
+
+                  final data = saveToBillModel();
+                  bool res = await ref.read(invoiceVMProvider.notifier).save(data);
+
+                  if (res) {
+                    SDToast.showToast(
+                      description: updateBillModel?.id != null ? "Invoice Updated Successfully" : "Invoice Generated Successfully",
+                      type: ToastificationType.success,
+                    );
+                    reset();
+                    ref.read(invoiceVMProvider.notifier).getInvNo();
+                    if (isUpdate) {
+                      context.pop();
                     }
-                  }),
+                  } else {
+                    SDToast.showToast(description: "Contact support immediately", type: ToastificationType.error);
+                  }
+                },
+              ),
               CustomButton(width: 110, buttonColor: blackColor, textColor: whiteColor, text: updateBillModel?.id != null ? "Update & Print" : "Save & Print", onTap: () {}),
               CustomButton(width: 100, buttonColor: ColorCode.colorList(context).borderColor, textColor: blackColor, text: "Clear", onTap: () {}),
             ],
@@ -575,27 +599,5 @@ class Sales extends HookConsumerWidget {
         ]
       ],
     );
-  }
-}
-
-class QuantitySuffix extends StatelessWidget {
-  const QuantitySuffix({
-    super.key,
-    required this.billItem,
-  });
-
-  final ItemModel billItem;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        width: 50,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (billItem.id != null) Text(billItem.unit ?? "", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w900)),
-            if (billItem.id == null) Text(billItem.unit ?? "Unit🔽", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w900)),
-          ],
-        ));
   }
 }

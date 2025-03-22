@@ -4,6 +4,7 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/route/route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:toastification/toastification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,15 +23,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'DB-Billmate',
-      debugShowCheckedModeBanner: false,
-      theme: MyTheme.getThemeData(ThemeMode.light),
-      themeMode: ThemeMode.light,
-      // themeMode:
-      //     ref.watch(mainVM).isLightTheme ? ThemeMode.light : ThemeMode.dark,
-      darkTheme: MyTheme.getThemeData(ThemeMode.dark),
-      routerConfig: myRoute,
+    return ToastificationWrapper(
+      child: MaterialApp.router(
+        title: 'DB-Billmate',
+        debugShowCheckedModeBanner: false,
+        theme: MyTheme.getThemeData(ThemeMode.light),
+        themeMode: ThemeMode.light,
+        // themeMode:
+        //     ref.watch(mainVM).isLightTheme ? ThemeMode.light : ThemeMode.dark,
+        darkTheme: MyTheme.getThemeData(ThemeMode.dark),
+        routerConfig: myRoute,
+      ),
     );
   }
 }

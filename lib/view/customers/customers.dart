@@ -30,7 +30,8 @@ class Customers extends HookConsumerWidget {
               data: (dataList) {
                 if (searchController.text.isEmpty) {
                   customerList.value = [
-                    ...customerList.value,
+                    ...dataList.where((newCustomer) => customerList.value.any((existingCustomer) => existingCustomer.id == newCustomer.id && existingCustomer != newCustomer)),
+                    ...customerList.value.where((e) => !dataList.any((newCustomer) => newCustomer.id == e.id && newCustomer != e)),
                     ...dataList.where((newCustomer) => !customerList.value.any((existingCustomer) => existingCustomer.id == newCustomer.id)),
                   ];
                 } else {
@@ -52,7 +53,7 @@ class Customers extends HookConsumerWidget {
                             Text("Select a customer"),
                           ],
                         ))),
-                      if (customerModel.value != EndUserModel()) CustomerTransactions( selected: selected),
+                      if (customerModel.value != EndUserModel()) CustomerTransactions(selected: selected),
                     ],
                   ),
                 );

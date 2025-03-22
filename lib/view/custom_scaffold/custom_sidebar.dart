@@ -40,7 +40,7 @@ class CustomSidebar extends StatelessWidget {
             padding: EdgeInsets.all(5),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(500),
-              child: Image.asset("assets/image/db.png"),
+              child: Image.asset("assets/icon/appIcon.png"),
             ),
           ).onTap(() {
             context.goNamed(RouteEnum.profile.name);

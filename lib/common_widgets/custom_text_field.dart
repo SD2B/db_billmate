@@ -14,6 +14,7 @@ class CustomTextField extends HookWidget {
   final FocusNode? focusNode;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
+  final Function? onFocused;
   final List<TextInputFormatter>? inputFormatters;
   final bool isPassword;
   final String? Function(String?)? validator;
@@ -26,6 +27,7 @@ class CustomTextField extends HookWidget {
   final bool selectAllOnFocus;
   final bool readOnly;
   final bool isAmount;
+  final Color? constantBorderColor;
 
   const CustomTextField({
     super.key,
@@ -39,6 +41,7 @@ class CustomTextField extends HookWidget {
     this.focusNode,
     this.onChanged,
     this.onSubmitted,
+    this.onFocused,
     this.inputFormatters,
     this.isPassword = false,
     this.validator,
@@ -51,6 +54,7 @@ class CustomTextField extends HookWidget {
     this.selectAllOnFocus = false,
     this.readOnly = false,
     this.isAmount = false,
+    this.constantBorderColor,
   });
 
   @override
@@ -62,6 +66,9 @@ class CustomTextField extends HookWidget {
     useEffect(() {
       // Add listener to focus node to select text on focus
       void handleFocusChange() {
+        if (onFocused != null) {
+          onFocused?.call();
+        }
         if (selectAllOnFocus && effectiveFocusNode.hasFocus) {
           controller.selection = TextSelection(
             baseOffset: 0,
@@ -76,14 +83,10 @@ class CustomTextField extends HookWidget {
 
     return SizedBox(
       width: width,
-      height: (errorText.value != null && errorText.value != "")
-          ? (height ?? 50) + 20
-          : (height ?? 50),
+      height: (errorText.value != null && errorText.value != "") ? (height ?? 50) + 20 : (height ?? 50),
       child: TextFormField(
         readOnly: readOnly,
-        textCapitalization: firstLetterCapital
-            ? TextCapitalization.words
-            : TextCapitalization.none,
+        textCapitalization: firstLetterCapital ? TextCapitalization.words : TextCapitalization.none,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w400,
@@ -109,47 +112,45 @@ class CustomTextField extends HookWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(boarderRadius ?? 8),
             borderSide: BorderSide(
-              color: ColorCode.colorList(context).borderColor!,
+              color: constantBorderColor ?? ColorCode.colorList(context).borderColor!,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(boarderRadius ?? 8),
             borderSide: BorderSide(
-              color: ColorCode.colorList(context).primary!,
+              color: constantBorderColor ?? ColorCode.colorList(context).primary!,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(boarderRadius ?? 8),
             borderSide: BorderSide(
-              color: ColorCode.colorList(context).borderColor!,
+              color: constantBorderColor ?? ColorCode.colorList(context).borderColor!,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(boarderRadius ?? 8),
-            borderSide: const BorderSide(
-              color: Colors.red,
+            borderSide: BorderSide(
+              color: constantBorderColor ?? Colors.red,
               width: 1.0,
             ),
           ),
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(boarderRadius ?? 8),
-            borderSide: const BorderSide(
-              color: Colors.red,
+            borderSide: BorderSide(
+              color: constantBorderColor ?? Colors.red,
               width: 1.0,
             ),
           ),
           errorStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontSize: 12,
-                color: Colors.red,
+                color: constantBorderColor ?? Colors.red,
               ),
           prefixIcon: prefix,
           suffixIcon: suffix ??
               (isPassword
                   ? IconButton(
                       icon: Icon(
-                        obscureText.value
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
+                        obscureText.value ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                         color: Colors.grey,
                       ),
                       onPressed: () {

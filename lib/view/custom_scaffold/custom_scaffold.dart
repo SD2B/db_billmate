@@ -36,26 +36,36 @@ class CustomScaffold extends HookConsumerWidget {
       },
       child: Scaffold(
         backgroundColor: whiteColor,
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              CustomSidebar(),
-              SizedBox(
-                width: context.width() - 100,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Column(
-                    children: [
-                      CustomAppbar(),
-                      10.height,
-                      ScaffoldBody(child: child),
-                      ScaffoldFooter(),
-                    ],
+        body: Container(
+          decoration: BoxDecoration(
+            color: whiteColor,
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage("assets/image/app_bg.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                CustomSidebar(),
+                SizedBox(
+                  width: context.width() - 100,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Column(
+                      children: [
+                        CustomAppbar(),
+                        10.height,
+                        ScaffoldBody(child: child),
+                        ScaffoldFooter(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

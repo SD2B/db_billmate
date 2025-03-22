@@ -1,9 +1,13 @@
 import 'package:db_billmate/models/item_model.dart';
+import 'package:db_billmate/models/ui_model.dart';
 import 'package:db_billmate/vm/repositories/item_repo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 
+final itemNameEditNotifier = StateProvider<bool>((ref) =>false);
+final purchasePriceEditNotifier = StateProvider<bool>((ref) =>false);
 final salePriceEditNotifier = StateProvider<bool>((ref) =>false);
+final stockCountEditNotifier = StateProvider<bool>((ref) =>false);
 final tempItemProvider = StateProvider<ItemModel>((ref) => ItemModel());
 final tempItemListProvider = StateProvider<List<ItemModel>>((ref) => []);
 
@@ -20,9 +24,9 @@ class ItemVM extends AsyncNotifier<List<ItemModel>> {
     return itemList;
   }
 
-  Future<bool> save(ItemModel model) async {
+  Future<ResponseModel> save(ItemModel model) async {
     final res = await ItemRepo.save(model);
-    if (res) await get();
+    if (res.isSuccess) await get();
     return res;
   }
 

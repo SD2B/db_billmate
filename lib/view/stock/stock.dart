@@ -1,6 +1,7 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
+import 'package:db_billmate/common_widgets/scaling_text.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
@@ -65,7 +66,17 @@ class Stock extends HookConsumerWidget {
               buttonColor: ColorCode.colorList(context).primary,
               textColor: whiteColor,
             ),
-            if (ref.watch(salePriceEditNotifier)) Text("Press Enter to save after editing sale price", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary)),
+            if (ref.watch(salePriceEditNotifier) || ref.watch(purchasePriceEditNotifier) || ref.watch(itemNameEditNotifier) || ref.watch(stockCountEditNotifier))
+              Container(
+                height: 45,
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: yellowAccentColor),
+                  color: yellowAccentColor.withValues(alpha: .3),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(child: ScalingText(text: "ℹ️ Press Enter on every field \n      to save what you edited", style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: appPrimary))),
+              ),
           ],
         ),
         10.height,
@@ -89,11 +100,16 @@ class Stock extends HookConsumerWidget {
               ),
               10.width,
               VerticalDivider(color: ColorCode.colorList(context).secondary),
-              ItemTableHeaders(flex: 2, value: "Item Name"),
+              ItemTableHeaders(
+                  flex: 2,
+                  value: "Item Name",
+                  onTap: (value) {
+                    qp(value);
+                    ref.read(itemNameEditNotifier.notifier).state = value;
+                  }),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               ItemTableHeaders(value: "Category"),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
-              // ItemTableHeaders(flex: 0, value: "Unit"),
               SizedBox(
                 width: 50,
                 child: Text(
@@ -103,13 +119,25 @@ class Stock extends HookConsumerWidget {
                 ),
               ),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
-              ItemTableHeaders(value: "Purchse Price"),
+              ItemTableHeaders(
+                  value: "Purchase Price",
+                  onTap: (value) {
+                    qp(value);
+                    ref.read(purchasePriceEditNotifier.notifier).state = value;
+                  }),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               ItemTableHeaders(
                   value: "Sale Price",
                   onTap: (value) {
                     qp(value);
                     ref.read(salePriceEditNotifier.notifier).state = value;
+                  }),
+              VerticalDivider(color: ColorCode.colorList(context).secondary),
+              ItemTableHeaders(
+                  value: "Stock Count",
+                  onTap: (value) {
+                    qp(value);
+                    ref.read(stockCountEditNotifier.notifier).state = value;
                   }),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               SizedBox(

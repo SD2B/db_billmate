@@ -46,7 +46,7 @@ class ExcelScreen extends HookConsumerWidget {
                     } else if (excelType == ExcelType.customers && data is List<EndUserModel>) {
                       excelData.value = data;
                     } else {
-                      SDToast.showToast(context, description: "Invalid data in Excel", type: ToastificationType.error);
+                      SDToast.showToast(description: "Invalid data in Excel", type: ToastificationType.error);
                     }
                   },
                 ),
@@ -61,13 +61,13 @@ class ExcelScreen extends HookConsumerWidget {
                       List<ItemModel> data = excelData.value as List<ItemModel>;
                       bool res = await ref.read(itemVMProvider.notifier).multiSave(data);
                       if (res) {
-                        SDToast.showToast(context, description: "Successfully added these items", type: ToastificationType.success);
+                        SDToast.showToast(description: "Successfully added these items", type: ToastificationType.success);
                       }
                     } else {
                       List<EndUserModel> data = excelData.value as List<EndUserModel>;
                       bool res = await ref.read(customerVMProvider.notifier).multiSave(data);
                       if (res) {
-                        SDToast.showToast(context, description: "Successfully added these customers", type: ToastificationType.success);
+                        SDToast.showToast(description: "Successfully added these customers", type: ToastificationType.success);
                       }
                     }
                   },

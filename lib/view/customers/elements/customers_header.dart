@@ -22,7 +22,7 @@ class CustomersHeader extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selected = useState(1);
     final getAndGive = ref.watch(toGetAndGive);
-    
+
     return Row(
       spacing: 10,
       children: [
@@ -79,11 +79,19 @@ class CustomersHeader extends HookConsumerWidget {
             await ref.read(customerVMProvider.notifier).get();
           },
         ),
+        CustomIconButton(
+          tooltipMsg: "Import from Excel",
+          buttonSize: 45,
+          shape: BoxShape.rectangle,
+          icon: Icons.download_rounded,
+          onTap: () => context.pushNamed(RouteEnum.excel.name, extra: ExcelType.customers),
+        ),
         CustomButton(
+          tooltipMsg: ref.watch(customerQuickTransaction) ? "Disable Quick Transaction" : "Enable Quick Transaction",
           width: 150,
           height: 45,
-          text: "⬇️ Import From Excel",
-          onTap: () => context.pushNamed(RouteEnum.excel.name, extra: ExcelType.customers),
+          text: ref.watch(customerQuickTransaction) ? "✅ Quick Transaction" : "🚫 Quick Transaction",
+          onTap: () => ref.read(customerQuickTransaction.notifier).state = !ref.read(customerQuickTransaction.notifier).state,
           buttonColor: ColorCode.colorList(context).primary,
           textColor: whiteColor,
         ),
@@ -108,7 +116,7 @@ class CustomersHeader extends HookConsumerWidget {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "₹${getAndGive[0]}",
+                        "₹${getAndGive[6]}",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, color: redColor),
                       ),
                     ],
@@ -132,7 +140,7 @@ class CustomersHeader extends HookConsumerWidget {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "₹${getAndGive[1]}",
+                        "₹${getAndGive[7]}",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, color: greenColor),
                       ),
                     ],

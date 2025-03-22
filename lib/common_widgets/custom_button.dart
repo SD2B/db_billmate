@@ -11,6 +11,7 @@ class CustomButton extends StatelessWidget {
   final Color? textColor;
   final Function onTap;
   final bool isLoading;
+  final String? tooltipMsg;
   const CustomButton({
     super.key,
     this.width,
@@ -21,16 +22,20 @@ class CustomButton extends StatelessWidget {
     this.textColor,
     required this.onTap,
     this.isLoading = false,
+    this.tooltipMsg,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () {
-        onTap();
-      },
-      child: width == null ? Expanded(child: CustomButtonCard(width: width, height: height, buttonColor: buttonColor, textColor: textColor, text: text, isLoading: isLoading, style: style)) : CustomButtonCard(width: width, height: height, buttonColor: buttonColor, textColor: textColor, text: text, isLoading: isLoading, style: style),
+    return Tooltip(
+      message: tooltipMsg ?? "",
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () {
+          onTap();
+        },
+        child: width == null ? Expanded(child: CustomButtonCard(width: width, height: height, buttonColor: buttonColor, textColor: textColor, text: text, isLoading: isLoading, style: style)) : CustomButtonCard(width: width, height: height, buttonColor: buttonColor, textColor: textColor, text: text, isLoading: isLoading, style: style),
+      ),
     );
   }
 }

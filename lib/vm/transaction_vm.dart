@@ -2,6 +2,7 @@ import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/repositories/transaction_repo.dart';
+import 'package:db_billmate/vm/supplier_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -30,19 +31,43 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
       return transactionList;
     } catch (e, stackTrace) {
       qp('Error: $e\nStackTrace: $stackTrace');
+      state = AsyncValue.data(state.value ?? []);
       return [];
     }
   }
 
-  Future<bool> save(TransactionModel model) async {
+  //document the save function
+  Future<bool> save(TransactionModel model, {bool isSupplier = false}) async {
     state = AsyncValue.loading();
     try {
+      //save the transaction
       bool res = await TransactionRepo.save(model);
-      final customer = ref.read(tempCustomerProvider.notifier).state;
+      //get the end user
+      EndUserModel endUser;
+      if (isSupplier) {
+        //get the supplier
+        endUser = ref.read(tempSupplierProvider.notifier).state;
+      } else {
+        //get the customer
+        endUser = ref.read(tempCustomerProvider.notifier).state;
+      }
+      //if the transaction is saved
       if (res) {
-        await get(where: {"customer_id": customer.id}, noLoad: true);
-        final newCustomer = (await ref.read(customerVMProvider.notifier).singleGet(customer.id ?? 0));
-        ref.read(tempCustomerProvider.notifier).state = newCustomer;
+        //get the transactions
+        await get(where: {"customer_id": endUser.id}, noLoad: true);
+        //get the new end user
+        EndUserModel newEndUser;
+        if (isSupplier) {
+          //get the supplier
+          newEndUser = (await ref.read(supplierVMProvider.notifier).singleGet(endUser.id ?? 0));
+          //set the new supplier
+          ref.read(tempSupplierProvider.notifier).state = newEndUser;
+        } else {
+          //get the customer
+          newEndUser = (await ref.read(customerVMProvider.notifier).singleGet(endUser.id ?? 0));
+          //set the new customer
+          ref.read(tempCustomerProvider.notifier).state = newEndUser;
+        }
       }
       return res;
     } catch (e) {
@@ -52,16 +77,29 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
     }
   }
 
-  Future<bool> updateTransactionModel(TransactionModel model) async {
+  Future<bool> updateTransactionModel(TransactionModel model, {bool isSupplier = false}) async {
     state = AsyncValue.loading();
     try {
+      //get the previous transaction amount
+      double prevTransactionAmount = (await TransactionRepo.get(where: {"id": model.id})).first.amount;
+      //update the transaction
       bool res = await TransactionRepo.save(model);
-      EndUserModel customer = ref.read(tempCustomerProvider.notifier).state;
-      double prevTransactionAmount = (state.value?.where((e) => e.id == model.id).toList())?.first.amount ?? 0;
-      customer = customer.copyWith(balanceAmount: "${(double.parse(customer.balanceAmount) - prevTransactionAmount) + model.amount}");
-      await ref.read(customerVMProvider.notifier).save(customer);
+      EndUserModel endUser;
+      if (isSupplier) {
+        endUser = ref.read(tempSupplierProvider.notifier).state;
+      } else {
+        endUser = ref.read(tempCustomerProvider.notifier).state;
+      }
+      //update the balance amount of the end user
+      endUser = endUser.copyWith(balanceAmount: "${(double.parse(endUser.balanceAmount) - prevTransactionAmount) + model.amount}");
+      //save the end user
+      if (isSupplier) {
+        await ref.read(supplierVMProvider.notifier).save(endUser);
+      } else {
+        await ref.read(customerVMProvider.notifier).save(endUser);
+      }
       if (res) {
-        await get(where: {"customer_id": customer.id}, noLoad: true);
+        await get(where: {"customer_id": endUser.id}, noLoad: true);
         // final newCustomer = (await ref.read(customerVMProvider.notifier).singleGet(customer.id ?? 0));
         // ref.read(tempCustomerProvider.notifier).state = newCustomer;
       }
@@ -78,17 +116,25 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
     // await get(where: {"customer_id": id});
   }
 
-  Future<bool> delete(TransactionModel model) async {
+  Future<bool> delete(TransactionModel model, {bool isSupplier = false}) async {
     final res = await TransactionRepo.delete(model.id ?? 0);
     if (res) {
-      EndUserModel customerModel = ref.read(tempCustomerProvider.notifier).state;
-      qp(customerModel, "ddddddddddddddddddd");
-      qp(model, "ddddddddddddddddddd");
+      EndUserModel endUser;
+      if (isSupplier) {
+        endUser = ref.read(tempSupplierProvider.notifier).state;
+      } else {
+        endUser = ref.read(tempCustomerProvider.notifier).state;
+      }
+
       final minusAmount = model.toGet ? model.amount : double.parse("-${model.amount}");
-      final balanceAmount = double.parse(customerModel.balanceAmount);
-      customerModel = customerModel.copyWith(balanceAmount: "${balanceAmount - minusAmount}");
-      await ref.read(customerVMProvider.notifier).save(customerModel);
-      get(where: {"customer_id": customerModel.id});
+      final balanceAmount = double.parse(endUser.balanceAmount);
+      endUser = endUser.copyWith(balanceAmount: "${balanceAmount - minusAmount}");
+      if (isSupplier) {
+        await ref.read(supplierVMProvider.notifier).save(endUser);
+      } else {
+        await ref.read(customerVMProvider.notifier).save(endUser);
+      }
+      get(where: {"customer_id": endUser.id});
     }
     return res;
   }

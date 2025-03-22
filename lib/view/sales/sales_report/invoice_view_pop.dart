@@ -197,7 +197,7 @@ class InvoiceViewPop extends HookConsumerWidget {
                               builder: (context) => AlertDialog(
                                     backgroundColor: whiteColor,
                                     contentPadding: EdgeInsets.all(30),
-                                    content: Sales(updateBillModel: model),
+                                    content: Sales(updateBillModel: model, isUpdate: true),
                                   ));
                         },
                         buttonColor: appPrimary,

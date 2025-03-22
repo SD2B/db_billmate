@@ -4,6 +4,7 @@ import 'package:db_billmate/vm/dashboard_vm.dart';
 import 'package:db_billmate/vm/repositories/customer_repo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+final customerQuickTransaction = StateProvider<bool>((ref) => false);
 final customerPageIndex = StateProvider<int>((ref) => 1);
 final tempCustomerProvider = StateProvider<EndUserModel>((ref) => EndUserModel());
 final billCustomerProvider = StateProvider<EndUserModel>((ref) => EndUserModel());

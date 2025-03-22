@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
 class SDToast {
-  static void showToast(BuildContext context,
-      {String? title,
-      required String description,
-      required ToastificationType type}) {
+
+  static void showToast({String? title, required String description, required ToastificationType type}) {
     toastification.show(
-      context: context,
       type: type,
       title: Text(title ?? type.name.toUpperCase()),
       description: Text(description),
@@ -32,5 +29,21 @@ class SDToast {
                   : Colors.red,
       foregroundColor: Colors.white,
     );
+  }
+
+  static void successToast({String? title, required String description}) {
+    showToast(title: title, description: description, type: ToastificationType.success);
+  }
+
+  static void infoToast({String? title, required String description}) {
+    showToast(title: title, description: description, type: ToastificationType.info);
+  }
+
+  static void warningToast({String? title, required String description}) {
+    showToast(title: title, description: description, type: ToastificationType.warning);
+  }
+
+  static void errorToast({String? title, required String description}) {
+    showToast(title: title, description: description, type: ToastificationType.error);
   }
 }

@@ -12,12 +12,9 @@ class ItemTableValues extends StatelessWidget {
     return Expanded(
         flex: flex ?? 1,
         child: Center(
-          child: Text(
+          child: SelectableText(
             value,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: ColorCode.colorList(context).primary),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 13, fontWeight: FontWeight.w400, color: ColorCode.colorList(context).primary),
           ),
         ));
   }

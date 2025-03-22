@@ -38,11 +38,18 @@ class CustomAppbar extends StatelessWidget {
                   tiltConfig: TiltConfig(enableReverse: true),
                   shadowConfig: ShadowConfig(enableReverse: true),
                   lightConfig: LightConfig(enableReverse: true),
-                  child: Image.asset(
-                    "assets/image/billmate_logo.png",
-                    height: 30,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: appPrimary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.all(10),
+                    child: Image.asset(
+                      "assets/image/dbbm_logo.png",
+                      height: 30,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),

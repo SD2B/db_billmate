@@ -1,6 +1,7 @@
 import 'package:db_billmate/helpers/local_storage.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/item_model.dart';
+import 'package:db_billmate/models/ui_model.dart';
 
 class ItemRepo {
   static Future<List<ItemModel>> get({Map<String, dynamic>? search, Map<String, dynamic>? where}) async {
@@ -15,16 +16,19 @@ class ItemRepo {
     }
   }
 
-  static Future<bool> save(ItemModel model) async {
+  static Future<ResponseModel> save(ItemModel model) async {
+    int? res;
+    ResponseModel response = ResponseModel();
+    model = model.copyWith(modified: DateTime.now());
     try {
       if (model.id != null) {
-        await LocalStorage.update(DBTable.items, model.toJson(), where: {"id": model.id});
+        res = await LocalStorage.update(DBTable.items, model.toJson(), where: {"id": model.id});
       } else {
-        await LocalStorage.save(DBTable.items, model.toJson());
+        res = await LocalStorage.save(DBTable.items, model.toJson());
       }
-      return true;
+      return response.copyWith(id: res, isSuccess: res != null);
     } catch (e) {
-      return false;
+      return response.copyWith(isSuccess: false);
     }
   }
 
@@ -33,6 +37,7 @@ class ItemRepo {
       final tempList = await get();
       for (ItemModel model in itemList) {
         if (tempList.where((e) => e.name?.toLowerCase() == model.name?.toLowerCase()).toList().isEmpty) {
+          model = model.copyWith(modified: DateTime.now());
           await LocalStorage.save(DBTable.items, model.toJson());
         }
       }

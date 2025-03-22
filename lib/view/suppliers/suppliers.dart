@@ -31,7 +31,8 @@ class Suppliers extends HookConsumerWidget {
               data: (dataList) {
                 if (searchController.text.isEmpty) {
                   supplierList.value = [
-                    ...supplierList.value,
+                    ...dataList.where((newSupplier) => supplierList.value.any((existingSupplier) => existingSupplier.id == newSupplier.id && existingSupplier != newSupplier)),
+                    ...supplierList.value.where((e) => !dataList.any((newSupplier) => newSupplier.id == e.id && newSupplier != e)),
                     ...dataList.where((newSupplier) => !supplierList.value.any((existingSupplier) => existingSupplier.id == newSupplier.id)),
                   ];
                 } else {
@@ -53,7 +54,7 @@ class Suppliers extends HookConsumerWidget {
                             Text("Select a supplier"),
                           ],
                         ))),
-                      if (supplierModel.value != EndUserModel()) SupplierTransactions( selected: selected),
+                      if (supplierModel.value != EndUserModel()) SupplierTransactions(selected: selected),
                     ],
                   ),
                 );

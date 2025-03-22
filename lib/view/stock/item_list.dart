@@ -1,20 +1,26 @@
 import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/common_widgets/delete_popup.dart';
 import 'package:db_billmate/common_widgets/loading_widget.dart';
+import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/constants/colors.dart';
+import 'package:db_billmate/helpers/form_helpers.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/stock/add_item_popup.dart';
 import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/item_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:toastification/toastification.dart';
 
 class ItemList extends HookConsumerWidget {
   const ItemList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isItemNameEditing = ref.watch(itemNameEditNotifier);
+    final isPurchasePriceEditing = ref.watch(purchasePriceEditNotifier);
     final isSalePriceEditing = ref.watch(salePriceEditNotifier);
+    final isStockCountEditing = ref.watch(stockCountEditNotifier);
     return ref.watch(itemVMProvider).when(
         data: (data) {
           if (data.isEmpty) {
@@ -56,7 +62,22 @@ class ItemList extends HookConsumerWidget {
                         ),
                         10.width,
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                        ItemTableValues(flex: 2, value: "${item.name}"),
+                        !isItemNameEditing
+                            ? ItemTableValues(flex: 2, value: "${item.name}")
+                            : Expanded(
+                                flex: 2,
+                                child: CustomTextField(
+                                  height: 40,
+                                  width: 100,
+                                  controller: TextEditingController(text: item.name),
+                                  onSubmitted: (value) async {
+                                    final res = await ref.read(itemVMProvider.notifier).save(item.copyWith(name: value));
+                                    if (res.isSuccess) {
+                                      SDToast.showToast(description: "Item name updated for SL.No. ${index + 1}", type: ToastificationType.success);
+                                    }
+                                  },
+                                ),
+                              ),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
                         ItemTableValues(value: item.category ?? "__"),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
@@ -69,17 +90,63 @@ class ItemList extends HookConsumerWidget {
                           ),
                         ),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                        ItemTableValues(value: item.purchasePrice ?? "__"),
+                        !isPurchasePriceEditing
+                            ? ItemTableValues(value: item.purchasePrice ?? "__")
+                            : Expanded(
+                                flex: 1,
+                                child: CustomTextField(
+                                  height: 40,
+                                  width: 100,
+                                  isAmount: true,
+                                  selectAllOnFocus: true,
+                                  controller: TextEditingController(text: item.purchasePrice ?? ""),
+                                  inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                                  onSubmitted: (value) async {
+                                    final res = await ref.read(itemVMProvider.notifier).save(item.copyWith(purchasePrice: value));
+                                    if (res.isSuccess) {
+                                      SDToast.showToast(description: "Purchase price updated for ${item.name}", type: ToastificationType.success);
+                                    }
+                                  },
+                                ),
+                              ),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
                         !isSalePriceEditing
                             ? ItemTableValues(value: "${item.salePrice}")
                             : Expanded(
                                 flex: 1,
                                 child: CustomTextField(
+                                  height: 40,
                                   width: 100,
                                   isAmount: true,
+                                  selectAllOnFocus: true,
                                   controller: TextEditingController(text: "${item.salePrice}"),
-                                  onChanged: (value) {},
+                                  inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                                  onSubmitted: (value) async {
+                                    final res = await ref.read(itemVMProvider.notifier).save(item.copyWith(salePrice: value));
+                                    if (res.isSuccess) {
+                                      SDToast.showToast(description: "Sale price updated for ${item.name}", type: ToastificationType.success);
+                                    }
+                                  },
+                                ),
+                              ),
+                        VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        !isStockCountEditing
+                            ? ItemTableValues(value: item.stockCount ?? "__")
+                            : Expanded(
+                                flex: 1,
+                                child: CustomTextField(
+                                  height: 40,
+                                  width: 100,
+                                  isAmount: true,
+                                  selectAllOnFocus: true,
+                                  controller: TextEditingController(text: item.stockCount ?? ""),
+                                  inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
+                                  onSubmitted: (value) async {
+                                    final res = await ref.read(itemVMProvider.notifier).save(item.copyWith(stockCount: value));
+                                    if (res.isSuccess) {
+                                      SDToast.showToast(description: "Stock count updated for ${item.name}", type: ToastificationType.success);
+                                    }
+                                  },
                                 ),
                               ),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),

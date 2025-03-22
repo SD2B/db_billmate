@@ -29,12 +29,29 @@ class DashboardVM extends AsyncNotifier<List<UiModel>> {
     try {
       final rawData = await LocalStorage.rawQuery('''
     SELECT 
+      COUNT(CASE WHEN end_user_type = 'customer' THEN 1 END) AS total_customers,
+      COUNT(CASE WHEN end_user_type = 'supplier' THEN 1 END) AS total_suppliers,    
       SUM(CASE WHEN CAST(balance_amount AS REAL) >= 0 THEN CAST(balance_amount AS REAL) ELSE 0 END) AS to_get,
-      SUM(CASE WHEN CAST(balance_amount AS REAL) < 0 THEN CAST(balance_amount AS REAL) ELSE 0 END) AS to_give
+      SUM(CASE WHEN CAST(balance_amount AS REAL) < 0 THEN CAST(balance_amount AS REAL) ELSE 0 END) AS to_give, 
+      SUM(CASE WHEN end_user_type = 'supplier' AND CAST(balance_amount AS REAL) >= 0 THEN CAST(balance_amount AS REAL) ELSE 0 END) AS to_get_from_supplier,
+      SUM(CASE WHEN end_user_type = 'supplier' AND CAST(balance_amount AS REAL) < 0 THEN CAST(balance_amount AS REAL) ELSE 0 END) AS to_give_to_supplier, 
+      SUM(CASE WHEN end_user_type = 'customer' AND CAST(balance_amount AS REAL) >= 0 THEN CAST(balance_amount AS REAL) ELSE 0 END) AS to_get_from_customer,
+      SUM(CASE WHEN end_user_type = 'customer' AND CAST(balance_amount AS REAL) < 0 THEN CAST(balance_amount AS REAL) ELSE 0 END) AS to_give_to_customer
     FROM customers;
   ''');
       qp(rawData);
-      List<UiModel> data = rawData.expand((e) => [UiModel(id: 1, title: "To get", value: double.parse("${e["to_get"]??0}").toStringAsFixed(2)), UiModel(id: 2, title: "To give", value: double.parse("${e["to_give"]??0}").toStringAsFixed(2).split("-").join())]).toList();
+      List<UiModel> data = rawData
+          .expand((e) => [
+                UiModel(id: 1, title: "Total customers", value: "${e["total_customers"] ?? 0}"),
+                UiModel(id: 2, title: "Total suppliers", value: "${e["total_suppliers"] ?? 0}"),
+                UiModel(id: 3, title: "To get", value: double.parse("${e["to_get"] ?? 0}").toStringAsFixed(2)),
+                UiModel(id: 4, title: "To give", value: double.parse("${e["to_give"] ?? 0}").toStringAsFixed(2).split("-").join()),
+                UiModel(id: 5, title: "To get from supplier", value: double.parse("${e["to_get_from_supplier"] ?? 0}").toStringAsFixed(2)),
+                UiModel(id: 6, title: "To give to supplier", value: double.parse("${e["to_give_to_supplier"] ?? 0}").toStringAsFixed(2).split("-").join()),
+                UiModel(id: 7, title: "To get from customer", value: double.parse("${e["to_get_from_customer"] ?? 0}").toStringAsFixed(2)),
+                UiModel(id: 8, title: "To give to customer", value: double.parse("${e["to_give_to_customer"] ?? 0}").toStringAsFixed(2).split("-").join()),
+              ])
+          .toList();
       qp(data);
       ref.read(toGetAndGive.notifier).state = [...data.map((e) => e.value ?? "")];
       return data;
