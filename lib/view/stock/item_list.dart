@@ -20,7 +20,6 @@ class ItemList extends HookConsumerWidget {
     final isItemNameEditing = ref.watch(itemNameEditNotifier);
     final isPurchasePriceEditing = ref.watch(purchasePriceEditNotifier);
     final isSalePriceEditing = ref.watch(salePriceEditNotifier);
-    final isStockCountEditing = ref.watch(stockCountEditNotifier);
     return ref.watch(itemVMProvider).when(
         data: (data) {
           if (data.isEmpty) {
