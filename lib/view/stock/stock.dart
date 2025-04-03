@@ -134,11 +134,20 @@ class Stock extends HookConsumerWidget {
                   }),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               ItemTableHeaders(
-                  value: "Stock Count",
-                  onTap: (value) {
-                    qp(value);
-                    ref.read(stockCountEditNotifier.notifier).state = value;
-                  }),
+                value: "Stock In",
+              ),
+              // VerticalDivider(color: ColorCode.colorList(context).secondary),
+              // ItemTableHeaders(
+              //   value: "Stock Out",
+              // ),
+              VerticalDivider(color: ColorCode.colorList(context).secondary),
+              ItemTableHeaders(
+                value: "Stock Left",
+                // onTap: (value) {
+                //   qp(value);
+                //   ref.read(stockCountEditNotifier.notifier).state = value;
+                // },
+              ),
               VerticalDivider(color: ColorCode.colorList(context).secondary),
               SizedBox(
                   width: 50,

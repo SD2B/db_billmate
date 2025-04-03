@@ -54,7 +54,7 @@ class SupplierListTile extends HookConsumerWidget {
             double.parse(model.balanceAmount).toStringAsFixed(2).split("-").join(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: (model.balanceAmount.toString().contains("-") || double.parse(model.balanceAmount) == 0) ? greenColor : redColor,
+                  color: (model.balanceAmount.toString().contains("-")) ? redColor : greenColor,
                 ),
           ),
         ),

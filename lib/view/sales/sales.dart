@@ -17,6 +17,7 @@ import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/invoice_vm.dart';
 import 'package:db_billmate/vm/item_vm.dart';
+import 'package:db_billmate/vm/repositories/item_repo.dart';
 import 'package:db_billmate/vm/unit_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -124,17 +125,17 @@ class Sales extends HookConsumerWidget {
       return double.parse((ob + total).toStringAsFixed(2));
     }
 
-    double getcurrentBalance() {
+    double getCurrentBalance() {
       double gTotal = getGrandTotal();
-      double recieved = double.tryParse(receivedController.text) ?? 0.00;
+      double received = double.tryParse(receivedController.text) ?? 0.00;
       double discount = double.tryParse(discountController.text) ?? 0.00;
-      currentBalance.value = double.parse((gTotal - discount - recieved).toStringAsFixed(2));
+      currentBalance.value = double.parse((gTotal - discount - received).toStringAsFixed(2));
       return currentBalance.value;
     }
 
     double getDiscount() {
       double discount = double.tryParse(discountController.text) ?? 0.00;
-      getcurrentBalance();
+      getCurrentBalance();
       return discount;
     }
 
@@ -150,7 +151,7 @@ class Sales extends HookConsumerWidget {
         grandTotal: getGrandTotal().toStringAsFixed(2),
         discount: getDiscount().toStringAsFixed(2),
         received: (double.tryParse(receivedController.text) ?? 0.00).toStringAsFixed(2),
-        currentBalance: getcurrentBalance().toStringAsFixed(2),
+        currentBalance: getCurrentBalance().toStringAsFixed(2),
         dateTime: DateTime.now(),
         note: noteController.text,
       );
@@ -181,7 +182,6 @@ class Sales extends HookConsumerWidget {
           children: [
             TypeAheadField<EndUserModel>(
               suggestionsCallback: (search) async {
-                qp(search, "hiiiiii");
                 List<EndUserModel> customers = await ref.read(customerVMProvider.notifier).get(search: {"name": search}, noWait: true);
                 return customers;
               },
@@ -495,7 +495,7 @@ class Sales extends HookConsumerWidget {
                           ),
                           LabelText(
                             label: "Current Balance",
-                            text: (getcurrentBalance()).toStringAsFixed(2),
+                            text: (getCurrentBalance()).toStringAsFixed(2),
                           ),
                         ],
                       ),
@@ -528,7 +528,7 @@ class Sales extends HookConsumerWidget {
                           hintText: "",
                           label: "Recieved",
                           onChanged: (p0) {
-                            getcurrentBalance();
+                            getCurrentBalance();
                           },
                         ),
                       ],
@@ -564,9 +564,16 @@ class Sales extends HookConsumerWidget {
                         name: billItemList[i].name,
                         salePrice: billItemList[i].salePrice,
                         unit: billItemList[i].unit,
+                        stockIn: billItemList[i].quantity,
+                        stockOut: billItemList[i].quantity,
+                        stockCount: "0.00",
                         modified: DateTime.now(),
                       );
                       itemSaveTasks.add(ref.read(itemVMProvider.notifier).save(item).then((res) {
+                        billItemList[i] = billItemList[i].copyWith(id: res.id);
+                      }));
+                    } else {
+                      itemSaveTasks.add(ItemRepo.updateStock(billItemList[i].quantity ?? "0.00", (double.parse(billItemList[i].stockCount ?? "0.00") - double.parse(billItemList[i].quantity ?? "0.00")).toString(), billItemList[i].id.toString()).then((res) {
                         billItemList[i] = billItemList[i].copyWith(id: res.id);
                       }));
                     }
@@ -582,6 +589,7 @@ class Sales extends HookConsumerWidget {
                       description: updateBillModel?.id != null ? "Invoice Updated Successfully" : "Invoice Generated Successfully",
                       type: ToastificationType.success,
                     );
+
                     reset();
                     ref.read(invoiceVMProvider.notifier).getInvNo();
                     if (isUpdate) {

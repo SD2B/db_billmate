@@ -20,6 +20,8 @@ _$ItemModelImpl _$$ItemModelImplFromJson(Map<String, dynamic> json) =>
       billPrice: json['bill_price'] as String?,
       modified: _$JsonConverterFromJson<String, DateTime>(
           json['modified'], const DateTimeConverter().fromJson),
+      stockIn: json['stock_in'] as String? ?? "0.00",
+      stockOut: json['stock_out'] as String? ?? "0.00",
       stockCount: json['stock_count'] as String? ?? "0.00",
       stockAlert: json['stock_alert'] as String? ?? "0.00",
     );
@@ -38,6 +40,8 @@ Map<String, dynamic> _$$ItemModelImplToJson(_$ItemModelImpl instance) =>
       'bill_price': instance.billPrice,
       'modified': _$JsonConverterToJson<String, DateTime>(
           instance.modified, const DateTimeConverter().toJson),
+      'stock_in': instance.stockIn,
+      'stock_out': instance.stockOut,
       'stock_count': instance.stockCount,
       'stock_alert': instance.stockAlert,
     };

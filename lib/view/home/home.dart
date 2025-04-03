@@ -1,3 +1,5 @@
+import 'package:db_billmate/common_widgets/custom_button.dart';
+import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/common_widgets/loading_widget.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
@@ -15,6 +17,32 @@ class Home extends HookConsumerWidget {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomButtonCard(
+                  width: 300,
+                  height: 50,
+                  text: "Das Brothers General Stores",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: whiteColor),
+                  buttonColor: appPrimary,
+                ),
+                5.width,
+                // Spacer(),
+                CustomIconButton(
+                  tooltipMsg: "Refresh",
+                  buttonSize: 50,
+                  iconColor: whiteColor,
+                  buttonColor: appPrimary,
+                  shape: BoxShape.rectangle,
+                  onTap: () {
+                    ref.read(dashboardVMProvider.notifier).getDashboardData();
+                  },
+                  icon: Icons.refresh,
+                ),
+              ],
+            ),
+            20.height,
             ref.watch(dashboardVMProvider).when(
                   data: (data) {
                     return Wrap(

@@ -54,7 +54,7 @@ class SupplierTransactionHeader extends HookConsumerWidget {
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: (tempSupplier.state.balanceAmount.contains("-") || double.parse(tempSupplier.state.balanceAmount) == 0) ? greenColor : redColor,
+                  color: (tempSupplier.state.balanceAmount.contains("-")) ? redColor : greenColor,
                 ),
           ),
           Spacer(),
@@ -82,21 +82,21 @@ class SupplierTransactionHeader extends HookConsumerWidget {
               onTap: () {
                 if (ref.read(transactionVMProvider).value?.isNotEmpty == true) showDialog(context: context, builder: (context) => SupplierAccountClosePopup());
               }),
-          VerticalDivider(),
-          CustomIconButton(
-            tooltipMsg: "Reminder",
-            shape: BoxShape.rectangle,
-            icon: Icons.alarm_outlined,
-            buttonSize: 45,
-            buttonColor: black87Color,
-            iconColor: whiteColor,
-            iconSize: 20,
-            onTap: () {
-              if (ref.read(transactionVMProvider).value?.isNotEmpty == true) {
-                showDialog(context: context, builder: (context) => ReminderPop(model: tempSupplier.state));
-              }
-            },
-          ),
+          // VerticalDivider(),
+          // CustomIconButton(
+          //   tooltipMsg: "Reminder",
+          //   shape: BoxShape.rectangle,
+          //   icon: Icons.alarm_outlined,
+          //   buttonSize: 45,
+          //   buttonColor: black87Color,
+          //   iconColor: whiteColor,
+          //   iconSize: 20,
+          //   onTap: () {
+          //     if (ref.read(transactionVMProvider).value?.isNotEmpty == true) {
+          //       showDialog(context: context, builder: (context) => ReminderPop(model: tempSupplier.state));
+          //     }
+          //   },
+          // ),
           VerticalDivider(),
           CustomIconButton(
             tooltipMsg: "Date Filter",

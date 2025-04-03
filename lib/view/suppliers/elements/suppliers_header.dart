@@ -83,7 +83,7 @@ class SuppliersHeader extends HookConsumerWidget {
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: redColor, width: 2),
+                    border: Border.all(color: greenColor, width: 2),
                   ),
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Row(
@@ -91,12 +91,12 @@ class SuppliersHeader extends HookConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "You will get :",
+                        "You Gave :",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "₹${getAndGive[0]}",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, color: redColor),
+                        "₹${getAndGive[4]}",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, color: greenColor),
                       ),
                     ],
                   ),
@@ -107,7 +107,7 @@ class SuppliersHeader extends HookConsumerWidget {
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: greenColor, width: 2),
+                    border: Border.all(color: redColor, width: 2),
                   ),
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Row(
@@ -115,12 +115,12 @@ class SuppliersHeader extends HookConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "You will give :",
+                        "You Bought :",
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "₹${getAndGive[1]}",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, color: greenColor),
+                        "₹${getAndGive[5]}",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, color: redColor),
                       ),
                     ],
                   ),

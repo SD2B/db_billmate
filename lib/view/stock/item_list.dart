@@ -130,25 +130,11 @@ class ItemList extends HookConsumerWidget {
                                 ),
                               ),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
-                        !isStockCountEditing
-                            ? ItemTableValues(value: item.stockCount ?? "__")
-                            : Expanded(
-                                flex: 1,
-                                child: CustomTextField(
-                                  height: 40,
-                                  width: 100,
-                                  isAmount: true,
-                                  selectAllOnFocus: true,
-                                  controller: TextEditingController(text: item.stockCount ?? ""),
-                                  inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],
-                                  onSubmitted: (value) async {
-                                    final res = await ref.read(itemVMProvider.notifier).save(item.copyWith(stockCount: value));
-                                    if (res.isSuccess) {
-                                      SDToast.showToast(description: "Stock count updated for ${item.name}", type: ToastificationType.success);
-                                    }
-                                  },
-                                ),
-                              ),
+                        ItemTableValues(value: "${item.stockIn} ${item.unit}"),
+                        VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        // ItemTableValues(value: "${item.stockOut} ${item.unit}"),
+                        // VerticalDivider(color: ColorCode.colorList(context).borderColor),
+                        ItemTableValues(value: "${item.stockCount} ${item.unit}"),
                         VerticalDivider(color: ColorCode.colorList(context).borderColor),
                         SizedBox(
                           width: 50,

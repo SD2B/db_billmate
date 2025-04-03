@@ -45,9 +45,11 @@ class AddSupplierPopup extends HookConsumerWidget {
           address: addressController.text,
           balanceAmount: model.value.id != null
               ? model.value.balanceAmount
-              : toGet.value
+              : ((double.tryParse(openingBalanceController.text) ?? 0) == 0)
                   ? "${double.tryParse(openingBalanceController.text)}"
-                  : "-${double.tryParse(openingBalanceController.text)}",
+                  : toGet.value
+                      ? "${double.tryParse(openingBalanceController.text)}"
+                      : "-${double.tryParse(openingBalanceController.text)}",
         );
       }
     }

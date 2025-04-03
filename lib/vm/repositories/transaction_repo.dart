@@ -51,11 +51,18 @@ class TransactionRepo {
     }
   }
 
-  static Future<bool> closeAccount(int customerId) async {
+  static Future<bool> closeAccount(TransactionModel model) async {
+    final userId = model.customerId;
     try {
-      await LocalStorage.rawQueryInt('''
-      DELETE FROM transactions WHERE customer_id = $customerId
-    ''');
+      await Future.wait([
+        LocalStorage.rawQueryInt('''
+        DELETE FROM transactions WHERE customer_id = $userId
+      '''),
+        LocalStorage.rawQuery('''
+        UPDATE customers SET balance_amount = "0.00" WHERE id = $userId
+      ''')
+      ]);
+      await save(model);
       return true;
     } catch (e) {
       return false;

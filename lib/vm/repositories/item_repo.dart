@@ -47,6 +47,18 @@ class ItemRepo {
     }
   }
 
+  static Future<ResponseModel> updateStock(String stockOutValue, String stockCountValue, String itemId) async {
+    try {
+      await LocalStorage.rawQuery(
+        'UPDATE items SET stock_out = ?, stock_count = ? WHERE id = ?',
+        [stockOutValue, stockCountValue, itemId],
+      );
+      return ResponseModel(isSuccess: true);
+    } catch (e) {
+      return ResponseModel(isSuccess: false);
+    }
+  }
+
   static Future<bool> delete(int id) async {
     try {
       await LocalStorage.delete(DBTable.items, where: {"id": id});

@@ -128,36 +128,35 @@ class PrintHelper {
                     ],
                   ),
                   pw.Divider(thickness: .5),
-                  for (int i = 0; i < 2; i++)
-                    for (int i = 0; i < (model.items?.length ?? 0); i++)
-                      pw.Row(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        children: [
-                          pw.SizedBox(
-                            width: 10,
-                            child: pw.Text("${i + 1}", style: valueText),
-                            // child: pw.Text("00", style: valueText),
-                          ),
-                          pw.SizedBox(width: 1),
-                          pw.SizedBox(
-                            width: 70,
-                            child: pw.Text(model.items![i].name.toString(), style: itemText),
-                          ),
-                          pw.SizedBox(
-                            width: 40,
-                            child: pw.Text("${model.items![i].quantity} ${model.items![i].unit}", textAlign: pw.TextAlign.end, style: itemText),
-                          ),
-                          pw.SizedBox(width: 3),
-                          pw.SizedBox(
-                            width: 30,
-                            child: pw.Text(model.items![i].salePrice.toString(), textAlign: pw.TextAlign.end, style: itemText),
-                          ),
-                          pw.SizedBox(
-                            width: 50,
-                            child: pw.Text((double.parse(model.items![i].billPrice ?? "0.00").toStringAsFixed(2)).toString(), textAlign: pw.TextAlign.end, style: itemText),
-                          ),
-                        ],
-                      ),
+                  for (int i = 0; i < (model.items?.length ?? 0); i++)
+                    pw.Row(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.SizedBox(
+                          width: 10,
+                          child: pw.Text("${i + 1}", style: valueText),
+                          // child: pw.Text("00", style: valueText),
+                        ),
+                        pw.SizedBox(width: 1),
+                        pw.SizedBox(
+                          width: 70,
+                          child: pw.Text(model.items![i].name.toString(), style: itemText),
+                        ),
+                        pw.SizedBox(
+                          width: 40,
+                          child: pw.Text("${model.items![i].quantity} ${model.items![i].unit}", textAlign: pw.TextAlign.end, style: itemText),
+                        ),
+                        pw.SizedBox(width: 3),
+                        pw.SizedBox(
+                          width: 30,
+                          child: pw.Text(model.items![i].salePrice.toString(), textAlign: pw.TextAlign.end, style: itemText),
+                        ),
+                        pw.SizedBox(
+                          width: 50,
+                          child: pw.Text((double.parse(model.items![i].billPrice ?? "0.00").toStringAsFixed(2)).toString(), textAlign: pw.TextAlign.end, style: itemText),
+                        ),
+                      ],
+                    ),
 
                   pw.Divider(thickness: .5),
 

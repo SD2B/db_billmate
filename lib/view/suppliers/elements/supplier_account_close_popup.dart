@@ -20,7 +20,7 @@ class SupplierAccountClosePopup extends HookConsumerWidget {
     final tempSupplier = ref.read(tempSupplierProvider.notifier);
     final transaction = useState(TransactionModel());
 
-    final toGet = useState(true);
+    final toGive = useState(true);
     final amountController = useTextEditingController();
     return AlertDialog(
       backgroundColor: whiteColor,
@@ -44,10 +44,10 @@ class SupplierAccountClosePopup extends HookConsumerWidget {
             ),
             10.width,
             Checkbox(
-              value: toGet.value,
-              onChanged: (value) => toGet.value = value ?? true,
+              value: toGive.value,
+              onChanged: (value) => toGive.value = value ?? true,
             ),
-            const Expanded(child: Text('To get', style: TextStyle(fontSize: 16.0))),
+            const Expanded(child: Text('To give', style: TextStyle(fontSize: 16.0))),
           ],
         ),
       ),
@@ -62,26 +62,16 @@ class SupplierAccountClosePopup extends HookConsumerWidget {
                 textColor: whiteColor,
                 text: "Yes",
                 onTap: () async {
-                  tempSupplier.state = tempSupplier.state.copyWith(
-                    modified: DateTime.now(),
-                    balanceAmount: amountController.text.isEmpty
-                        ? "0.00"
-                        : toGet.value
-                            ? double.parse(amountController.text).toStringAsFixed(2)
-                            : "-${double.parse(amountController.text).toStringAsFixed(2)}",
+                  transaction.value = TransactionModel(
+                    amount: double.tryParse(amountController.text) ?? 0,
+                    toGet: !toGive.value,
+                    customerId: tempSupplier.state.id,
+                    dateTime: DateTime.now(),
+                    description: "Balance after account closed on ${DateFormat("EEEE, MMMM dd, yyyy").format(DateTime.now())} at ${DateFormat("hh:mm aaa").format(DateTime.now())}",
+                    transactionType: TransactionType.normal,
                   );
-                  if (amountController.text.isNotEmpty) {
-                    transaction.value = TransactionModel(
-                      amount: double.parse(amountController.text),
-                      toGet: toGet.value,
-                      customerId: tempSupplier.state.id,
-                      dateTime: DateTime.now(),
-                      description: "Balance after account closed on ${DateFormat("EEEE, MMMM dd, yyyy").format(DateTime.now())} at ${DateFormat("hh:mm aaa").format(DateTime.now())}",
-                    );
-                  }
-                  await ref.read(transactionVMProvider.notifier).closeAccount(tempSupplier.state.id ?? 0);
-                  await ref.read(supplierVMProvider.notifier).save(tempSupplier.state);
-                  await ref.read(transactionVMProvider.notifier).get(where: {"customer_id": tempSupplier.state.id});
+
+                  await ref.read(transactionVMProvider.notifier).closeAccount(tempSupplier.state.id ?? 0, transaction.value, isSupplier: true);
                   context.pop();
                 }),
             CustomButton(width: 120, height: 40, buttonColor: ColorCode.colorList(context).borderColor, textColor: black87Color, text: "No", onTap: () => context.pop()),

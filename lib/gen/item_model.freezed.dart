@@ -36,6 +36,10 @@ mixin _$ItemModel {
   String? get billPrice => throw _privateConstructorUsedError;
   @DateTimeConverter()
   DateTime? get modified => throw _privateConstructorUsedError;
+  @JsonKey(name: "stock_in")
+  String? get stockIn => throw _privateConstructorUsedError;
+  @JsonKey(name: "stock_out")
+  String? get stockOut => throw _privateConstructorUsedError;
   @JsonKey(name: "stock_count")
   String? get stockCount => throw _privateConstructorUsedError;
   @JsonKey(name: "stock_alert")
@@ -68,6 +72,8 @@ abstract class $ItemModelCopyWith<$Res> {
       String? quantity,
       @JsonKey(name: "bill_price") String? billPrice,
       @DateTimeConverter() DateTime? modified,
+      @JsonKey(name: "stock_in") String? stockIn,
+      @JsonKey(name: "stock_out") String? stockOut,
       @JsonKey(name: "stock_count") String? stockCount,
       @JsonKey(name: "stock_alert") String? stockAlert});
 }
@@ -98,6 +104,8 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
     Object? quantity = freezed,
     Object? billPrice = freezed,
     Object? modified = freezed,
+    Object? stockIn = freezed,
+    Object? stockOut = freezed,
     Object? stockCount = freezed,
     Object? stockAlert = freezed,
   }) {
@@ -146,6 +154,14 @@ class _$ItemModelCopyWithImpl<$Res, $Val extends ItemModel>
           ? _value.modified
           : modified // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      stockIn: freezed == stockIn
+          ? _value.stockIn
+          : stockIn // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stockOut: freezed == stockOut
+          ? _value.stockOut
+          : stockOut // ignore: cast_nullable_to_non_nullable
+              as String?,
       stockCount: freezed == stockCount
           ? _value.stockCount
           : stockCount // ignore: cast_nullable_to_non_nullable
@@ -178,6 +194,8 @@ abstract class _$$ItemModelImplCopyWith<$Res>
       String? quantity,
       @JsonKey(name: "bill_price") String? billPrice,
       @DateTimeConverter() DateTime? modified,
+      @JsonKey(name: "stock_in") String? stockIn,
+      @JsonKey(name: "stock_out") String? stockOut,
       @JsonKey(name: "stock_count") String? stockCount,
       @JsonKey(name: "stock_alert") String? stockAlert});
 }
@@ -206,6 +224,8 @@ class __$$ItemModelImplCopyWithImpl<$Res>
     Object? quantity = freezed,
     Object? billPrice = freezed,
     Object? modified = freezed,
+    Object? stockIn = freezed,
+    Object? stockOut = freezed,
     Object? stockCount = freezed,
     Object? stockAlert = freezed,
   }) {
@@ -254,6 +274,14 @@ class __$$ItemModelImplCopyWithImpl<$Res>
           ? _value.modified
           : modified // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      stockIn: freezed == stockIn
+          ? _value.stockIn
+          : stockIn // ignore: cast_nullable_to_non_nullable
+              as String?,
+      stockOut: freezed == stockOut
+          ? _value.stockOut
+          : stockOut // ignore: cast_nullable_to_non_nullable
+              as String?,
       stockCount: freezed == stockCount
           ? _value.stockCount
           : stockCount // ignore: cast_nullable_to_non_nullable
@@ -281,6 +309,8 @@ class _$ItemModelImpl implements _ItemModel {
       this.quantity,
       @JsonKey(name: "bill_price") this.billPrice,
       @DateTimeConverter() this.modified,
+      @JsonKey(name: "stock_in") this.stockIn = "0.00",
+      @JsonKey(name: "stock_out") this.stockOut = "0.00",
       @JsonKey(name: "stock_count") this.stockCount = "0.00",
       @JsonKey(name: "stock_alert") this.stockAlert = "0.00"});
 
@@ -315,6 +345,12 @@ class _$ItemModelImpl implements _ItemModel {
   @DateTimeConverter()
   final DateTime? modified;
   @override
+  @JsonKey(name: "stock_in")
+  final String? stockIn;
+  @override
+  @JsonKey(name: "stock_out")
+  final String? stockOut;
+  @override
   @JsonKey(name: "stock_count")
   final String? stockCount;
   @override
@@ -323,7 +359,7 @@ class _$ItemModelImpl implements _ItemModel {
 
   @override
   String toString() {
-    return 'ItemModel(id: $id, billId: $billId, barcode: $barcode, name: $name, category: $category, salePrice: $salePrice, purchasePrice: $purchasePrice, unit: $unit, quantity: $quantity, billPrice: $billPrice, modified: $modified, stockCount: $stockCount, stockAlert: $stockAlert)';
+    return 'ItemModel(id: $id, billId: $billId, barcode: $barcode, name: $name, category: $category, salePrice: $salePrice, purchasePrice: $purchasePrice, unit: $unit, quantity: $quantity, billPrice: $billPrice, modified: $modified, stockIn: $stockIn, stockOut: $stockOut, stockCount: $stockCount, stockAlert: $stockAlert)';
   }
 
   @override
@@ -348,6 +384,9 @@ class _$ItemModelImpl implements _ItemModel {
                 other.billPrice == billPrice) &&
             (identical(other.modified, modified) ||
                 other.modified == modified) &&
+            (identical(other.stockIn, stockIn) || other.stockIn == stockIn) &&
+            (identical(other.stockOut, stockOut) ||
+                other.stockOut == stockOut) &&
             (identical(other.stockCount, stockCount) ||
                 other.stockCount == stockCount) &&
             (identical(other.stockAlert, stockAlert) ||
@@ -369,6 +408,8 @@ class _$ItemModelImpl implements _ItemModel {
       quantity,
       billPrice,
       modified,
+      stockIn,
+      stockOut,
       stockCount,
       stockAlert);
 
@@ -401,6 +442,8 @@ abstract class _ItemModel implements ItemModel {
           final String? quantity,
           @JsonKey(name: "bill_price") final String? billPrice,
           @DateTimeConverter() final DateTime? modified,
+          @JsonKey(name: "stock_in") final String? stockIn,
+          @JsonKey(name: "stock_out") final String? stockOut,
           @JsonKey(name: "stock_count") final String? stockCount,
           @JsonKey(name: "stock_alert") final String? stockAlert}) =
       _$ItemModelImpl;
@@ -435,6 +478,12 @@ abstract class _ItemModel implements ItemModel {
   @override
   @DateTimeConverter()
   DateTime? get modified;
+  @override
+  @JsonKey(name: "stock_in")
+  String? get stockIn;
+  @override
+  @JsonKey(name: "stock_out")
+  String? get stockOut;
   @override
   @JsonKey(name: "stock_count")
   String? get stockCount;

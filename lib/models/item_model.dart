@@ -17,6 +17,8 @@ class ItemModel with _$ItemModel {
     String? quantity,
     @JsonKey(name: "bill_price") String? billPrice,
     @DateTimeConverter() DateTime? modified,
+    @Default("0.00") @JsonKey(name: "stock_in") String? stockIn,
+    @Default("0.00") @JsonKey(name: "stock_out") String? stockOut,
     @Default("0.00") @JsonKey(name: "stock_count") String? stockCount,
     @Default("0.00") @JsonKey(name: "stock_alert") String? stockAlert,
   }) = _ItemModel;

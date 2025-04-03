@@ -28,7 +28,7 @@ class AddItemPopup extends HookConsumerWidget {
     final barcodeController = useTextEditingController(text: itemModel.value.barcode);
     final purchasePriceController = useTextEditingController(text: itemModel.value.purchasePrice);
     final salePriceController = useTextEditingController(text: itemModel.value.salePrice);
-    final stockCountController = useTextEditingController(text: itemModel.value.stockCount);
+    final stockInController = useTextEditingController(text: itemModel.value.stockIn);
     final stockAlertController = useTextEditingController(text: itemModel.value.stockAlert);
     void setToModel() {
       itemModel.value = itemModel.value.copyWith(
@@ -36,7 +36,8 @@ class AddItemPopup extends HookConsumerWidget {
         barcode: barcodeController.text,
         purchasePrice: purchasePriceController.text,
         salePrice: salePriceController.text,
-        stockCount: stockCountController.text,
+        stockIn: stockInController.text,
+        stockCount: "${double.parse(itemModel.value.stockCount ?? "0") + double.parse(stockInController.text)}",
         stockAlert: stockAlertController.text,
         modified: DateTime.now(),
       );
@@ -185,8 +186,8 @@ class AddItemPopup extends HookConsumerWidget {
                   CustomTextField(
                     width: 145,
                     readOnly: itemModel.value.unit == null,
-                    controller: stockCountController,
-                    label: "Enter stock count",
+                    controller: stockInController,
+                    label: "Enter stock in",
                     selectAllOnFocus: true,
                     isAmount: true,
                     inputFormatters: [DoubleOnlyFormatter(maxDigitsAfterDecimal: 2)],

@@ -62,26 +62,15 @@ class CustomerAccountClosePopup extends HookConsumerWidget {
                 textColor: whiteColor,
                 text: "Yes",
                 onTap: () async {
-                  tempCustomer.state = tempCustomer.state.copyWith(
-                    modified: DateTime.now(),
-                    balanceAmount: amountController.text.isEmpty
-                        ? "0.00"
-                        : toGet.value
-                            ? double.parse(amountController.text).toStringAsFixed(2)
-                            : "-${double.parse(amountController.text).toStringAsFixed(2)}",
+                  transaction.value = TransactionModel(
+                    amount: double.tryParse(amountController.text) ?? 0,
+                    toGet: toGet.value,
+                    customerId: tempCustomer.state.id,
+                    dateTime: DateTime.now(),
+                    description: "Balance after account closed on ${DateFormat("EEEE, MMMM dd, yyyy").format(DateTime.now())} at ${DateFormat("hh:mm aaa").format(DateTime.now())}",
                   );
-                  if (amountController.text.isNotEmpty) {
-                    transaction.value = TransactionModel(
-                      amount: double.parse(amountController.text),
-                      toGet: toGet.value,
-                      customerId: tempCustomer.state.id,
-                      dateTime: DateTime.now(),
-                      description: "Balance after account closed on ${DateFormat("EEEE, MMMM dd, yyyy").format(DateTime.now())} at ${DateFormat("hh:mm aaa").format(DateTime.now())}",
-                    );
-                  }
-                  await ref.read(transactionVMProvider.notifier).closeAccount(tempCustomer.state.id ?? 0);
-                  await ref.read(customerVMProvider.notifier).save(tempCustomer.state);
-                  await ref.read(transactionVMProvider.notifier).get(where: {"customer_id": tempCustomer.state.id});
+
+                  await ref.read(transactionVMProvider.notifier).closeAccount(tempCustomer.state.id ?? 0, transaction.value);
                   context.pop();
                 }),
             CustomButton(width: 120, height: 40, buttonColor: ColorCode.colorList(context).borderColor, textColor: black87Color, text: "No", onTap: () => context.pop()),

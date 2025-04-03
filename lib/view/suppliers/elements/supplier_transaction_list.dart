@@ -37,7 +37,7 @@ class SupplierTransactionList extends HookConsumerWidget {
                               builder: (context) => DeletePopup(
                                     title: "Are you sure about deleting this transaction?",
                                     onYes: () {
-                                      ref.read(transactionVMProvider.notifier).delete(transaction);
+                                      ref.read(transactionVMProvider.notifier).delete(transaction, isSupplier: true);
                                     },
                                   ));
                         },
@@ -46,6 +46,7 @@ class SupplierTransactionList extends HookConsumerWidget {
                             showDialog(
                                 context: context,
                                 builder: (context) => TransactionPopup(
+                                      isSupplier: true,
                                       youGot: !transaction.toGet,
                                       amountModel: transaction,
                                       onSave: (p0) async {
@@ -84,7 +85,7 @@ class SupplierTransactionList extends HookConsumerWidget {
                                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w700,
-                                              color: redColor,
+                                              color: greenColor,
                                             ),
                                       ),
                                     if (!transaction.toGet)
@@ -111,7 +112,7 @@ class SupplierTransactionList extends HookConsumerWidget {
                                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w700,
-                                              color: greenColor,
+                                              color: redColor,
                                             ),
                                       ),
                                     if (transaction.toGet)

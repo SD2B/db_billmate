@@ -1,3 +1,4 @@
+import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,15 +24,17 @@ class ItemTableHeaders extends HookWidget {
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
               ),
               if (onTap != null)
-                IconButton(
-                  onPressed: () {
+                CustomIconButton(
+                  shape: BoxShape.circle,
+                  icon: Icons.edit_rounded,
+                  iconSize: 15,
+                  buttonSize: 30,
+                  buttonColor: transparentColor,
+                  iconColor: appPrimary,
+                  onTap: () {
                     isEditing.value = !isEditing.value;
                     onTap!(isEditing.value);
                   },
-                  icon: const Icon(
-                    Icons.edit_rounded,
-                    size: 15,
-                  ),
                 ),
             ],
           ),

@@ -17,7 +17,7 @@ class DashboardVM extends AsyncNotifier<List<UiModel>> {
       state = AsyncValue.data([]);
       state = AsyncValue.loading();
       List<UiModel> data = [...await getTotalGetAndGive()];
-      state = AsyncValue.data([]);
+      state = AsyncValue.data(data);
       return data;
     } catch (e) {
       qp(e);

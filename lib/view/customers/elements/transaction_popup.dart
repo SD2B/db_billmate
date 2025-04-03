@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 
 class TransactionPopup extends HookConsumerWidget {
   final bool youGot;
+  final bool isSupplier;
   final TransactionModel? amountModel;
   final Function(TransactionModel) onSave;
 
@@ -21,6 +22,7 @@ class TransactionPopup extends HookConsumerWidget {
     required this.youGot,
     this.amountModel,
     required this.onSave,
+    this.isSupplier = false,
   });
 
   @override
@@ -49,13 +51,13 @@ class TransactionPopup extends HookConsumerWidget {
               Container(
                 width: 280,
                 decoration: BoxDecoration(
-                  color: youGot ? greenColor : redColor,
+                  color: youGot ? (isSupplier ? redColor : greenColor) : (isSupplier ? greenColor : redColor),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Center(
                   child: Text(
-                    "You Gave",
+                    youGot ? (isSupplier ? "You Bought" : "You Got") : "You gave",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w500,
                           fontSize: 14,

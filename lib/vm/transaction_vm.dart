@@ -1,3 +1,4 @@
+import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
@@ -53,27 +54,31 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
       }
       //if the transaction is saved
       if (res) {
-        //get the transactions
-        await get(where: {"customer_id": endUser.id}, noLoad: true);
         //get the new end user
-        EndUserModel newEndUser;
-        if (isSupplier) {
-          //get the supplier
-          newEndUser = (await ref.read(supplierVMProvider.notifier).singleGet(endUser.id ?? 0));
-          //set the new supplier
-          ref.read(tempSupplierProvider.notifier).state = newEndUser;
-        } else {
-          //get the customer
-          newEndUser = (await ref.read(customerVMProvider.notifier).singleGet(endUser.id ?? 0));
-          //set the new customer
-          ref.read(tempCustomerProvider.notifier).state = newEndUser;
-        }
+        await getNewEndUser(isSupplier, endUser.id ?? 0);
       }
       return res;
     } catch (e) {
       qp(e, "transactionSaveError");
       state = AsyncValue.data(state.value ?? []);
       return false;
+    }
+  }
+
+  Future<void> getNewEndUser(bool isSupplier, int userId) async {
+    await get(where: {"customer_id": userId}, noLoad: true);
+
+    EndUserModel newEndUser;
+    if (isSupplier) {
+      //get the supplier
+      newEndUser = (await ref.read(supplierVMProvider.notifier).singleGet(userId));
+      //set the new supplier
+      ref.read(tempSupplierProvider.notifier).state = newEndUser;
+    } else {
+      //get the customer
+      newEndUser = (await ref.read(customerVMProvider.notifier).singleGet(userId));
+      //set the new customer
+      ref.read(tempCustomerProvider.notifier).state = newEndUser;
     }
   }
 
@@ -111,9 +116,17 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
     }
   }
 
-  Future closeAccount(int id) async {
-    await TransactionRepo.closeAccount(id);
-    // await get(where: {"customer_id": id});
+  Future closeAccount(int id, TransactionModel model, {bool isSupplier = false}) async {
+    try {
+      final res = await TransactionRepo.closeAccount(model);
+      if (res) {
+        SDToast.successToast(description: "Account closed successfully");
+        await getNewEndUser(isSupplier, model.customerId ?? 0);
+      }
+    } catch (e) {
+      SDToast.errorToast(description: "Error closing account");
+      qp(e, "transactionCloseAccountError");
+    }
   }
 
   Future<bool> delete(TransactionModel model, {bool isSupplier = false}) async {

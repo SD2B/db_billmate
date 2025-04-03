@@ -29,6 +29,7 @@ class AddSupplierTransactions extends HookConsumerWidget {
             showDialog(
                 context: context,
                 builder: (context) => TransactionPopup(
+                      isSupplier: true,
                       youGot: false,
                       onSave: (p0) async {
                         TransactionModel model = p0.copyWith(customerId: tempSupplier.state.id);
@@ -37,17 +38,18 @@ class AddSupplierTransactions extends HookConsumerWidget {
                       },
                     ));
           },
-          buttonColor: redColor,
+          buttonColor: greenColor,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor),
         ),
         CircleAvatar(radius: 18, backgroundColor: black45Color, child: CircleAvatar(radius: 14, backgroundColor: black54Color, child: CircleAvatar(radius: 10, backgroundColor: black87Color))),
         CustomButton(
           width: 200,
-          text: "You Got",
+          text: "You Bought",
           onTap: () {
             showDialog(
                 context: context,
                 builder: (context) => TransactionPopup(
+                      isSupplier: true,
                       youGot: true,
                       onSave: (p0) async {
                         TransactionModel model = p0.copyWith(customerId: tempSupplier.state.id);
@@ -56,7 +58,7 @@ class AddSupplierTransactions extends HookConsumerWidget {
                       },
                     ));
           },
-          buttonColor: greenColor,
+          buttonColor: redColor,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor),
         ),
       ],

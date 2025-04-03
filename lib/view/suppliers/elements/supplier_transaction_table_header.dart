@@ -25,7 +25,7 @@ class SupplierTransactionTableHeader extends HookWidget {
           VerticalDivider(),
           Expanded(child: Center(child: Text("You Gave"))),
           VerticalDivider(),
-          Expanded(child: Center(child: Text("You Got"))),
+          Expanded(child: Center(child: Text("You Bought"))),
         ],
       ),
     );
