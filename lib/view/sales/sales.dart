@@ -242,11 +242,16 @@ class Sales extends HookConsumerWidget {
             TypeAheadField<ItemModel>(
               suggestionsCallback: (search) async {
                 List<ItemModel> items = await ref.read(itemVMProvider.notifier).get(search: {"name": search});
-
                 return items;
               },
               builder: (context, controller, focusNode) {
                 itemFocus = focusNode;
+                itemFocus.addListener(() {
+                  if (customerFocus.hasFocus) {
+                    itemNameController.text = " ";
+                    itemNameController.text = "";
+                  }
+                });
                 return CustomTextField(
                   width: 300,
                   focusNode: itemFocus,
@@ -285,6 +290,10 @@ class Sales extends HookConsumerWidget {
                   tileColor: whiteColor,
                   title: Text(item.name ?? ""),
                   subtitle: Text(pricePer),
+                  trailing: Text(
+                    item.stockCount != null ? "${item.stockCount} ${item.unit}" : "0.00",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, fontWeight: FontWeight.w700, color: ColorCode.colorList(context).primary),
+                  ),
                 );
               },
               emptyBuilder: (context) => Column(
@@ -600,8 +609,24 @@ class Sales extends HookConsumerWidget {
                   }
                 },
               ),
-              CustomButton(width: 110, buttonColor: blackColor, textColor: whiteColor, text: updateBillModel?.id != null ? "Update & Print" : "Save & Print", onTap: () {}),
-              CustomButton(width: 100, buttonColor: ColorCode.colorList(context).borderColor, textColor: blackColor, text: "Clear", onTap: () {}),
+              CustomButton(
+                width: 110,
+                buttonColor: blackColor,
+                textColor: whiteColor,
+                text: updateBillModel?.id != null ? "Update & Print" : "Save & Print",
+                onTap: () {},
+              ),
+              CustomButton(
+                width: 100,
+                buttonColor: ColorCode.colorList(context).borderColor,
+                textColor: blackColor,
+                text: "Clear",
+                onTap: () {
+                  reset();
+                  ref.read(invoiceVMProvider.notifier).getInvNo();
+                  
+                },
+              ),
             ],
           )
         ]

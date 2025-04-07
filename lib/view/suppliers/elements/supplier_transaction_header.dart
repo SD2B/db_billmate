@@ -2,7 +2,6 @@ import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/view/customers/elements/reminder_pop.dart';
 import 'package:db_billmate/view/suppliers/add_supplier_popup.dart';
 import 'package:db_billmate/view/suppliers/elements/supplier_account_close_popup.dart';
 import 'package:db_billmate/vm/supplier_vm.dart';
@@ -12,9 +11,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SupplierTransactionHeader extends HookConsumerWidget {
-  const SupplierTransactionHeader({
-    super.key,
-  });
+  const SupplierTransactionHeader({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

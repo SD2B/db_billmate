@@ -1,12 +1,9 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/header_label.dart';
+import 'package:db_billmate/common_widgets/show_custom_dialog.dart';
 import 'package:db_billmate/constants/colors.dart';
-import 'package:db_billmate/helpers/print_helper.dart';
+import 'package:db_billmate/helpers/print_helper/print_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
-import 'package:db_billmate/helpers/send_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:db_billmate/view/sales/bill_items_header.dart';
@@ -17,10 +14,8 @@ import 'package:db_billmate/view/stock/item_table_values.dart';
 import 'package:db_billmate/vm/customer_vm.dart';
 import 'package:db_billmate/vm/item_vm.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:widgets_to_image/widgets_to_image.dart';
 
 class InvoiceViewPop extends HookConsumerWidget {
   final BillModel model;
@@ -192,8 +187,12 @@ class InvoiceViewPop extends HookConsumerWidget {
                         onTap: () {
                           ref.read(tempItemListProvider.notifier).state = model.items ?? [];
                           ref.read(billCustomerProvider.notifier).state = EndUserModel(id: model.customerId, name: model.customerName, balanceAmount: model.ob ?? "0.00");
-                          showDialog(
+                          showCustomDialog(
                               context: context,
+                              onClosed: () {
+                                ref.read(tempItemListProvider.notifier).state = [];
+                                ref.read(billCustomerProvider.notifier).state = EndUserModel();
+                              },
                               builder: (context) => AlertDialog(
                                     backgroundColor: whiteColor,
                                     contentPadding: EdgeInsets.all(30),
@@ -216,7 +215,7 @@ class InvoiceViewPop extends HookConsumerWidget {
                       CustomButton(
                         text: "Share",
                         onTap: () {
-                          showDialog(context: context, builder: (context) => InvoiceViewSharePop(model: model));
+                          showCustomDialog(context: context, builder: (context) => InvoiceViewSharePop(model: model));
                         },
                         buttonColor: appSecondary,
                         textColor: blackColor,

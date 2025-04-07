@@ -115,7 +115,7 @@ List<GoRoute> scaffoldRoutes = [
     path: RouteEnum.sales.name,
     name: RouteEnum.sales.name,
     parentNavigatorKey: ConstantData.navigatorKey,
-    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Sales())),
+    pageBuilder: (context, state) => NoTransitionPage(child: CustomScaffold(child: const Sales(isUpdate: false))),
   ),
   GoRoute(
     path: RouteEnum.salesReport.name,

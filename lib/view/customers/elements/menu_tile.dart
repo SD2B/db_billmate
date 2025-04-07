@@ -2,6 +2,7 @@ import 'package:db_billmate/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class MenuTile extends PopupMenuItem<int> {
+  // ignore: use_super_parameters
   MenuTile({
     Key? key,
     required int value,
