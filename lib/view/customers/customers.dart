@@ -23,8 +23,10 @@ class Customers extends HookConsumerWidget {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomersHeader(searchController: searchController, selected: selected),
+        // Text("No.of customers: ${customerList.value.length}"),
         20.height,
         ref.watch(customerVMProvider).when(
               data: (dataList) {

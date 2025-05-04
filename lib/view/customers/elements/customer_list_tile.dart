@@ -40,11 +40,21 @@ class CustomerListTile extends HookConsumerWidget {
                   ),
             ),
           ),
-          title: Text(
-            model.name ?? "",
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                model.name ?? "",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              Text(
+                "id:#${model.id}",
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500, fontSize: 12, color: greyColor),
+              ),
+            ],
           ),
           subtitle: ref.watch(customerQuickTransaction)
               ? Column(
