@@ -70,7 +70,7 @@ class Sales extends HookConsumerWidget {
 
     void getItemTotalPrice() {
       final itemPriceTotal = (double.tryParse(unitPriceController.text) ?? 0) * (double.tryParse(quantityController.text) ?? 1);
-      priceController.text = "$itemPriceTotal";
+      priceController.text = (itemPriceTotal).toStringAsFixed(1);
     }
 
     void addToItemLst() {
