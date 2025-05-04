@@ -18,8 +18,9 @@ class ReminderPop extends HookWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsToImageController controller = WidgetsToImageController();
-    final customTextController = useTextEditingController(text: "Please clear it out as soon as you can.");
-    final customText = useState("Please clear it out as soon as you can.");
+    final isDue = useState<bool>((model.balanceAmount.contains("-") || (double.parse(model.balanceAmount) == 0)) ? false : true);
+    final customText = useState(isDue.value ? "Please clear it out as soon as you can." : "");
+    final customTextController = useTextEditingController(text: customText.value);
     return AlertDialog(
       backgroundColor: whiteColor,
       content: Column(
@@ -42,7 +43,7 @@ class ReminderPop extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Dear Customer, you have a due amount of",
+                      isDue.value ? "Dear Customer, you have a due amount of" : "Dear Customer, your wallet have",
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -53,7 +54,7 @@ class ReminderPop extends HookWidget {
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontSize: 25,
                             fontWeight: FontWeight.w900,
-                            color: redColor,
+                            color: isDue.value ? redColor : greenColor,
                           ),
                     ),
                     10.height,

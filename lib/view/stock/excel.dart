@@ -1,7 +1,7 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/constants/colors.dart';
-import 'package:db_billmate/helpers/file_picker_helper.dart';
+import 'package:db_billmate/helpers/excel_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/item_model.dart';
@@ -40,13 +40,17 @@ class ExcelScreen extends HookConsumerWidget {
                   textColor: whiteColor,
                   text: "Import",
                   onTap: () async {
-                    final data = await FilePickerHelper.importExcel(excelType: excelType);
-                    if (excelType == ExcelType.items && data is List<ItemModel>) {
-                      excelData.value = data;
-                    } else if (excelType == ExcelType.customers && data is List<EndUserModel>) {
-                      excelData.value = data;
-                    } else {
-                      SDToast.showToast(description: "Invalid data in Excel", type: ToastificationType.error);
+                    try {
+                      final data = await ExcelHelper.importExcel(excelType: excelType);
+                      if (excelType == ExcelType.items && data is List<ItemModel>) {
+                        excelData.value = data;
+                      } else if (excelType == ExcelType.customers && data is List<EndUserModel>) {
+                        excelData.value = data;
+                      } else {
+                        SDToast.errorToast(description: "Invalid data format in the file");
+                      }
+                    } catch (e) {
+                      SDToast.errorToast(description: "Error importing file");
                     }
                   },
                 ),
@@ -55,20 +59,24 @@ class ExcelScreen extends HookConsumerWidget {
                   height: 45,
                   buttonColor: blackColor,
                   textColor: whiteColor,
-                  text: "Save items",
+                  text: (excelType == ExcelType.items) ? "Save items" : "Save customers",
                   onTap: () async {
-                    if (excelType == ExcelType.items) {
-                      List<ItemModel> data = excelData.value as List<ItemModel>;
-                      bool res = await ref.read(itemVMProvider.notifier).multiSave(data);
-                      if (res) {
-                        SDToast.showToast(description: "Successfully added these items", type: ToastificationType.success);
+                    try {
+                      if (excelType == ExcelType.items) {
+                        List<ItemModel> data = excelData.value as List<ItemModel>;
+                        bool res = await ref.read(itemVMProvider.notifier).multiSave(data);
+                        if (res) {
+                          SDToast.showToast(description: "Successfully added these items", type: ToastificationType.success);
+                        }
+                      } else {
+                        List<EndUserModel> data = excelData.value as List<EndUserModel>;
+                        bool res = await ref.read(customerVMProvider.notifier).multiSave(data);
+                        if (res) {
+                          SDToast.showToast(description: "Successfully added these customers", type: ToastificationType.success);
+                        }
                       }
-                    } else {
-                      List<EndUserModel> data = excelData.value as List<EndUserModel>;
-                      bool res = await ref.read(customerVMProvider.notifier).multiSave(data);
-                      if (res) {
-                        SDToast.showToast(description: "Successfully added these customers", type: ToastificationType.success);
-                      }
+                    } catch (e) {
+                      SDToast.errorToast(description: "Error saving data");
                     }
                   },
                 ),

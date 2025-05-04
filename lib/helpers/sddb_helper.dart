@@ -20,6 +20,11 @@ extension ContextExtensions on BuildContext {
   double height() => MediaQuery.of(this).size.height;
 }
 
+extension NegativeDouble on double {
+  double toNegative() => this > 0 ? -this : this;
+}
+
+
 extension ShortNumberFormat on double {
   String toShortForm({int minDigits = 4}) {
     String valueStr = toStringAsFixed(0); // Convert to string without decimals

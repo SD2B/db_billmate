@@ -4,6 +4,8 @@ import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/common_widgets/scaling_text.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
+import 'package:db_billmate/helpers/excel_helper.dart';
+import 'package:db_billmate/helpers/file_picker_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/stock/add_item_popup.dart';
 import 'package:db_billmate/view/stock/excel.dart';
@@ -29,7 +31,16 @@ class Stock extends HookConsumerWidget {
         Row(
           spacing: 10,
           children: [
-            CustomTextField(width: 300, height: 45, controller: searchController, label: "Search...", hintText: "Search..."),
+            CustomTextField(
+              width: 300,
+              height: 45,
+              controller: searchController,
+              label: "Search...",
+              hintText: "Search...",
+              onChanged: (search) async {
+                await ref.read(itemVMProvider.notifier).get(search: {"name": search});
+              },
+            ),
             CustomIconButton(
               buttonSize: 45,
               icon: Icons.tune_rounded,
@@ -62,7 +73,7 @@ class Stock extends HookConsumerWidget {
               width: 150,
               height: 45,
               text: "⬆️ Export to excel",
-              onTap: () => context.pushNamed(RouteEnum.excel.name, extra: ExcelType.items),
+              onTap: () => ExcelHelper.exportToExcel(ref.watch(itemVMProvider).value ?? []),
               buttonColor: ColorCode.colorList(context).primary,
               textColor: whiteColor,
             ),

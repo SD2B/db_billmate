@@ -61,7 +61,7 @@ class InvoiceVM extends AsyncNotifier<List<BillModel>> {
 
   Future<void> getInvNo() async {
     try {
-      ref.read(invNoProvider.notifier).state = await LocalStorage.getLength(DBTable.invoice);
+      ref.read(invNoProvider.notifier).state = await LocalStorage.getLength(DBTable.invoice) + 1;
     } catch (e) {
       qp(e);
     }

@@ -1,3 +1,4 @@
+import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/delete_popup.dart';
 import 'package:db_billmate/common_widgets/loading_widget.dart';
 import 'package:db_billmate/constants/colors.dart';
@@ -80,13 +81,41 @@ class SupplierTransactionList extends HookConsumerWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     if (transaction.toGet)
-                                      Text(
-                                        "${transaction.amount}",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              color: greenColor,
-                                            ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            "${transaction.amount}",
+                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: greenColor),
+                                          ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            spacing: 10,
+                                            children: [
+                                              if (transaction.transactionType == TransactionType.normal)
+                                                CustomButton(
+                                                  width: 50,
+                                                  height: 25,
+                                                  text: "Edit",
+                                                  buttonColor: appSecondary,
+                                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: appPrimary),
+                                                  onTap: () {
+                                                    if (transaction.transactionType == TransactionType.normal) {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) => TransactionPopup(
+                                                                isSupplier: true,
+                                                                youGot: !transaction.toGet,
+                                                                amountModel: transaction,
+                                                                onSave: (p0) async {
+                                                                  await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0, isSupplier: true);
+                                                                },
+                                                              ));
+                                                    }
+                                                  },
+                                                ),
+                                            ],
+                                          )
+                                        ],
                                       ),
                                     if (!transaction.toGet)
                                       Text(
@@ -107,13 +136,41 @@ class SupplierTransactionList extends HookConsumerWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     if (!transaction.toGet)
-                                      Text(
-                                        transaction.toGet ? "" : "${transaction.amount}",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              color: redColor,
-                                            ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            transaction.toGet ? "" : "${transaction.amount}",
+                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: redColor),
+                                          ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            spacing: 10,
+                                            children: [
+                                              if (transaction.transactionType == TransactionType.normal)
+                                                CustomButton(
+                                                  width: 50,
+                                                  height: 25,
+                                                  text: "Edit",
+                                                  buttonColor: appSecondary,
+                                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: appPrimary),
+                                                  onTap: () {
+                                                    if (transaction.transactionType == TransactionType.normal) {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) => TransactionPopup(
+                                                                isSupplier: true,
+                                                                youGot: !transaction.toGet,
+                                                                amountModel: transaction,
+                                                                onSave: (p0) async {
+                                                                  await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0, isSupplier: true);
+                                                                },
+                                                              ));
+                                                    }
+                                                  },
+                                                ),
+                                            ],
+                                          )
+                                        ],
                                       ),
                                     if (transaction.toGet)
                                       Text(

@@ -19,7 +19,7 @@ class ItemRepo {
   static Future<ResponseModel> save(ItemModel model) async {
     int? res;
     ResponseModel response = ResponseModel();
-    model = model.copyWith(modified: DateTime.now());
+    model = model.copyWith(modified: DateTime.now(), purchasePrice: (model.purchasePrice?.isEmpty == true || model.purchasePrice == null) ? null : model.purchasePrice);
     try {
       if (model.id != null) {
         res = await LocalStorage.update(DBTable.items, model.toJson(), where: {"id": model.id});
@@ -37,7 +37,7 @@ class ItemRepo {
       final tempList = await get();
       for (ItemModel model in itemList) {
         if (tempList.where((e) => e.name?.toLowerCase() == model.name?.toLowerCase()).toList().isEmpty) {
-          model = model.copyWith(modified: DateTime.now());
+          model = model.copyWith(modified: DateTime.now(), billId: null, quantity: null, billPrice: null, category: (model.category?.isEmpty == true || model.category == null) ? null : model.category, purchasePrice: (model.purchasePrice?.isEmpty == true || model.purchasePrice == null) ? null : model.purchasePrice);
           await LocalStorage.save(DBTable.items, model.toJson());
         }
       }

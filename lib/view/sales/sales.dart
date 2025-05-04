@@ -5,6 +5,7 @@ import 'package:db_billmate/common_widgets/custom_text_field.dart';
 import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/form_helpers.dart';
+import 'package:db_billmate/helpers/print_helper/print_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/item_model.dart';
@@ -73,6 +74,7 @@ class Sales extends HookConsumerWidget {
     }
 
     void addToItemLst() {
+      qp(billItem);
       if (itemNameController.text.isNotEmpty && quantityController.text.isNotEmpty && unitPriceController.text.isNotEmpty) {
         if (billItem.billId != null) {
           // Update the existing item in the list
@@ -101,7 +103,6 @@ class Sales extends HookConsumerWidget {
 
         // Reset the temp item
         ref.read(tempItemProvider.notifier).state = ItemModel();
-
         // Request focus for the next item
         itemFocus.requestFocus();
       }
@@ -173,10 +174,71 @@ class Sales extends HookConsumerWidget {
       return null;
     }, [billItem]);
 
+    Future<bool> processSave({bool print = false}) async {
+      if (billCustomer.id == null) {
+        SDToast.showToast(description: "Select a customer", type: ToastificationType.warning);
+        return false;
+      }
+
+      List<Future<void>> itemSaveTasks = [];
+      for (int i = 0; i < billItemList.length; i++) {
+        if (billItemList[i].id == null) {
+          qp("1111111111111");
+          ItemModel item = ItemModel(
+            name: billItemList[i].name,
+            salePrice: billItemList[i].salePrice,
+            unit: billItemList[i].unit,
+            stockIn: billItemList[i].quantity,
+            stockOut: billItemList[i].quantity,
+            stockCount: "0.00",
+            modified: DateTime.now(),
+          );
+          itemSaveTasks.add(ref.read(itemVMProvider.notifier).save(item).then((res) {
+            billItemList[i] = billItemList[i].copyWith(id: res.id);
+          }));
+        } else {
+          qp("22222222222222");
+          itemSaveTasks.add(ItemRepo.updateStock(
+            billItemList[i].quantity ?? "0.00",
+            (double.parse(billItemList[i].stockCount ?? "0.00") - double.parse(billItemList[i].quantity ?? "0.00")).toString(),
+            billItemList[i].id.toString(),
+          ).then((res) {
+            // billItemList[i] = billItemList[i].copyWith(id: res.id);
+          }));
+        }
+      }
+
+      await Future.wait(itemSaveTasks);
+
+      final data = saveToBillModel();
+      bool res = await ref.read(invoiceVMProvider.notifier).save(data);
+
+      if (res) {
+        if (print) {
+          PrintHelper.printInvoice(context, ref, data);
+        }
+        SDToast.showToast(
+          description: updateBillModel?.id != null ? "Invoice Updated Successfully" : "Invoice Generated Successfully",
+          type: ToastificationType.success,
+        );
+
+        reset();
+        ref.read(invoiceVMProvider.notifier).getInvNo();
+        if (isUpdate) {
+          context.pop();
+        }
+      } else {
+        SDToast.showToast(description: "Contact support immediately", type: ToastificationType.error);
+      }
+
+      return res;
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Text("test").onTap(() => qp(billItemList)),
         Row(
           spacing: 10,
           children: [
@@ -311,7 +373,9 @@ class Sales extends HookConsumerWidget {
                 ],
               ),
               onSelected: (item) {
+                qp(item, "111111111");
                 ref.read(tempItemProvider.notifier).state = item;
+                qp(billItem);
               },
             ),
             CustomTextField(
@@ -559,54 +623,7 @@ class Sales extends HookConsumerWidget {
                 text: updateBillModel?.id != null ? "Update" : "Save",
                 isLoading: ref.watch(invoiceVMProvider).isLoading,
                 onTap: () async {
-                  if (billCustomer.id == null) {
-                    SDToast.showToast(description: "Select a customer", type: ToastificationType.warning);
-                    return;
-                  }
-
-                  // Process and save items first
-                  List<Future<void>> itemSaveTasks = [];
-
-                  for (int i = 0; i < billItemList.length; i++) {
-                    if (billItemList[i].id == null) {
-                      ItemModel item = ItemModel(
-                        name: billItemList[i].name,
-                        salePrice: billItemList[i].salePrice,
-                        unit: billItemList[i].unit,
-                        stockIn: billItemList[i].quantity,
-                        stockOut: billItemList[i].quantity,
-                        stockCount: "0.00",
-                        modified: DateTime.now(),
-                      );
-                      itemSaveTasks.add(ref.read(itemVMProvider.notifier).save(item).then((res) {
-                        billItemList[i] = billItemList[i].copyWith(id: res.id);
-                      }));
-                    } else {
-                      itemSaveTasks.add(ItemRepo.updateStock(billItemList[i].quantity ?? "0.00", (double.parse(billItemList[i].stockCount ?? "0.00") - double.parse(billItemList[i].quantity ?? "0.00")).toString(), billItemList[i].id.toString()).then((res) {
-                        billItemList[i] = billItemList[i].copyWith(id: res.id);
-                      }));
-                    }
-                  }
-
-                  await Future.wait(itemSaveTasks); // Ensure all items are processed before moving forward
-
-                  final data = saveToBillModel();
-                  bool res = await ref.read(invoiceVMProvider.notifier).save(data);
-
-                  if (res) {
-                    SDToast.showToast(
-                      description: updateBillModel?.id != null ? "Invoice Updated Successfully" : "Invoice Generated Successfully",
-                      type: ToastificationType.success,
-                    );
-
-                    reset();
-                    ref.read(invoiceVMProvider.notifier).getInvNo();
-                    if (isUpdate) {
-                      context.pop();
-                    }
-                  } else {
-                    SDToast.showToast(description: "Contact support immediately", type: ToastificationType.error);
-                  }
+                  processSave();
                 },
               ),
               CustomButton(
@@ -614,7 +631,9 @@ class Sales extends HookConsumerWidget {
                 buttonColor: blackColor,
                 textColor: whiteColor,
                 text: updateBillModel?.id != null ? "Update & Print" : "Save & Print",
-                onTap: () {},
+                onTap: () {
+                  processSave(print: true);
+                },
               ),
               CustomButton(
                 width: 100,
@@ -624,7 +643,6 @@ class Sales extends HookConsumerWidget {
                 onTap: () {
                   reset();
                   ref.read(invoiceVMProvider.notifier).getInvNo();
-                  
                 },
               ),
             ],

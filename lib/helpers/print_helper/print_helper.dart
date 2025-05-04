@@ -21,6 +21,7 @@ class PrintHelper {
   static final itemText = pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9);
   static final amountText = pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 10);
   static final impAmountText = pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 11);
+  static final trnxImpAmountText = pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 20);
   static final impAmountTextBold = pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 11);
   static final valueText = pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 7);
   static final quoteText = pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 9);
@@ -296,10 +297,16 @@ class PrintHelper {
 
                   // // Totals
                   pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
-                      pw.Text(model.toGet ? "Given" : 'Recieved:', style: impAmountText),
-                      pw.Text(double.parse("${model.amount}").toStringAsFixed(2), style: impAmountText),
+                      pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        children: [
+                          pw.Text(model.toGet ? "Given" : 'Recieved:', style: impAmountText),
+                          pw.Text(double.parse("${model.amount}").toStringAsFixed(2), style: trnxImpAmountText),
+                        ],
+                      ),
                     ],
                   ),
 
@@ -307,11 +314,19 @@ class PrintHelper {
                   pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
-                      pw.Text('----ThankYou----', style: impAmountText),
+                      pw.Text('----Thank You----', style: impAmountText),
                     ],
                   ),
                   pw.SizedBox(height: 10),
                   pw.Divider(thickness: .000000000000000000000000000000000000000000000001),
+                   pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [
+                      pw.Text('----------------------', style: impAmountText),
+                    ],
+                  ),
+                  pw.SizedBox(height: 10),
+                 
                 ],
               ));
         },

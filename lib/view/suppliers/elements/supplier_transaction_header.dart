@@ -1,6 +1,7 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/constants/colors.dart';
+import 'package:db_billmate/helpers/print_helper/print_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/view/suppliers/add_supplier_popup.dart';
 import 'package:db_billmate/view/suppliers/elements/supplier_account_close_popup.dart';
@@ -9,6 +10,7 @@ import 'package:db_billmate/vm/transaction_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class SupplierTransactionHeader extends HookConsumerWidget {
   const SupplierTransactionHeader({super.key});
@@ -115,6 +117,21 @@ class SupplierTransactionHeader extends HookConsumerWidget {
                 startDate.value = range.start;
                 endDate.value = range.end;
                 ref.read(transactionVMProvider.notifier).get(where: {"customer_id": tempSupplier.state.id}, dateRange: range);
+              }
+            },
+          ),
+          VerticalDivider(),
+          CustomIconButton(
+            tooltipMsg: "Print",
+            shape: BoxShape.rectangle,
+            icon: Icons.print_rounded,
+            buttonSize: 45,
+            buttonColor: black87Color,
+            iconColor: whiteColor,
+            iconSize: 20,
+            onTap: () {
+              if (ref.read(transactionVMProvider).value?.isNotEmpty == true) {
+                PrintHelper.printFullTransaction(context, ref, (ref.watch(transactionVMProvider).value ?? []).reversed.toList(), ref.watch(tempSupplierProvider).name ?? "", ref.watch(tempSupplierProvider).balanceAmount, "${DateFormat("dd/MM/yyyy").format(startDate.value)} - ${DateFormat("dd/MM/yyyy").format(endDate.value)}");
               }
             },
           ),

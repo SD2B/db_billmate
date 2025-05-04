@@ -213,6 +213,8 @@ class InvoiceViewPop extends HookConsumerWidget {
                         width: 100,
                       ),
                       CustomButton(
+                        disable: true,
+                        disableMessage: "This feature is not available yet",
                         text: "Share",
                         onTap: () {
                           showCustomDialog(context: context, builder: (context) => InvoiceViewSharePop(model: model));

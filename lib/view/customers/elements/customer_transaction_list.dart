@@ -1,7 +1,6 @@
 import 'package:db_billmate/common_widgets/custom_button.dart';
 import 'package:db_billmate/common_widgets/delete_popup.dart';
 import 'package:db_billmate/common_widgets/loading_widget.dart';
-import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/print_helper/print_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
@@ -45,21 +44,6 @@ class CustomerTransactionList extends HookConsumerWidget {
                                     },
                                   ));
                         },
-                        onLongPress: () {
-                          if (transaction.transactionType == TransactionType.normal) {
-                            showDialog(
-                                context: context,
-                                builder: (context) => TransactionPopup(
-                                      youGot: !transaction.toGet,
-                                      amountModel: transaction,
-                                      onSave: (p0) async {
-                                        await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0);
-                                      },
-                                    ));
-                          } else {
-                            SDToast.warningToast(title: "Cannot edit this transaction", description: "This is an invoice transaction and cannot be edited.");
-                          }
-                        },
                         child: Container(
                           width: 300,
                           height: 70,
@@ -89,11 +73,7 @@ class CustomerTransactionList extends HookConsumerWidget {
                                         children: [
                                           Text(
                                             "${transaction.amount}",
-                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: redColor,
-                                                ),
+                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: redColor),
                                           ),
                                           Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -108,15 +88,7 @@ class CustomerTransactionList extends HookConsumerWidget {
                                                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: appPrimary),
                                                   onTap: () {
                                                     if (transaction.transactionType == TransactionType.normal) {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (context) => TransactionPopup(
-                                                                youGot: !transaction.toGet,
-                                                                amountModel: transaction,
-                                                                onSave: (p0) async {
-                                                                  await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0);
-                                                                },
-                                                              ));
+                                                      showDialog(context: context, builder: (context) => TransactionPopup(youGot: !transaction.toGet, amountModel: transaction, onSave: (p0) async => await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0)));
                                                     }
                                                   },
                                                 ),
@@ -126,9 +98,7 @@ class CustomerTransactionList extends HookConsumerWidget {
                                                 text: "Print",
                                                 buttonColor: appSecondary,
                                                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: appPrimary),
-                                                onTap: () {
-                                                  PrintHelper.printTransaction(context, ref, transaction, ref.watch(tempCustomerProvider).name ?? "");
-                                                },
+                                                onTap: () => PrintHelper.printTransaction(context, ref, transaction, ref.watch(tempCustomerProvider).name ?? ""),
                                               ),
                                             ],
                                           )
@@ -137,11 +107,7 @@ class CustomerTransactionList extends HookConsumerWidget {
                                     if (!transaction.toGet)
                                       Text(
                                         transaction.description ?? "",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                              color: ColorCode.colorList(context).primary,
-                                            ),
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10, fontWeight: FontWeight.w400, color: ColorCode.colorList(context).primary),
                                       ),
                                   ],
                                 ),
@@ -157,11 +123,7 @@ class CustomerTransactionList extends HookConsumerWidget {
                                         children: [
                                           Text(
                                             transaction.toGet ? "" : "${transaction.amount}",
-                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: greenColor,
-                                                ),
+                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: greenColor),
                                           ),
                                           Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -181,9 +143,7 @@ class CustomerTransactionList extends HookConsumerWidget {
                                                           builder: (context) => TransactionPopup(
                                                                 youGot: !transaction.toGet,
                                                                 amountModel: transaction,
-                                                                onSave: (p0) async {
-                                                                  await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0);
-                                                                },
+                                                                onSave: (p0) async => await ref.read(transactionVMProvider.notifier).updateTransactionModel(p0),
                                                               ));
                                                     }
                                                   },
@@ -194,9 +154,7 @@ class CustomerTransactionList extends HookConsumerWidget {
                                                 text: "Print",
                                                 buttonColor: appSecondary,
                                                 style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: appPrimary),
-                                                onTap: () {
-                                                  PrintHelper.printTransaction(context, ref, transaction, ref.watch(tempCustomerProvider).name ?? "");
-                                                },
+                                                onTap: () => PrintHelper.printTransaction(context, ref, transaction, ref.watch(tempCustomerProvider).name ?? ""),
                                               ),
                                             ],
                                           )
@@ -205,11 +163,7 @@ class CustomerTransactionList extends HookConsumerWidget {
                                     if (transaction.toGet)
                                       Text(
                                         transaction.description ?? "",
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                              color: ColorCode.colorList(context).primary,
-                                            ),
+                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10, fontWeight: FontWeight.w400, color: ColorCode.colorList(context).primary),
                                       ),
                                   ],
                                 ),

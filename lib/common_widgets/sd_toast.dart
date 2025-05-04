@@ -35,7 +35,7 @@ class SDToast {
   }
 
   static void infoToast({String? title, required String description}) {
-    showToast(title: title, description: description, type: ToastificationType.info);
+    showToast(title: title, description: description, type: ToastificationType.info, descriptionStyle: TextStyle(fontWeight: FontWeight.bold));
   }
 
   static void warningToast({String? title, required String description}) {

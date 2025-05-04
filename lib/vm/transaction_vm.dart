@@ -86,7 +86,8 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
     state = AsyncValue.loading();
     try {
       //get the previous transaction amount
-      double prevTransactionAmount = (await TransactionRepo.get(where: {"id": model.id})).first.amount;
+      double prevTransactionAmount = model.toGet ? (await TransactionRepo.get(where: {"id": model.id})).first.amount : (await TransactionRepo.get(where: {"id": model.id})).first.amount.toNegative();
+      double newTransactionAmount = model.toGet ? model.amount : model.amount.toNegative();
       //update the transaction
       bool res = await TransactionRepo.save(model);
       EndUserModel endUser;
@@ -95,8 +96,21 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
       } else {
         endUser = ref.read(tempCustomerProvider.notifier).state;
       }
-      //update the balance amount of the end user
-      endUser = endUser.copyWith(balanceAmount: "${(double.parse(endUser.balanceAmount) - prevTransactionAmount) + model.amount}");
+      double getNewBalance(double balance, double prevTransactionAmount, double newTransactionAmount) {
+        double newBalance = (balance - prevTransactionAmount) + newTransactionAmount;
+        return newBalance;
+      }
+
+      qp(prevTransactionAmount, "prevTransactionAmount");
+      qp(model.amount, "modelAmount");
+      qp(endUser.balanceAmount, "endUserBalanceAmount");
+      endUser = endUser.copyWith(
+        balanceAmount: "${getNewBalance(double.parse(endUser.balanceAmount), prevTransactionAmount, newTransactionAmount)}",
+      );
+      // endUser = endUser.copyWith(balanceAmount: "${(double.parse(endUser.balanceAmount) - prevTransactionAmount) + calculationAmount}");
+      qp(endUser.balanceAmount, "endUserBalanceAmount");
+      qp(endUser, "endUserBalanceAmount");
+
       //save the end user
       if (isSupplier) {
         await ref.read(supplierVMProvider.notifier).save(endUser);
