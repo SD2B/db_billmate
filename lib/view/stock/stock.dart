@@ -38,6 +38,8 @@ class Stock extends HookConsumerWidget {
               label: "Search...",
               hintText: "Search...",
               onChanged: (search) async {
+
+                
                 await ref.read(itemVMProvider.notifier).get(search: {"name": search});
               },
             ),
