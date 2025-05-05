@@ -76,6 +76,8 @@ _$BillModelImpl _$$BillModelImplFromJson(Map<String, dynamic> json) =>
       dateTime: _$JsonConverterFromJson<String, DateTime>(
           json['date_time'], const DateTimeConverter().fromJson),
       note: json['note'] as String?,
+      outTrnxId: (json['outTrnxId'] as num?)?.toInt(),
+      inTrnxId: (json['inTrnxId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$BillModelImplToJson(_$BillModelImpl instance) =>
@@ -94,4 +96,6 @@ Map<String, dynamic> _$$BillModelImplToJson(_$BillModelImpl instance) =>
       'date_time': _$JsonConverterToJson<String, DateTime>(
           instance.dateTime, const DateTimeConverter().toJson),
       'note': instance.note,
+      'outTrnxId': instance.outTrnxId,
+      'inTrnxId': instance.inTrnxId,
     };

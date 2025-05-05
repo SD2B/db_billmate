@@ -331,6 +331,7 @@ TransactionModel _$TransactionModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TransactionModel {
   int? get id => throw _privateConstructorUsedError;
+  int? get uid => throw _privateConstructorUsedError;
   @IntConverter()
   @JsonKey(name: "customer_id")
   int? get customerId => throw _privateConstructorUsedError;
@@ -364,6 +365,7 @@ abstract class $TransactionModelCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
+      int? uid,
       @IntConverter() @JsonKey(name: "customer_id") int? customerId,
       @DoubleConverter() double amount,
       String? description,
@@ -388,6 +390,7 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
   @override
   $Res call({
     Object? id = freezed,
+    Object? uid = freezed,
     Object? customerId = freezed,
     Object? amount = null,
     Object? description = freezed,
@@ -399,6 +402,10 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      uid: freezed == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
               as int?,
       customerId: freezed == customerId
           ? _value.customerId
@@ -438,6 +445,7 @@ abstract class _$$TransactionModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
+      int? uid,
       @IntConverter() @JsonKey(name: "customer_id") int? customerId,
       @DoubleConverter() double amount,
       String? description,
@@ -460,6 +468,7 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
+    Object? uid = freezed,
     Object? customerId = freezed,
     Object? amount = null,
     Object? description = freezed,
@@ -471,6 +480,10 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      uid: freezed == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
               as int?,
       customerId: freezed == customerId
           ? _value.customerId
@@ -505,6 +518,7 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
 class _$TransactionModelImpl implements _TransactionModel {
   const _$TransactionModelImpl(
       {this.id,
+      this.uid,
       @IntConverter() @JsonKey(name: "customer_id") this.customerId,
       @DoubleConverter() this.amount = 0.0,
       this.description,
@@ -518,6 +532,8 @@ class _$TransactionModelImpl implements _TransactionModel {
 
   @override
   final int? id;
+  @override
+  final int? uid;
   @override
   @IntConverter()
   @JsonKey(name: "customer_id")
@@ -542,7 +558,7 @@ class _$TransactionModelImpl implements _TransactionModel {
 
   @override
   String toString() {
-    return 'TransactionModel(id: $id, customerId: $customerId, amount: $amount, description: $description, toGet: $toGet, dateTime: $dateTime, transactionType: $transactionType)';
+    return 'TransactionModel(id: $id, uid: $uid, customerId: $customerId, amount: $amount, description: $description, toGet: $toGet, dateTime: $dateTime, transactionType: $transactionType)';
   }
 
   @override
@@ -551,6 +567,7 @@ class _$TransactionModelImpl implements _TransactionModel {
         (other.runtimeType == runtimeType &&
             other is _$TransactionModelImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.customerId, customerId) ||
                 other.customerId == customerId) &&
             (identical(other.amount, amount) || other.amount == amount) &&
@@ -565,7 +582,7 @@ class _$TransactionModelImpl implements _TransactionModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, customerId, amount,
+  int get hashCode => Object.hash(runtimeType, id, uid, customerId, amount,
       description, toGet, dateTime, transactionType);
 
   /// Create a copy of TransactionModel
@@ -588,6 +605,7 @@ class _$TransactionModelImpl implements _TransactionModel {
 abstract class _TransactionModel implements TransactionModel {
   const factory _TransactionModel(
       {final int? id,
+      final int? uid,
       @IntConverter() @JsonKey(name: "customer_id") final int? customerId,
       @DoubleConverter() final double amount,
       final String? description,
@@ -601,6 +619,8 @@ abstract class _TransactionModel implements TransactionModel {
 
   @override
   int? get id;
+  @override
+  int? get uid;
   @override
   @IntConverter()
   @JsonKey(name: "customer_id")

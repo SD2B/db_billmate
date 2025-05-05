@@ -525,6 +525,8 @@ mixin _$BillModel {
   @JsonKey(name: "date_time")
   DateTime? get dateTime => throw _privateConstructorUsedError;
   String? get note => throw _privateConstructorUsedError;
+  int? get outTrnxId => throw _privateConstructorUsedError;
+  int? get inTrnxId => throw _privateConstructorUsedError;
 
   /// Serializes this BillModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -554,7 +556,9 @@ abstract class $BillModelCopyWith<$Res> {
       String received,
       @JsonKey(name: "current_balance") String? currentBalance,
       @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
-      String? note});
+      String? note,
+      int? outTrnxId,
+      int? inTrnxId});
 }
 
 /// @nodoc
@@ -585,6 +589,8 @@ class _$BillModelCopyWithImpl<$Res, $Val extends BillModel>
     Object? currentBalance = freezed,
     Object? dateTime = freezed,
     Object? note = freezed,
+    Object? outTrnxId = freezed,
+    Object? inTrnxId = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -639,6 +645,14 @@ class _$BillModelCopyWithImpl<$Res, $Val extends BillModel>
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
               as String?,
+      outTrnxId: freezed == outTrnxId
+          ? _value.outTrnxId
+          : outTrnxId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      inTrnxId: freezed == inTrnxId
+          ? _value.inTrnxId
+          : inTrnxId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -664,7 +678,9 @@ abstract class _$$BillModelImplCopyWith<$Res>
       String received,
       @JsonKey(name: "current_balance") String? currentBalance,
       @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
-      String? note});
+      String? note,
+      int? outTrnxId,
+      int? inTrnxId});
 }
 
 /// @nodoc
@@ -693,6 +709,8 @@ class __$$BillModelImplCopyWithImpl<$Res>
     Object? currentBalance = freezed,
     Object? dateTime = freezed,
     Object? note = freezed,
+    Object? outTrnxId = freezed,
+    Object? inTrnxId = freezed,
   }) {
     return _then(_$BillModelImpl(
       id: freezed == id
@@ -747,6 +765,14 @@ class __$$BillModelImplCopyWithImpl<$Res>
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
               as String?,
+      outTrnxId: freezed == outTrnxId
+          ? _value.outTrnxId
+          : outTrnxId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      inTrnxId: freezed == inTrnxId
+          ? _value.inTrnxId
+          : inTrnxId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -767,7 +793,9 @@ class _$BillModelImpl implements _BillModel {
       this.received = "0.00",
       @JsonKey(name: "current_balance") this.currentBalance,
       @DateTimeConverter() @JsonKey(name: "date_time") this.dateTime,
-      this.note})
+      this.note,
+      this.outTrnxId,
+      this.inTrnxId})
       : _items = items;
 
   factory _$BillModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -816,10 +844,14 @@ class _$BillModelImpl implements _BillModel {
   final DateTime? dateTime;
   @override
   final String? note;
+  @override
+  final int? outTrnxId;
+  @override
+  final int? inTrnxId;
 
   @override
   String toString() {
-    return 'BillModel(id: $id, invoiceNumber: $invoiceNumber, customerId: $customerId, customerName: $customerName, items: $items, total: $total, ob: $ob, grandTotal: $grandTotal, discount: $discount, received: $received, currentBalance: $currentBalance, dateTime: $dateTime, note: $note)';
+    return 'BillModel(id: $id, invoiceNumber: $invoiceNumber, customerId: $customerId, customerName: $customerName, items: $items, total: $total, ob: $ob, grandTotal: $grandTotal, discount: $discount, received: $received, currentBalance: $currentBalance, dateTime: $dateTime, note: $note, outTrnxId: $outTrnxId, inTrnxId: $inTrnxId)';
   }
 
   @override
@@ -847,7 +879,11 @@ class _$BillModelImpl implements _BillModel {
                 other.currentBalance == currentBalance) &&
             (identical(other.dateTime, dateTime) ||
                 other.dateTime == dateTime) &&
-            (identical(other.note, note) || other.note == note));
+            (identical(other.note, note) || other.note == note) &&
+            (identical(other.outTrnxId, outTrnxId) ||
+                other.outTrnxId == outTrnxId) &&
+            (identical(other.inTrnxId, inTrnxId) ||
+                other.inTrnxId == inTrnxId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -866,7 +902,9 @@ class _$BillModelImpl implements _BillModel {
       received,
       currentBalance,
       dateTime,
-      note);
+      note,
+      outTrnxId,
+      inTrnxId);
 
   /// Create a copy of BillModel
   /// with the given fields replaced by the non-null parameter values.
@@ -898,7 +936,9 @@ abstract class _BillModel implements BillModel {
       final String received,
       @JsonKey(name: "current_balance") final String? currentBalance,
       @DateTimeConverter() @JsonKey(name: "date_time") final DateTime? dateTime,
-      final String? note}) = _$BillModelImpl;
+      final String? note,
+      final int? outTrnxId,
+      final int? inTrnxId}) = _$BillModelImpl;
 
   factory _BillModel.fromJson(Map<String, dynamic> json) =
       _$BillModelImpl.fromJson;
@@ -936,6 +976,10 @@ abstract class _BillModel implements BillModel {
   DateTime? get dateTime;
   @override
   String? get note;
+  @override
+  int? get outTrnxId;
+  @override
+  int? get inTrnxId;
 
   /// Create a copy of BillModel
   /// with the given fields replaced by the non-null parameter values.

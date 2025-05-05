@@ -129,10 +129,15 @@ bool checkIfTimeEmpty(DateTime? dateTime) {
 class UniqueIdGenerator {
   static final Random _random = Random();
 
-  static int generateId() {
+  static int generateId({bool reverse = false}) {
     int timestamp = DateTime.now().millisecondsSinceEpoch;
     int randomNumber = _random.nextInt(100000);
-    return int.parse('$timestamp$randomNumber');
+
+    String idString = reverse
+        ? '$randomNumber$timestamp'
+        : '$timestamp$randomNumber';
+
+    return int.parse(idString);
   }
 }
 

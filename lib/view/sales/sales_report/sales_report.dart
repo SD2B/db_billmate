@@ -23,25 +23,25 @@ class SalesReport extends HookConsumerWidget {
     return Column(
       spacing: 10,
       children: [
-        Row(
-          spacing: 20,
-          children: [
-            Container(
-              height: 100,
-              width: 200,
-              decoration: BoxDecoration(
-                border: Border.all(color: ColorCode.colorList(context).borderColor!),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Text("No.of Invoices"),
-                  Text("No.of Invoices"),
-                ],
-              ),
-            )
-          ],
-        ),
+        // Row(
+        //   spacing: 20,
+        //   children: [
+        //     Container(
+        //       height: 100,
+        //       width: 200,
+        //       decoration: BoxDecoration(
+        //         border: Border.all(color: ColorCode.colorList(context).borderColor!),
+        //         borderRadius: BorderRadius.circular(10),
+        //       ),
+        //       child: Column(
+        //         children: [
+        //           Text("No.of Invoices"),
+        //           Text("No.of Invoices"),
+        //         ],
+        //       ),
+        //     )
+        //   ],
+        // ),
         Row(
           spacing: 10,
           children: [
@@ -96,7 +96,7 @@ class SalesReport extends HookConsumerWidget {
                 final data = rawData.reversed.toList();
                 qp(data.length, "lllllllllllllllllllllllll");
                 return SizedBox(
-                  height: context.height() - 380,
+                  height: context.height() - 270,
                   width: context.width() - 150,
                   child: ListView.builder(
                       itemCount: data.length,

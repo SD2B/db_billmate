@@ -36,6 +36,7 @@ _$TransactionModelImpl _$$TransactionModelImplFromJson(
         Map<String, dynamic> json) =>
     _$TransactionModelImpl(
       id: (json['id'] as num?)?.toInt(),
+      uid: (json['uid'] as num?)?.toInt(),
       customerId: _$JsonConverterFromJson<String, int>(
           json['customer_id'], const IntConverter().fromJson),
       amount: json['amount'] == null
@@ -55,6 +56,7 @@ Map<String, dynamic> _$$TransactionModelImplToJson(
         _$TransactionModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'uid': instance.uid,
       'customer_id': _$JsonConverterToJson<String, int>(
           instance.customerId, const IntConverter().toJson),
       'amount': const DoubleConverter().toJson(instance.amount),

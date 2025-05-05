@@ -42,6 +42,8 @@ class BillModel with _$BillModel {
     @JsonKey(name: "current_balance") String? currentBalance,
     @DateTimeConverter() @JsonKey(name: "date_time") DateTime? dateTime,
     String? note,
+    int? outTrnxId,
+    int? inTrnxId,
   }) = _BillModel;
 
   factory BillModel.fromJson(Map<String, dynamic> json) => _$BillModelFromJson(json);

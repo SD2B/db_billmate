@@ -24,6 +24,7 @@ class EndUserModel with _$EndUserModel {
 class TransactionModel with _$TransactionModel {
   const factory TransactionModel({
     int? id,
+    int? uid,
     @IntConverter() @JsonKey(name: "customer_id") int? customerId,
     @DoubleConverter() @Default(0.0) double amount,
     String? description,

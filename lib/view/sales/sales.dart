@@ -155,6 +155,8 @@ class Sales extends HookConsumerWidget {
         currentBalance: getCurrentBalance().toStringAsFixed(2),
         dateTime: DateTime.now(),
         note: noteController.text,
+        outTrnxId: updateBillModel?.outTrnxId,
+        inTrnxId: updateBillModel?.inTrnxId,
       );
       qp(model);
       return model;
@@ -211,7 +213,8 @@ class Sales extends HookConsumerWidget {
       await Future.wait(itemSaveTasks);
 
       final data = saveToBillModel();
-      bool res = await ref.read(invoiceVMProvider.notifier).save(data);
+
+      bool res = data.id == null ? await ref.read(invoiceVMProvider.notifier).save(data) : await ref.read(invoiceVMProvider.notifier).updateBillModel(data);
 
       if (res) {
         if (print) {
