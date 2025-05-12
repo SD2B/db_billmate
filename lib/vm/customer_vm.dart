@@ -59,9 +59,9 @@ class CustomerVM extends AsyncNotifier<List<EndUserModel>> {
     }
   }
 
-  Future<bool> save(EndUserModel model) async {
+  Future<bool> save(EndUserModel model, {bool enaableReset= true}) async {
     state = AsyncValue.loading();
-
+    
     List<dynamic> results = await Future.wait([CustomerRepo.addCustomer(model)]);
     final res = results[0];
     if (res != 0) {

@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 qp(dynamic data, [String? tag]) {
-  final String ttag = tag != null ? tag.toString() : '';
-  debugPrint("$ttag : $data");
+  if (kDebugMode) {
+    final String ttag = tag != null ? tag.toString() : '';
+    debugPrint("$ttag : $data");
+  }
 }
 
 extension SizedBoxExtensions on num {
@@ -23,7 +25,6 @@ extension ContextExtensions on BuildContext {
 extension NegativeDouble on double {
   double toNegative() => this > 0 ? -this : this;
 }
-
 
 extension ShortNumberFormat on double {
   String toShortForm({int minDigits = 4}) {
@@ -133,9 +134,7 @@ class UniqueIdGenerator {
     int timestamp = DateTime.now().millisecondsSinceEpoch;
     int randomNumber = _random.nextInt(100000);
 
-    String idString = reverse
-        ? '$randomNumber$timestamp'
-        : '$timestamp$randomNumber';
+    String idString = reverse ? '$randomNumber$timestamp' : '$timestamp$randomNumber';
 
     return int.parse(idString);
   }

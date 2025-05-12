@@ -1,3 +1,4 @@
+import 'package:db_billmate/common_widgets/sd_toast.dart';
 import 'package:db_billmate/helpers/local_storage.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:db_billmate/models/end_user_model.dart';
@@ -49,6 +50,12 @@ class InvoiceVM extends AsyncNotifier<List<BillModel>> {
     try {
       //ou transaction updatet
       TransactionModel outTrnx = (await ref.read(transactionVMProvider.notifier).get(where: {"uid": model.outTrnxId})).toList().firstOrNull ?? TransactionModel();
+      if (outTrnx == TransactionModel()) {
+        SDToast.errorToast(title: "No transaction id", description: "This is an invoice without 'Transaction ID', so can't edit");
+              state = AsyncValue.data(state.value ?? []);
+
+        return false;
+      }
       qp(model, "111111111111111111111");
       qp(outTrnx, "111111111111111111111");
       double billTotal1 = double.tryParse(model.discount) == 0 ? double.parse(model.total ?? "0.00") : (double.parse(model.total ?? "0.00") - double.parse(model.discount));

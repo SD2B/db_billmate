@@ -101,15 +101,11 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
         return newBalance;
       }
 
-      qp(prevTransactionAmount, "prevTransactionAmount");
-      qp(model.amount, "modelAmount");
-      qp(endUser.balanceAmount, "endUserBalanceAmount");
+    
       endUser = endUser.copyWith(
         balanceAmount: "${getNewBalance(double.parse(endUser.balanceAmount), prevTransactionAmount, newTransactionAmount)}",
       );
-      // endUser = endUser.copyWith(balanceAmount: "${(double.parse(endUser.balanceAmount) - prevTransactionAmount) + calculationAmount}");
-      qp(endUser.balanceAmount, "endUserBalanceAmount");
-      qp(endUser, "endUserBalanceAmount");
+  
 
       //save the end user
       if (isSupplier) {

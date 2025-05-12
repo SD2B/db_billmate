@@ -209,8 +209,11 @@ class Sales extends HookConsumerWidget {
           }));
         }
       }
-
-      await Future.wait(itemSaveTasks);
+      try {
+        await Future.wait(itemSaveTasks);
+      } catch (e) {
+        SDToast.errorToast(description: "$e");
+      }
 
       final data = saveToBillModel();
 
@@ -220,9 +223,8 @@ class Sales extends HookConsumerWidget {
         if (print) {
           PrintHelper.printInvoice(context, ref, data);
         }
-        SDToast.showToast(
+        SDToast.successToast(
           description: updateBillModel?.id != null ? "Invoice Updated Successfully" : "Invoice Generated Successfully",
-          type: ToastificationType.success,
         );
 
         reset();
@@ -231,7 +233,7 @@ class Sales extends HookConsumerWidget {
           context.pop();
         }
       } else {
-        SDToast.showToast(description: "Contact support immediately", type: ToastificationType.error);
+        SDToast.errorToast(description: "Contact support immediately");
       }
 
       return res;
