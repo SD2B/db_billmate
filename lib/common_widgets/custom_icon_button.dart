@@ -11,6 +11,7 @@ class CustomIconButton extends StatelessWidget {
   final BoxShape? shape;
   final bool noTap;
   final String? tooltipMsg;
+  final Widget? badge;
   const CustomIconButton({
     super.key,
     required this.icon,
@@ -22,54 +23,39 @@ class CustomIconButton extends StatelessWidget {
     this.shape,
     this.noTap = false,
     this.tooltipMsg,
+    this.badge,
   });
+
+  Widget iconButton(BuildContext context) {
+    return Badge(
+      backgroundColor: transparentColor,
+      alignment: FractionalOffset(.8, 0),
+      label: badge,
+      child: Container(
+        height: buttonSize ?? 38,
+        width: buttonSize ?? 38,
+        decoration: BoxDecoration(
+          shape: shape ?? BoxShape.circle,
+          color: buttonColor ?? ColorCode.colorList(context).primary,
+          borderRadius: shape == BoxShape.rectangle ? BorderRadius.circular(8) : null,
+        ),
+        child: Icon(icon, color: iconColor ?? Colors.white, size: iconSize),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-        message: tooltipMsg??"",
+        message: tooltipMsg ?? "",
         child: noTap
-            ? CustomIconButtonCard(buttonSize: buttonSize, shape: shape, buttonColor: buttonColor, icon: icon, iconColor: iconColor, iconSize: iconSize)
+            ? iconButton(context)
             : InkWell(
                 onTap: () {
                   onTap?.call();
                 },
                 splashColor: Colors.transparent,
                 borderRadius: BorderRadius.circular(500),
-                child: CustomIconButtonCard(buttonSize: buttonSize, shape: shape, buttonColor: buttonColor, icon: icon, iconColor: iconColor, iconSize: iconSize),
-              ));
-  }
-}
-
-class CustomIconButtonCard extends StatelessWidget {
-  const CustomIconButtonCard({
-    super.key,
-    required this.buttonSize,
-    required this.shape,
-    required this.buttonColor,
-    required this.icon,
-    required this.iconColor,
-    required this.iconSize,
-  });
-
-  final double? buttonSize;
-  final BoxShape? shape;
-  final Color? buttonColor;
-  final IconData icon;
-  final Color? iconColor;
-  final double? iconSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: buttonSize ?? 38,
-      width: buttonSize ?? 38,
-      decoration: BoxDecoration(
-        shape: shape ?? BoxShape.circle,
-        color: buttonColor ?? ColorCode.colorList(context).primary,
-        borderRadius:shape ==BoxShape.rectangle?  BorderRadius.circular(8):null,
-      ),
-      child: Icon(icon, color: iconColor ?? Colors.white, size: iconSize),
-    );
+                child: iconButton(context)));
   }
 }

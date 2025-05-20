@@ -1,17 +1,20 @@
+import 'package:db_billmate/common_widgets/custom_icon_button.dart';
 import 'package:db_billmate/constants/colors.dart';
 import 'package:db_billmate/helpers/common_enums.dart';
+import 'package:db_billmate/helpers/print_helper/print_helper.dart';
 import 'package:db_billmate/helpers/sddb_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tilt/flutter_tilt.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CustomAppbar extends StatelessWidget {
+class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentRoute = GoRouter.of(context).routeInformationProvider.value.uri;
     final routeName = currentRoute.toString() == "/" ? RouteEnum.home.name : currentRoute.toString().split("/").last;
 
@@ -34,6 +37,31 @@ class CustomAppbar extends StatelessWidget {
                       ),
                 ),
                 Spacer(),
+                CustomIconButton(
+                  tooltipMsg: ref.watch(printerProvider).url == "" ? "Select Printer" : "Current printer is ${ref.watch(printerProvider).url}",
+                  buttonSize: 50,
+                  icon: Icons.print,
+                  shape: BoxShape.rectangle,
+                  buttonColor: appPrimary,
+                  iconColor: whiteColor,
+                  badge: ref.watch(printerProvider).url == ""
+                      ? CircleAvatar(
+                          radius: 10,
+                          backgroundColor: redColor,
+                          child: Icon(
+                            Icons.close_rounded,
+                            color: whiteColor,
+                            size: 15,
+                          ))
+                      : Icon(
+                          Icons.check_circle,
+                          color: greenColor,
+                        ),
+                  onTap: () {
+                    PrintHelper.printerPop(context, ref);
+                  },
+                ),
+                10.width,
                 Tilt(
                   tiltConfig: TiltConfig(enableReverse: true),
                   shadowConfig: ShadowConfig(enableReverse: true),

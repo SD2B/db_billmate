@@ -93,7 +93,7 @@ class SalesReport extends HookConsumerWidget {
         SalesReportTableHeader(),
         ref.watch(invoiceVMProvider).when(
               data: (rawData) {
-                final data = rawData.reversed.toList();
+                final data = rawData.toList();
                 qp(data.length, "lllllllllllllllllllllllll");
                 return SizedBox(
                   height: context.height() - 270,

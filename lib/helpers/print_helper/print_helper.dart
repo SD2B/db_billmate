@@ -5,6 +5,7 @@ import 'package:db_billmate/models/end_user_model.dart';
 import 'package:db_billmate/models/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -319,14 +320,13 @@ class PrintHelper {
                   ),
                   pw.SizedBox(height: 10),
                   pw.Divider(thickness: .000000000000000000000000000000000000000000000001),
-                   pw.Row(
+                  pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
                       pw.Text('----------------------', style: impAmountText),
                     ],
                   ),
                   pw.SizedBox(height: 10),
-                 
                 ],
               ));
         },
@@ -483,6 +483,8 @@ class PrintHelper {
                   onChanged: (Printer? newPrinter) {
                     if (newPrinter != null) {
                       ref.read(printerProvider.notifier).state = newPrinter;
+                      SDToast.successToast(description: "Printer selected successfully");
+                      context.pop();
                       // selectedPrinter = newPrinter;
                     }
                   },

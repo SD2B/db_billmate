@@ -25,7 +25,7 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
         transactionList.removeWhere((t) => t.id == transaction.id);
         transactionList = [transaction, ...transactionList];
       } else {
-        transactionList = await TransactionRepo.get(where: where, dateRange: MapEntry("date_time", dateRange ?? DateTimeRange(start: DateTime.now().subtract(Duration(days: 30)), end: DateTime.now())));
+        transactionList = await TransactionRepo.get(where: where, dateRange: MapEntry("date_time", dateRange ?? DateTimeRange(start: DateTime.now().subtract(Duration(days: 365)), end: DateTime.now())));
       }
       state = AsyncValue.data(transactionList);
       qp(transactionList);
@@ -101,11 +101,9 @@ class TransactionVM extends AsyncNotifier<List<TransactionModel>> {
         return newBalance;
       }
 
-    
       endUser = endUser.copyWith(
         balanceAmount: "${getNewBalance(double.parse(endUser.balanceAmount), prevTransactionAmount, newTransactionAmount)}",
       );
-  
 
       //save the end user
       if (isSupplier) {
